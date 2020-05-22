@@ -1,0 +1,17 @@
+<template>
+    <div id="app-header">
+        <div class="col text-center my-5">
+            <h1 class="font-weight-bold">recept0r - A Recipes App</h1>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'app-header'
+}
+</script>
+
+<style>
+
+</style>
