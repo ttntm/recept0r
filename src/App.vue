@@ -6,7 +6,7 @@
         <AppHeader />
       </div>
       <div class="row">
-        <router-view :recipes="recipes" @add:recipe="addRecipe" @create:recipe="addRecipe" @edit:recipe="editRecipe" @delete:recipe="deleteRecipe" />
+        <router-view :recipes="recipes" @create:recipe="addRecipe" @edit:recipe="editRecipe" @delete:recipe="deleteRecipe" />
       </div>
     </div>
     <AppFooter />
@@ -43,9 +43,6 @@ export default {
       this.recipes = this.recipes.filter(
         recipe => recipe.id !== id
       );
-    },
-    updateStatus(status) {
-      this.status = status;
     }
   },
   data() {
@@ -71,7 +68,7 @@ export default {
           id: "r03",
           title: "Not so awesome Recipe",
           description: 'Recipe03 Description or Summary',
-          ingredients: ["1 tsp awesomeness", "100 cup onions"],
+          ingredients: ["1 tsp awesomeness", "100 cups onions"],
           body: "Well, I guess you tried."
         }
       ]

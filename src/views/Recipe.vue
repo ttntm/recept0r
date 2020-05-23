@@ -19,12 +19,12 @@
     <hr />
     <h4>Ingredients</h4>
     <ul class="mb-4">
-      <li v-for="(ing, index) in recipe.ingredients" :key="recipe.ingredients[index]">
+      <li v-for="(ing, index) in recipe.ingredients" :key="index">
         <span v-if="editing === null">
           {{ ing }}
         </span>
         <span v-else>
-          <input type="text" v-model.lazy="recipe.ingredients[index]" v-focus class="form-control mb-3">
+          <input type="text" v-model.trim="recipe.ingredients[index]" v-focus class="form-control mb-3">
         </span>
       </li>
     </ul>
@@ -97,7 +97,10 @@ export default {
       this.editing = null;
     },
     editRecipe(recipe) {
-      if (recipe.name === '' || recipe.description === '' || recipe.ingredients.length == 0 || recipe.body === '') return; //cancel on empty
+      if (recipe.name === '' || recipe.description === '' || recipe.ingredients.length == 0 || recipe.body === '') {
+          alert("Please fill all fields.");
+          return
+      }
       this.$emit("edit:recipe", recipe);
       this.editing = null; //reset state when done editing
     },
@@ -119,6 +122,19 @@ export default {
         inserted: function (el) {
             el.focus()
         }
+    }
+  },
+  beforeRouteLeave (to, from, next) {
+    if(this.editing !== null) {
+      const answer = window.confirm('Do you really want to leave? There might be unsaved changes!');
+      if (answer) {
+        this.cancelEdit(this.recipe);
+        next();
+      } else {
+        next(false);
+      }
+    } else {
+      next();
     }
   }
 };

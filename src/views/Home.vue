@@ -14,8 +14,7 @@
 export default {
   name: 'all-recipes',
   props: {
-      recipes: Array,
-      status: String
+      recipes: Array
   }
 };
 </script>
