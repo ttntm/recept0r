@@ -20,7 +20,7 @@
     <textarea v-model="recipe.body" class="form-control"></textarea>
     <hr />
     <div class="d-flex flex-row align-items-start">
-        <button class="btn btn-outline-success btn-sm mr-3" @click="createRecipe(recipe)">Save</button>
+        <button class="btn btn-outline-success btn-sm mr-3" @click="createRecipe(recipe)" :disabled="isEmpty">Save</button>
         <button class="btn btn-outline-danger btn-sm mr-3" @click="cancelCreate(recipe)">Cancel</button>
     </div>
   </div>
@@ -47,17 +47,18 @@ export default {
       recipe: {
         deep: true,
         handler() {
-            if (this.recipe.name === '' && this.recipe.description === '' && this.recipe.ingredients.length < 1 && this.recipe.body === '') {
+            const r = this.recipe;
+            if (r.title === '' && r.description === '' && r.ingredients.length < 1 && r.body === '') {
                 this.isEmpty = true;
             } else {
                 this.isEmpty = false;
             }
-            if (this.recipe.name !== '' && this.recipe.description !== '' && this.recipe.ingredients.length > 0 && this.recipe.body !== '') {
+            if (r.title !== '' && r.description !== '' && r.ingredients.length > 0 && r.body !== '') {
                 this.isFilled = true;
             } else {
                 this.isFilled = false;
             }
-            this.hasIng = this.recipe.ingredients.length < 1 ? false : true;
+            this.hasIng = r.ingredients.length < 1 ? false : true;
         }
       }
   },
@@ -66,7 +67,7 @@ export default {
       this.$router.push({ name: 'home' });
     },
     createRecipe(recipe) {
-      if (recipe.name === '' || recipe.description === '' || recipe.ingredients.length == 0 || recipe.body === '') {
+      if (recipe.title === '' || recipe.description === '' || recipe.ingredients.length == 0 || recipe.body === '') {
           alert("Please fill all fields.");
           return
       } //cancel on empty
