@@ -1,27 +1,29 @@
 <template>
-  <div id="create-recipe" class="col">
-    <h3 class="font-weight-bold">Recipe Title</h3>
-    <input type="text" v-model="recipe.title" ref="recipeTitle" class="form-control mb-3">
-    <h4>Description</h4>
-    <input type="text" v-model="recipe.description" class="form-control mb-3">
-    <hr />
-    <h4>Ingredients</h4>
-    <ul class="mb-4">
-      <li v-for="(ing, index) in recipe.ingredients" :key="index">
-        <input type="text" v-model.trim="recipe.ingredients[index]" v-focus class="form-control mb-3">
-      </li>
-    </ul>
-    <div class="d-flex flex-row align-items-start">
-      <button @click="addIngredient" class="btn btn-outline-dark btn-sm mr-3">Add Ingredient</button>
-      <button v-if="hasIng !== false" @click="removeIngredient" class="btn btn-outline-danger btn-sm">Remove Ingredient</button>
-    </div>
-    <hr />
-    <h4>Instructions</h4>
-    <textarea v-model="recipe.body" class="form-control"></textarea>
-    <hr />
-    <div class="d-flex flex-row align-items-start">
-        <button class="btn btn-outline-success btn-sm mr-3" @click="createRecipe(recipe)" :disabled="isEmpty">Save</button>
-        <button class="btn btn-outline-danger btn-sm mr-3" @click="cancelCreate(recipe)">Cancel</button>
+  <div id="create-recipe" class="row">
+    <div class="col">
+      <h3 class="font-weight-bold">Recipe Title</h3>
+      <input type="text" v-model="recipe.title" ref="recipeTitle" class="form-control mb-3">
+      <h4>Description</h4>
+      <input type="text" v-model="recipe.description" class="form-control mb-3">
+      <hr />
+      <h4>Ingredients</h4>
+      <ul class="mb-4">
+        <li v-for="(ing, index) in recipe.ingredients" :key="index">
+          <input type="text" v-model.trim="recipe.ingredients[index]" v-focus class="form-control mb-3">
+        </li>
+      </ul>
+      <div class="d-flex flex-row align-items-start">
+        <button @click="addIngredient" class="btn btn-outline-dark btn-sm mr-3">Add Ingredient</button>
+        <button v-if="hasIng !== false" @click="removeIngredient" class="btn btn-outline-danger btn-sm">Remove Ingredient</button>
+      </div>
+      <hr />
+      <h4>Instructions</h4>
+      <textarea v-model="recipe.body" class="form-control"></textarea>
+      <hr />
+      <div class="d-flex flex-row align-items-start">
+          <button class="btn btn-outline-success btn-sm mr-3" @click="createRecipe(recipe)" :disabled="isDisabled">Save</button>
+          <button class="btn btn-outline-danger btn-sm mr-3" @click="cancelCreate(recipe)">Cancel</button>
+      </div>
     </div>
   </div>
 </template>
@@ -33,15 +35,25 @@ export default {
     return {
       isEmpty: true,
       isFilled: false,
+      hasIng: false,
+      isSaving: false,
       recipe: {
         id: '',
         title: '',
         description: '',
         ingredients: [],
         body: ''
-      },
-      hasIng: false
+      }
     };
+  },
+  computed: {
+    isDisabled() {
+      if(this.isEmpty || this.isSaving) {
+        return true
+      } else {
+        return false
+      }
+    }
   },
   watch: {
       recipe: {
@@ -58,7 +70,12 @@ export default {
             } else {
                 this.isFilled = false;
             }
+            //watch ingredients
             this.hasIng = r.ingredients.length < 1 ? false : true;
+            //create id
+            let rTitle = r.title;
+            let slug = rTitle.replace(/[^a-z0-9]+/gi, '-').replace(/^-*|-*$/g, '').toLowerCase();
+            r.id = slug;
         }
       }
   },
@@ -70,9 +87,10 @@ export default {
       if (recipe.title === '' || recipe.description === '' || recipe.ingredients.length == 0 || recipe.body === '') {
           alert("Please fill all fields.");
           return
-      } //cancel on empty
-      this.$emit("create:recipe", recipe);
-      this.$router.push({ name: 'home' });
+      } else {
+        this.addRecipe(recipe);
+        this.isSaving = true;
+      }
     },
     addIngredient() {
       let ing = this.recipe.ingredients;
@@ -82,6 +100,26 @@ export default {
       let ing = this.recipe.ingredients;
       ing.splice(ing.length - 1);
       this.hasIng = this.recipe.ingredients.length < 1 ? false : true;
+    },
+    addRecipe(recipe) {
+      const newRecipe = recipe;
+
+      function postRecipe(data) {
+        return fetch('/.netlify/functions/recipe-create', {
+          body: JSON.stringify(data),
+          method: 'POST'
+        }).then(response => {
+          return response.json()
+        })
+      }
+
+      postRecipe(newRecipe).then((response) => {
+        console.log("API response", response);
+        this.$emit("status:update", true); //make sure the DB operation has finished before emitting the status update
+        this.$router.push({ name: 'home' }); // navigate when done
+      }).catch((error) => {
+        console.log('API error', error)
+      })
     }
   },
   directives: {

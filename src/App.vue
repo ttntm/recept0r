@@ -5,9 +5,7 @@
       <div class="row">
         <AppHeader />
       </div>
-      <div class="row">
-        <router-view :recipes="recipes" @create:recipe="addRecipe" @edit:recipe="editRecipe" @delete:recipe="deleteRecipe" />
-      </div>
+      <router-view :recipes="recipes" @status:update="updateRecipes" />
     </div>
     <AppFooter />
   </div>
@@ -18,8 +16,6 @@ import Navbar from '@/components/Navbar.vue';
 import AppHeader from '@/components/AppHeader.vue';
 import AppFooter from '@/components/AppFooter.vue';
 
-// const default_layout = "default";
-
 export default {
   name: 'App',
   components: {
@@ -28,50 +24,33 @@ export default {
       AppFooter
   },
   methods: {
-    addRecipe(recipe) {
-      let newRecipe = recipe;
-      newRecipe.id = 'r0' + (this.recipes.length + 1);
-      this.recipes.push(newRecipe);
-      console.log("Recipe " + newRecipe.title + " added.");
+    getRecipes() {
+      fetch('/.netlify/functions/all-recipes')
+        .then((response) => {
+          return response.json();
+        }).then((res) => {
+          this.recipes = res.map((e) => {
+            let temp = Object.assign({}, e.data); //create new object from DB data
+            temp.refId = e.ref['@ref'].id; // add the database ID for edit/delete operations
+            return temp; //return newly created temp object
+          });
+      })
     },
-    editRecipe(id, updatedRecipe) {
-      this.recipes = this.recipes.map(recipe =>
-          recipe.id === id ? updatedRecipe : recipe
-      );
-    },
-    deleteRecipe(id) {
-      this.recipes = this.recipes.filter(
-        recipe => recipe.id !== id
-      );
+    updateRecipes(status) {
+      this.updateList = status[0];
+      if(status) { //if an update is neccessary...
+        this.getRecipes(); //...do it!
+        this.updateList = false; // and make sure you let others know it's done
+      }
     }
+  },
+  created() {
+    this.getRecipes();
   },
   data() {
     return {
-      recipes: [
-        {
-          id: "r01",
-          title: "Awesome Recipe",
-          description: 'Recipe01 Description or Summary',
-          ingredients: ["1 tsp awesomeness", "1 cup onions", "1/3 cup beer"],
-          body:
-            "Mix all the stuff and be happy. Then put into a large pot and cook for about half an hour. In the end, it may taste like something, but we can't guarantee that..."
-        },
-        {
-          id: "r02",
-          title: "Another Awesome Recipe",
-          description: 'Recipe02 Description or Summary',
-          ingredients: ["1 tsp awesomeness", "1 cup onions"],
-          body:
-            "Cooking without beer is possible, but who knows what will come out of that...?"
-        },
-        {
-          id: "r03",
-          title: "Not so awesome Recipe",
-          description: 'Recipe03 Description or Summary',
-          ingredients: ["1 tsp awesomeness", "100 cups onions"],
-          body: "Well, I guess you tried."
-        }
-      ]
+      recipes: [],
+      updateList: false
     };
   }
 };
