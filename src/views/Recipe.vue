@@ -1,57 +1,65 @@
 <template>
   <div id="recipe" class="row">
     <div class="col">
-      <h3 class="font-weight-bold">
-        <span v-if="editing === null">
-          {{ recipe.title }}
-        </span>
-        <span v-else>
-          <span class="d-block mb-2">Recipe Title</span>
-          <input type="text" v-model="recipe.title" ref="recipeTitle" class="form-control">
-        </span>
-      </h3>
-      <h4>Description</h4>
-      <div v-if="editing === null">
-        <p class="text-dark">{{ recipe.description }}</p>
+      <div v-if="readSuccess !== true">
+        <p class="text-secondary">Loading...</p>
       </div>
       <div v-else>
-        <input type="text" v-model="recipe.description" class="form-control">
-      </div>
-      <hr />
-      <h4>Ingredients</h4>
-      <ul class="mb-4">
-        <li v-for="(ing, index) in recipe.ingredients" :key="index">
+        <!-- BEGIN CONTENT -->
+        <h3 class="font-weight-bold mb-4">
           <span v-if="editing === null">
-            {{ ing }}
+            {{ recipe.title }}
           </span>
           <span v-else>
-            <input type="text" v-model.trim="recipe.ingredients[index]" v-focus class="form-control mb-3">
+            <span class="d-block mb-3">Recipe Title</span>
+            <input type="text" v-model="recipe.title" ref="recipeTitle" class="form-control">
           </span>
-        </li>
-      </ul>
-      <div v-if="editing !== null" class="d-flex flex-row align-items-start">
-        <button @click="addIngredient" class="btn btn-outline-dark btn-sm mr-3">Add Ingredient</button>
-        <button @click="removeIngredient" class="btn btn-outline-danger btn-sm">Remove Ingredient</button>
-      </div>
-      <hr />
-      <h4>Instructions</h4>
-      <div v-if="editing === null">
-        <p>{{ recipe.body }}</p>
-      </div>
-      <div v-else>
-        <textarea v-model="recipe.body" class="form-control"></textarea>
-      </div>
-      <hr />
-      <div class="d-flex flex-row align-items-start">
+        </h3>
+        <h4>Description</h4>
         <div v-if="editing === null">
-          <button class="btn btn-outline-dark btn-sm mr-3" @click="editMode(recipe)">Edit Recipe</button>
-          <button class="btn btn-outline-danger btn-sm mr-3" @click="deleteRecipe(recipe.refId)">Delete Recipe</button>
+          <p class="text-dark">{{ recipe.description }}</p>
         </div>
         <div v-else>
-          <button class="btn btn-outline-success btn-sm mr-3" @click="editRecipe(recipe, recipe.refId)">Save</button>
-          <button class="btn btn-outline-danger btn-sm mr-3" @click="cancelEdit(recipe)">Cancel</button>
+          <input type="text" v-model="recipe.description" class="form-control">
+        </div>
+        <hr class="my-4" />
+        <h4>Ingredients</h4>
+        <ul class="mb-4">
+          <li v-for="(ing, index) in recipe.ingredients" :key="index">
+            <span v-if="editing === null">
+              {{ ing }}
+            </span>
+            <span v-else>
+              <input type="text" v-model.trim="recipe.ingredients[index]" v-focus class="form-control mb-3">
+            </span>
+          </li>
+        </ul>
+        <div v-if="editing !== null" class="d-flex flex-row align-items-start">
+          <button @click="addIngredient" class="btn btn-outline-dark btn-sm mr-3">Add Ingredient</button>
+          <button @click="removeIngredient" class="btn btn-outline-secondary btn-sm">Remove Ingredient</button>
+        </div>
+        <hr class="my-4" />
+        <h4>Instructions</h4>
+        <div v-if="editing === null">
+          <p>{{ recipe.body }}</p>
+        </div>
+        <div v-else>
+          <textarea v-model="recipe.body" class="form-control"></textarea>
+        </div>
+        <hr class="my-4" />
+        <div class="d-flex flex-row align-items-start">
+          <div v-if="editing === null">
+            <router-link :to="{name: 'home'}" class="btn btn-outline-secondary btn-sm mr-3">&lt; Go Back</router-link>
+            <button class="btn btn-outline-dark btn-sm mr-3" @click="editMode(recipe)">Edit Recipe</button>
+            <button class="btn btn-outline-danger btn-sm mr-3" @click="deleteRecipe(recipe)">Delete Recipe</button>
+          </div>
+          <div v-else>
+            <button class="btn btn-outline-success btn-sm mr-3" @click="editRecipe(recipe)">Save</button>
+            <button class="btn btn-outline-danger btn-sm mr-3" @click="cancelEdit(recipe)">Cancel</button>
+          </div>
         </div>
       </div>
+      <!-- END CONTENT -->
     </div>
   </div>
 </template>
@@ -63,24 +71,18 @@ var cacheStr = '';
 export default {
   name: "recipe",
   props: {
-    recipes: Array
+    fPath: Object
   },
   data() {
     return {
       editing: null,
-      recipe: null
+      recipe: null,
+      readSuccess: false
     };
   },
-  watch: {
-    $route: {
-      immediate: true,
-      handler($route) { //production: get data from DB via API -- NOPE, otherwise that's an extra DB read we've already performed when opening the app!
-        let currentRecipe = this.recipes.filter(
-          recipe => recipe.refId === $route.params.refId
-        );
-        this.recipe = currentRecipe[0];
-      }
-    }
+  created() {
+    const cRefId = this.$route.params.refId; //get refId
+    this.readRecipe(cRefId); //query DB for the respective record
   },
   methods: {
     editMode(recipe) {
@@ -104,30 +106,51 @@ export default {
       Object.assign(recipe, cache);
       this.editing = null;
     },
-    editRecipe(recipe, refId) {
-      if (recipe.name === '' || recipe.description === '' || recipe.ingredients.length == 0 || recipe.body === '') {
+    readRecipe(refId) {
+      fetch(`${this.fPath.readOne}/${refId}`, {
+        method: 'POST',
+      }).then(response => {
+        return response.json();
+      }).then(res => {
+        this.recipe = res.data;
+        this.recipe.refId = res.ref['@ref'].id;
+        if('refId' in this.recipe) { //check if data was obtained from the DB
+          this.readSuccess = true; //set success state
+          console.log("recipe data obtained - " + this.recipe.title); //log success
+        }
+      }).catch((error) => {
+        console.log("API error", error);
+      })
+    },
+    editRecipe(recipe) {
+      if (recipe.title === '' || recipe.description === '' || recipe.ingredients.length == 0 || recipe.body === '') {
           alert("Please fill all fields.");
           return
       } else {
-        fetch(`/.netlify/functions/recipe-edit/${refId}`, {
+        let rId = recipe.refId;
+        fetch(`${this.fPath.edit}/${rId}`, {
           body: JSON.stringify(recipe),
           method: 'POST'
         }).then(response => {
-          console.log("API response", response);
+          console.log("recipe " + recipe.title + " successfully updated.", response);
           this.$emit("status:update", true); //make sure the DB operation has finished before emitting the status update
           this.editing = null; //reset state when done editing
+        }).catch((error) => {
+          console.log("API error", error);
         })
       }
     },
-    deleteRecipe(refId) {
-      fetch(`/.netlify/functions/recipe-delete/${refId}`, {
+    deleteRecipe(recipe) {
+      let rId = recipe.refId;
+      let rName = recipe.title;
+      fetch(`${this.fPath.delete}/${rId}`, {
         method: 'POST',
       }).then(response => {
-        console.log("API response", response);
         this.$emit("status:update", true); //make sure the DB operation has finished before emitting the status update
         this.$router.push({ name: 'home' }); // navigate when done
+        console.log("Recipe " + rName + " deleted", response);
       }).catch((error) => {
-        console.log('API error', error);
+        console.log("API error", error);
       })
     },
   },

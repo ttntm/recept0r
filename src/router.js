@@ -29,7 +29,7 @@ export default new Router({
       component: Create
     },
     {
-      path: "/recipe/:id",
+      path: "/recipe/:id/:refId",
       name: "recipe",
       component: Recipe
     },
@@ -38,5 +38,8 @@ export default new Router({
       name: "404*",
       component: FourOFour
     }
-  ]
+  ],
+  scrollBehavior () {
+    return { x: 0, y: 0 }
+  }
 });

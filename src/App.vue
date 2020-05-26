@@ -5,7 +5,7 @@
       <div class="row">
         <AppHeader />
       </div>
-      <router-view :recipes="recipes" @status:update="updateRecipes" />
+      <router-view :updateList="updateList" :fPath="fPath" @status:update="updateRecipes" />
     </div>
     <AppFooter />
   </div>
@@ -24,33 +24,20 @@ export default {
       AppFooter
   },
   methods: {
-    getRecipes() {
-      fetch('/.netlify/functions/all-recipes')
-        .then((response) => {
-          return response.json();
-        }).then((res) => {
-          this.recipes = res.map((e) => {
-            let temp = Object.assign({}, e.data); //create new object from DB data
-            temp.refId = e.ref['@ref'].id; // add the database ID for edit/delete operations
-            return temp; //return newly created temp object
-          });
-      })
-    },
     updateRecipes(status) {
       this.updateList = status[0];
-      if(status) { //if an update is neccessary...
-        this.getRecipes(); //...do it!
-        this.updateList = false; // and make sure you let others know it's done
-      }
     }
-  },
-  created() {
-    this.getRecipes();
   },
   data() {
     return {
-      recipes: [],
-      updateList: false
+      updateList: false,
+      fPath: {
+        readAll: process.env.VUE_APP_FUNC_PATH_ALL,
+        readOne: process.env.VUE_APP_FUNC_PATH_ONE,
+        create: process.env.VUE_APP_FUNC_PATH_CREATE,
+        edit: process.env.VUE_APP_FUNC_PATH_EDIT,
+        delete: process.env.VUE_APP_FUNC_PATH_DELETE
+      }
     };
   }
 };

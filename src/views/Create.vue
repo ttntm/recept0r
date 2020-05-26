@@ -1,11 +1,11 @@
 <template>
   <div id="create-recipe" class="row">
     <div class="col">
-      <h3 class="font-weight-bold">Recipe Title</h3>
+      <h3 class="font-weight-bold mb-3">Recipe Title</h3>
       <input type="text" v-model="recipe.title" ref="recipeTitle" class="form-control mb-3">
       <h4>Description</h4>
       <input type="text" v-model="recipe.description" class="form-control mb-3">
-      <hr />
+      <hr class="my-4" />
       <h4>Ingredients</h4>
       <ul class="mb-4">
         <li v-for="(ing, index) in recipe.ingredients" :key="index">
@@ -14,12 +14,12 @@
       </ul>
       <div class="d-flex flex-row align-items-start">
         <button @click="addIngredient" class="btn btn-outline-dark btn-sm mr-3">Add Ingredient</button>
-        <button v-if="hasIng !== false" @click="removeIngredient" class="btn btn-outline-danger btn-sm">Remove Ingredient</button>
+        <button v-if="hasIng !== false" @click="removeIngredient" class="btn btn-outline-secondary btn-sm">Remove Ingredient</button>
       </div>
-      <hr />
+      <hr class="my-4" />
       <h4>Instructions</h4>
       <textarea v-model="recipe.body" class="form-control"></textarea>
-      <hr />
+      <hr class="my-4" />
       <div class="d-flex flex-row align-items-start">
           <button class="btn btn-outline-success btn-sm mr-3" @click="createRecipe(recipe)" :disabled="isDisabled">Save</button>
           <button class="btn btn-outline-danger btn-sm mr-3" @click="cancelCreate(recipe)">Cancel</button>
@@ -31,6 +31,9 @@
 <script>
 export default {
   name: "create-recipe",
+  props: {
+    fPath: Object
+  },
   data() {
     return {
       isEmpty: true,
@@ -103,22 +106,23 @@ export default {
     },
     addRecipe(recipe) {
       const newRecipe = recipe;
+      const functions = this.fPath;
 
       function postRecipe(data) {
-        return fetch('/.netlify/functions/recipe-create', {
+        return fetch(`${functions.create}`, {
           body: JSON.stringify(data),
           method: 'POST'
         }).then(response => {
           return response.json()
+        }).catch((error) => {
+          console.log("API error", error)
         })
       }
 
       postRecipe(newRecipe).then((response) => {
-        console.log("API response", response);
+        console.log(newRecipe.title + " created.", response);
         this.$emit("status:update", true); //make sure the DB operation has finished before emitting the status update
         this.$router.push({ name: 'home' }); // navigate when done
-      }).catch((error) => {
-        console.log('API error', error)
       })
     }
   },
