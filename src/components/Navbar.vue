@@ -1,6 +1,8 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <span class="navbar-brand"><a href="/" class="navbar-brand">recept0r</a></span>
+    <span class="navbar-brand">
+      <router-link :to="{name: 'home'}" class="navbar-brand">recept0r</router-link>
+    </span>
     <button
       class="navbar-toggler"
       type="button"

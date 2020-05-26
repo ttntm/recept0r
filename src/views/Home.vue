@@ -1,6 +1,9 @@
 <template>
   <div id="all-recipes" class="row">
-    <div v-for="recipe in recipes" :key="recipe.refId" class="col-sm-12 col-md-6 p-2">
+    <div v-if="isLoading" class="col">
+      <p class="text-dark text-center font-weight-bold">Loading recipes...</p>
+    </div>
+    <div v-else v-for="recipe in recipes" :key="recipe.refId" class="col-sm-12 col-md-6 p-2">
       <div class="recipe-card border border-secondary rounded p-4 mb-2">
         <h3 class="font-weight-bold text-dark">{{ recipe.title }}</h3>
         <p class="text-secondary my-3">{{ recipe.description }}</p>
@@ -52,6 +55,11 @@ export default {
     return {
       recipes: []
     };
+  },
+  computed: {
+    isLoading() {
+      return this.recipes.length > 0 ? false : true;
+    }
   }
 };
 </script>
