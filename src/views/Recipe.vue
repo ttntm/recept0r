@@ -15,6 +15,12 @@
             <input type="text" v-model="recipe.title" ref="recipeTitle" class="form-control">
           </span>
         </h3>
+        <img v-if="recipe.image" class="img-fluid mb-4" :src="recipe.image" :alt="recipe.title">
+        <div v-if="editing">
+          <input @change="editImage" class="form-control-file" type="file" accept="image/*">
+          <button v-if="recipe.image !== null" @click="removeImage" class="btn btn-outline-secondary btn-sm mt-3">Remove Image</button>
+          <hr class="my-4" />
+        </div>
         <h4>Description</h4>
         <div v-if="editing === null">
           <p class="text-dark">{{ recipe.description }}</p>
@@ -92,6 +98,21 @@ export default {
       this.$nextTick(function(){
         this.$refs['recipeTitle'].focus();
       });
+    },
+    editImage(e) {
+      const selectedImage = e.target.files[0]; //get the first file
+      if(selectedImage) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.recipe.image = e.target.result;
+        }
+        reader.readAsDataURL(selectedImage);
+      } else {
+        return //cancel if there's no image or if the image is removed
+      }
+    },
+    removeImage() {
+      this.recipe.image = null;
     },
     addIngredient() {
       let ing = this.recipe.ingredients;
