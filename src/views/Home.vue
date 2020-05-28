@@ -4,7 +4,7 @@
       <p class="text-dark text-center font-weight-bold">Loading recipes...</p>
     </div>
     <div v-else class="recipe-grid col">
-      <div v-for="recipe in recipes" :key="recipe.refId" class="">
+      <div v-for="recipe in recipesReversed" :key="recipe.refId" class="">
         <div class="recipe-card border border-secondary rounded mb-2">
           <div v-if="recipe.image" class="recipe-card-img border-bottom border-secondary bg-light" v-bind:style="{ 'background-image': 'url(' + recipe.image + ')' }"><!-- image --></div>
           <div class="p-4">
@@ -64,6 +64,9 @@ export default {
   computed: {
     isLoading() {
       return this.recipes.length > 0 ? false : true;
+    },
+    recipesReversed() {
+      return this.recipes.slice().reverse();
     }
   }
 };
