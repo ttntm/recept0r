@@ -8,8 +8,7 @@
       <hr class="my-4" />
       <h4>Image</h4>
       <img class="img-fluid mt-3 mb-4" :src="recipe.image" :alt="recipe.title">
-      <input @change="addImage" class="form-control-file" type="file" accept="image/*">
-      <button v-if="recipe.image !== null" @click="removeImage" class="btn btn-outline-secondary btn-sm mt-3">Remove Image</button>
+      <recipe-image :recipe="recipe" @image:update="imageUpdate" />
       <hr class="my-4" />
       <h4>Ingredients</h4>
       <ul class="mb-4">
@@ -34,8 +33,13 @@
 </template>
 
 <script>
+import RecipeImage from '@/components/RecipeImage.vue';
+
 export default {
   name: "create-recipe",
+  components: {
+      RecipeImage
+  },
   props: {
     fPath: Object
   },
@@ -45,6 +49,7 @@ export default {
       isFilled: false,
       hasIng: false,
       isSaving: false,
+      isImgUploaded: false,
       recipe: {
         id: '',
         title: '',
@@ -84,24 +89,15 @@ export default {
             //create id
             let rTitle = r.title;
             r.id = rTitle.replace(/[^a-z0-9]+/gi, '-').replace(/^-*|-*$/g, '').toLowerCase();
+            //check if image was uploaded
+            const checkImgSrc = RegExp(/^https:\/\//);
+            this.isImgUploaded = checkImgSrc.test(r.image);
         }
       }
   },
   methods: {
-    addImage(e) {
-      const selectedImage = e.target.files[0]; //get the first file
-      if(selectedImage) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          this.recipe.image = e.target.result;
-        }
-        reader.readAsDataURL(selectedImage);
-      } else {
-        return //cancel if there's no image or if the image is removed
-      }
-    },
-    removeImage() {
-      this.recipe.image = null;
+    imageUpdate(url) {
+      this.recipe.image = url;
     },
     addIngredient() {
       let ing = this.recipe.ingredients;
@@ -112,18 +108,6 @@ export default {
       ing.splice(ing.length - 1);
       this.hasIng = this.recipe.ingredients.length < 1 ? false : true;
     },
-    cancelCreate() {
-      this.$router.push({ name: 'home' });
-    },
-    createRecipe(recipe) {
-      if (recipe.title === '' || recipe.description === '' || recipe.ingredients.length == 0 || recipe.body === '') {
-          alert("Please fill all fields.");
-          return
-      } else {
-        this.addRecipe(recipe);
-        this.isSaving = true;
-      }
-    },
     addRecipe(recipe) {
       const newRecipe = recipe;
       const functions = this.fPath;
@@ -133,9 +117,9 @@ export default {
           body: JSON.stringify(data),
           method: 'POST'
         }).then(response => {
-          return response.json()
+          return response.json();
         }).catch((error) => {
-          console.log("API error", error)
+          console.log("API error", error);
         })
       }
 
@@ -144,6 +128,22 @@ export default {
         this.$emit("status:update", true); //make sure the DB operation has finished before emitting the status update
         this.$router.push({ name: 'home' }); // navigate when done
       })
+    },
+    createRecipe(recipe) {
+      if (recipe.title === '' || recipe.description === '' || recipe.ingredients.length == 0 || recipe.body === '') {
+          alert("Please fill all fields.");
+          return
+      } else {
+        if(recipe.image !== null && !this.isImgUploaded) {
+          alert('An image was selected but never uploaded. Please click "Upload Image" before saving.');
+        } else { //all necessary data available, send it off
+          this.isSaving = true;
+          this.addRecipe(recipe);
+        }
+      }
+    },
+    cancelCreate() {
+      this.$router.push({ name: 'home' });
     }
   },
   directives: {
@@ -159,7 +159,7 @@ export default {
     })
   },
   beforeRouteLeave (to, from, next) {
-    if(!this.isEmpty && !this.isFilled) { //if NOT empty AND NOT filled
+    if(!this.isEmpty && !this.isFilled) { //if NOT empty _and_ NOT filled
         const answer = window.confirm('Do you really want to leave? There might be unsaved changes!');
         if (answer) {
             next();

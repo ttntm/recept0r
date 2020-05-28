@@ -6,7 +6,7 @@
     <div v-else class="recipe-grid col">
       <div v-for="recipe in recipes" :key="recipe.refId" class="">
         <div class="recipe-card border border-secondary rounded mb-2">
-          <div v-if="recipe.image" class="recipe-card-img border-bottom border-secondary" v-bind:style="{ 'background-image': 'url(' + recipe.image + ')' }"><!-- image --></div>
+          <div v-if="recipe.image" class="recipe-card-img border-bottom border-secondary bg-light" v-bind:style="{ 'background-image': 'url(' + recipe.image + ')' }"><!-- image --></div>
           <div class="p-4">
             <h3 class="font-weight-bold text-dark">{{ recipe.title }}</h3>
             <p class="text-secondary my-3">{{ recipe.description }}</p>

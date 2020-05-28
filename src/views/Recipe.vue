@@ -17,8 +17,7 @@
         </h3>
         <img v-if="recipe.image" class="img-fluid mb-4" :src="recipe.image" :alt="recipe.title">
         <div v-if="editing">
-          <input @change="editImage" class="form-control-file" type="file" accept="image/*">
-          <button v-if="recipe.image !== null" @click="removeImage" class="btn btn-outline-secondary btn-sm mt-3">Remove Image</button>
+          <recipe-image :recipe="recipe" @image:update="imageUpdate" />
           <hr class="my-4" />
         </div>
         <h4>Description</h4>
@@ -71,17 +70,23 @@
 </template>
 
 <script>
+import RecipeImage from '@/components/RecipeImage.vue';
+
 var cache = Object.create(null);
 var cacheStr = '';
 
 export default {
   name: "recipe",
+  components: {
+      RecipeImage
+  },
   props: {
     fPath: Object
   },
   data() {
     return {
       editing: null,
+      isImgUploaded: false,
       recipe: null,
       readSuccess: false
     };
@@ -89,6 +94,20 @@ export default {
   created() {
     const cRefId = this.$route.params.refId; //get refId
     this.readRecipe(cRefId); //query DB for the respective record
+  },
+  watch: {
+      recipe: {
+        deep: true,
+        handler() {
+            const r = this.recipe;
+            //create id
+            let rTitle = r.title;
+            r.id = rTitle.replace(/[^a-z0-9]+/gi, '-').replace(/^-*|-*$/g, '').toLowerCase();
+            //check if image was uploaded
+            const checkImgSrc = RegExp(/^https:\/\//);
+            this.isImgUploaded = checkImgSrc.test(r.image);
+        }
+      }
   },
   methods: {
     editMode(recipe) {
@@ -99,20 +118,8 @@ export default {
         this.$refs['recipeTitle'].focus();
       });
     },
-    editImage(e) {
-      const selectedImage = e.target.files[0]; //get the first file
-      if(selectedImage) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          this.recipe.image = e.target.result;
-        }
-        reader.readAsDataURL(selectedImage);
-      } else {
-        return //cancel if there's no image or if the image is removed
-      }
-    },
-    removeImage() {
-      this.recipe.image = null;
+    imageUpdate(url) {
+      this.recipe.image = url;
     },
     addIngredient() {
       let ing = this.recipe.ingredients;
@@ -148,17 +155,21 @@ export default {
           alert("Please fill all fields.");
           return
       } else {
-        let rId = recipe.refId;
-        fetch(`${this.fPath.edit}/${rId}`, {
-          body: JSON.stringify(recipe),
-          method: 'POST'
-        }).then(response => {
-          console.log("recipe " + recipe.title + " successfully updated.", response);
-          this.$emit("status:update", true); //make sure the DB operation has finished before emitting the status update
-          this.editing = null; //reset state when done editing
-        }).catch((error) => {
-          console.log("API error", error);
-        })
+        if(recipe.image !== null && !this.isImgUploaded) {
+          alert('An image was selected but never uploaded. Please click "Upload Image" before saving.');
+        } else { //all necessary data available, send it off
+          let rId = recipe.refId;
+          fetch(`${this.fPath.edit}/${rId}`, {
+            body: JSON.stringify(recipe),
+            method: 'POST'
+          }).then(response => {
+            console.log("recipe " + recipe.title + " successfully updated.", response);
+            this.$emit("status:update", true); //make sure the DB operation has finished before emitting the status update
+            this.editing = null; //reset state when done editing
+          }).catch((error) => {
+            console.log("API error", error);
+          })
+        }
       }
     },
     deleteRecipe(recipe) {
