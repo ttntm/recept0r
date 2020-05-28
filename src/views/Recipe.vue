@@ -7,7 +7,7 @@
       <div v-else>
         <!-- BEGIN CONTENT -->
         <h3 class="font-weight-bold mb-4">
-          <span v-if="editing === null">
+          <span v-if="editing === false">
             {{ recipe.title }}
           </span>
           <span v-else>
@@ -21,7 +21,7 @@
           <hr class="my-4" />
         </div>
         <h4>Description</h4>
-        <div v-if="editing === null">
+        <div v-if="editing === false">
           <p class="text-dark">{{ recipe.description }}</p>
         </div>
         <div v-else>
@@ -31,29 +31,24 @@
         <h4>Ingredients</h4>
         <ul class="mb-4">
           <li v-for="(ing, index) in recipe.ingredients" :key="index">
-            <span v-if="editing === null">
+            <span v-if="editing === false">
               {{ ing }}
             </span>
             <span v-else>
-              <input type="text" v-model.trim="recipe.ingredients[index]" v-focus class="form-control mb-3">
+              <input type="text" v-model.trim="recipe.ingredients[index]" v-focus class="d-inline form-control mb-3">
             </span>
           </li>
         </ul>
-        <div v-if="editing !== null" class="d-flex flex-row align-items-start">
+        <div v-if="editing !== false" class="d-flex flex-row align-items-start">
           <button @click="addIngredient" class="btn btn-outline-dark btn-sm mr-3">Add Ingredient</button>
           <button @click="removeIngredient" class="btn btn-outline-secondary btn-sm">Remove Ingredient</button>
         </div>
         <hr class="my-4" />
         <h4>Instructions</h4>
-        <div v-if="editing === null">
-          <p>{{ recipe.body }}</p>
-        </div>
-        <div v-else>
-          <textarea v-model="recipe.body" class="form-control"></textarea>
-        </div>
+        <recipe-editor :editing="editing" :editorContent="recipe.body" @editor:update="editorUpdate" />
         <hr class="my-4" />
         <div class="d-flex flex-row align-items-start">
-          <div v-if="editing === null">
+          <div v-if="editing === false">
             <router-link :to="{name: 'home'}" class="btn btn-outline-secondary btn-sm mr-3">&lt; Go Back</router-link>
             <button class="btn btn-outline-dark btn-sm mr-3" @click="editMode(recipe)">Edit Recipe</button>
             <button class="btn btn-outline-danger btn-sm mr-3" @click="deleteRecipe(recipe)">Delete Recipe</button>
@@ -71,6 +66,7 @@
 
 <script>
 import RecipeImage from '@/components/RecipeImage.vue';
+import RecipeEditor from '@/components/RecipeEditor.vue';
 
 var cache = Object.create(null);
 var cacheStr = '';
@@ -78,14 +74,15 @@ var cacheStr = '';
 export default {
   name: "recipe",
   components: {
-      RecipeImage
+      RecipeImage,
+      RecipeEditor
   },
   props: {
     fPath: Object
   },
   data() {
     return {
-      editing: null,
+      editing: false,
       isImgUploaded: false,
       recipe: null,
       readSuccess: false
@@ -113,7 +110,7 @@ export default {
     editMode(recipe) {
       Object.assign(cache, recipe);
       cacheStr = JSON.stringify(cache);
-      this.editing = recipe.id; //set state when editing
+      this.editing = true; //set state when editing
       this.$nextTick(function(){
         this.$refs['recipeTitle'].focus();
       });
@@ -129,10 +126,13 @@ export default {
       let ing = this.recipe.ingredients;
       ing.splice(ing.length - 1);
     },
+    editorUpdate(editorData) {
+      this.recipe.body = editorData;
+    },
     cancelEdit(recipe) {
       cache = JSON.parse(cacheStr);
       Object.assign(recipe, cache);
-      this.editing = null;
+      this.editing = false;
     },
     readRecipe(refId) {
       fetch(`${this.fPath.readOne}/${refId}`, {
@@ -165,7 +165,7 @@ export default {
           }).then(response => {
             console.log("recipe " + recipe.title + " successfully updated.", response);
             this.$emit("status:update", true); //make sure the DB operation has finished before emitting the status update
-            this.editing = null; //reset state when done editing
+            this.editing = false; //reset state when done editing
           }).catch((error) => {
             console.log("API error", error);
           })
@@ -194,7 +194,7 @@ export default {
     }
   },
   beforeRouteLeave (to, from, next) {
-    if(this.editing !== null) {
+    if(this.editing) {
       const answer = window.confirm('Do you really want to leave? There might be unsaved changes!');
       if (answer) {
         this.cancelEdit(this.recipe);

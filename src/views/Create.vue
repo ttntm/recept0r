@@ -13,7 +13,7 @@
       <h4>Ingredients</h4>
       <ul class="mb-4">
         <li v-for="(ing, index) in recipe.ingredients" :key="index">
-          <input type="text" v-model.trim="recipe.ingredients[index]" v-focus class="form-control mb-3">
+          <input type="text" v-model.trim="recipe.ingredients[index]" v-focus class="d-inline form-control form-control-sm mb-3">
         </li>
       </ul>
       <div class="d-flex flex-row align-items-start">
@@ -22,7 +22,7 @@
       </div>
       <hr class="my-4" />
       <h4>Instructions</h4>
-      <textarea v-model="recipe.body" class="form-control"></textarea>
+      <recipe-editor :editing="true" :editorContent="recipe.body" @editor:update="editorUpdate" />
       <hr class="my-4" />
       <div class="d-flex flex-row align-items-start">
           <button class="btn btn-outline-success btn-sm mr-3" @click="createRecipe(recipe)" :disabled="isDisabled">Save</button>
@@ -34,11 +34,13 @@
 
 <script>
 import RecipeImage from '@/components/RecipeImage.vue';
+import RecipeEditor from '@/components/RecipeEditor.vue';
 
 export default {
   name: "create-recipe",
   components: {
-      RecipeImage
+    RecipeImage,
+    RecipeEditor
   },
   props: {
     fPath: Object
@@ -56,7 +58,16 @@ export default {
         description: '',
         image: null,
         ingredients: [],
-        body: ''
+        body: {
+          "type":"doc",
+          "content":[{
+            "type":"paragraph",
+            "content":[{
+              "type":"text",
+              "text":"Recipe description goes into this editor right here..."
+            }]
+          }]
+        }
       }
     };
   },
@@ -74,7 +85,7 @@ export default {
         deep: true,
         handler() {
             const r = this.recipe;
-            if (r.title === '' && r.description === '' && r.ingredients.length < 1 && r.body === '') {
+            if (r.title === '' && r.description === '' && r.ingredients.length < 1 && r.body === '' && r.image === null) {
                 this.isEmpty = true;
             } else {
                 this.isEmpty = false;
@@ -107,6 +118,9 @@ export default {
       let ing = this.recipe.ingredients;
       ing.splice(ing.length - 1);
       this.hasIng = this.recipe.ingredients.length < 1 ? false : true;
+    },
+    editorUpdate(editorData) {
+      this.recipe.body = editorData;
     },
     addRecipe(recipe) {
       const newRecipe = recipe;
@@ -153,19 +167,17 @@ export default {
         }
     }
   },
-  mounted: function () {
+  mounted() {
     this.$nextTick(function () {
         this.$refs['recipeTitle'].focus();
-    })
+    });
   },
   beforeRouteLeave (to, from, next) {
     if(!this.isEmpty && !this.isFilled) { //if NOT empty _and_ NOT filled
         const answer = window.confirm('Do you really want to leave? There might be unsaved changes!');
         if (answer) {
             next();
-        } else {
-            next(false);
-        }
+        } else { return }
     } else {
         next();
     }
@@ -173,8 +185,5 @@ export default {
 };
 </script>
 
-<style scoped>
-  textarea {
-    min-height: 150px;
-  }
+<style>
 </style>
