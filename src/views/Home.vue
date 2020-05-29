@@ -3,9 +3,20 @@
     <div v-if="isLoading" class="col">
       <p class="text-dark text-center font-weight-bold">Loading recipes...</p>
     </div>
-    <div v-else class="recipe-grid col">
-      <div v-for="recipe in recipesReversed" :key="recipe.refId" class="">
-        <div class="recipe-card border border-secondary rounded mb-2">
+    <div v-else class="col">
+      <div class="text-center mb-5">
+        <div class="search shadow-sm mx-auto" :class="{ 'input-group': searchTerm !== '' }">
+          <input v-model.trim="searchTerm" type="text" class="form-control" placeholder="Search term">
+          <div class="input-group-append">
+            <button v-if="searchTerm !== ''" @click="clearSearch" class="btn btn-outline-secondary" type="button" title="Clear search">&times;</button>
+          </div>
+        </div>
+        <transition name="fade">
+          <p v-if="noResults" class="text-center text-secondary mt-3">No results for your search query :(</p>
+        </transition>
+      </div>
+      <transition-group name="list" tag="div" class="recipe-grid">
+        <div v-for="recipe in recipesReversed" :key="recipe.refId" class="recipe-card border border-secondary rounded">
           <div v-if="recipe.image" class="recipe-card-img border-bottom border-secondary bg-light" v-bind:style="{ 'background-image': 'url(' + recipe.image + ')' }"><!-- image --></div>
           <div class="p-4">
             <h3 class="font-weight-bold text-dark">{{ recipe.title }}</h3>
@@ -14,7 +25,7 @@
             <router-link :to="{name: 'recipe', params: {id: recipe.id, refId: recipe.refId}}" class="btn btn-outline-secondary">Show Recipe &gt;</router-link>
           </div>
         </div>
-      </div>
+      </transition-group>
     </div>
   </div>
 </template>
@@ -41,7 +52,10 @@ export default {
       }).catch((error) => {
         console.log('API error', error);
       })
-    }
+    },
+    clearSearch() {
+      this.searchTerm = '';
+    },
   },
   created() {
     this.getRecipes();
@@ -58,7 +72,8 @@ export default {
   },
   data() {
     return {
-      recipes: []
+      recipes: [],
+      searchTerm: ''
     };
   },
   computed: {
@@ -66,20 +81,42 @@ export default {
       return this.recipes.length > 0 ? false : true;
     },
     recipesReversed() {
-      return this.recipes.slice().reverse();
+      var vm = this
+      return this.recipes.filter(function (item) {
+        if (item.title.toLowerCase().indexOf(vm.searchTerm.toLowerCase()) === -1) { //if there was no match for the title...
+          return item.description.toLowerCase().indexOf(vm.searchTerm.toLowerCase()) !== -1 //...evaluate the description
+        } else { return true }
+      }).reverse();
+    },
+    noResults() {
+      if(this.searchTerm !== '') {
+        return this.recipesReversed.length > 0 ? false : true;
+      } else { return false }
     }
   }
 };
 </script>
 
 <style scoped>
+  .search {
+    width: 50%;
+  }
+  .fade-enter-active, .fade-leave-active {
+    transition: all .5s;
+  }
+  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
+    transform: translateY(30px);
+  }
   .recipe-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 1rem;
   }
-
   @media(max-width:768px) {
+    .search {
+      width: 100%;
+    }
     .recipe-grid {
         grid-template-columns: 1fr;
     }
@@ -98,5 +135,15 @@ export default {
   .recipe-card:hover .recipe-card-img {
     opacity: 1;
     transition: all .5s ease-in-out;
+  }
+  .list-enter-active, .list-leave-active {
+    transition: all .5s;
+  }
+  .list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
+    opacity: 0;
+    /* transform: translateY(30px); */
+  }
+  .list-move {
+    transition: transform .5s;
   }
 </style>
