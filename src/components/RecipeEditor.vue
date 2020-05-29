@@ -6,17 +6,17 @@
           class="btn btn-outline-secondary btn-sm"
           :class="{ 'is-active': isActive.bold() }"
           @click="commands.bold"
-        >Bold</button>
+        ><strong>B</strong></button>
         <button
           class="btn btn-outline-secondary btn-sm"
           :class="{ 'is-active': isActive.italic() }"
           @click="commands.italic"
-        >Italic</button>
+        ><em>i</em></button>
         <button
           class="btn btn-outline-secondary btn-sm"
           :class="{ 'is-active': isActive.underline() }"
           @click="commands.underline"
-        >U</button>
+        ><u>U</u></button>
         <button
           class="btn btn-outline-secondary btn-sm"
           :class="{ 'is-active': isActive.paragraph() }"
@@ -41,14 +41,14 @@
           class="btn btn-outline-secondary btn-sm"
           :class="{ 'is-active': isActive.bullet_list() }"
           @click="commands.bullet_list"
-        >UL</button>
+        >&bull; UL</button>
         <button
           class="btn btn-outline-secondary btn-sm"
           :class="{ 'is-active': isActive.ordered_list() }"
           @click="commands.ordered_list"
-        >OL</button>
-        <button class="btn btn-outline-secondary btn-sm" @click="commands.undo">Undo</button>
-        <button class="btn btn-outline-secondary btn-sm" @click="commands.redo">Redo</button>
+        >1. OL</button>
+        <button class="btn btn-outline-secondary btn-sm" @click="commands.undo">&lt;</button>
+        <button class="btn btn-outline-secondary btn-sm" @click="commands.redo">&gt;</button>
       </div>
     </editor-menu-bar>
     <editor-content class="editor__content" :editor="editor" :class="{ 'editor-active': editing }"/>

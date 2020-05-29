@@ -49,8 +49,8 @@ export default {
             temp.refId = e.ref['@ref'].id; // add the database ID for edit/delete operations
             return temp; //return newly created temp object
           });
-      }).catch((error) => {
-        console.log('API error', error);
+        }).catch((error) => {
+          console.log('API error', error);
       })
     },
     clearSearch() {

@@ -96,13 +96,13 @@ export default {
       recipe: {
         deep: true,
         handler() {
-            const r = this.recipe;
-            //create id
-            let rTitle = r.title;
-            r.id = rTitle.replace(/[^a-z0-9]+/gi, '-').replace(/^-*|-*$/g, '').toLowerCase();
-            //check if image was uploaded
-            const checkImgSrc = RegExp(/^https:\/\//);
-            this.isImgUploaded = checkImgSrc.test(r.image);
+          const r = this.recipe;
+          //create id
+          let rTitle = r.title;
+          r.id = rTitle.replace(/[^a-z0-9]+/gi, '-').replace(/^-*|-*$/g, '').toLowerCase();
+          //check if image was uploaded
+          const checkImgSrc = RegExp(/^https:\/\//);
+          this.isImgUploaded = checkImgSrc.test(r.image);
         }
       }
   },

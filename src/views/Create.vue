@@ -84,25 +84,25 @@ export default {
       recipe: {
         deep: true,
         handler() {
-            const r = this.recipe;
-            if (r.title === '' && r.description === '' && r.ingredients.length < 1 && r.body === '' && r.image === null) {
-                this.isEmpty = true;
-            } else {
-                this.isEmpty = false;
-            }
-            if (r.title !== '' && r.description !== '' && r.ingredients.length > 0 && r.body !== '') {
-                this.isFilled = true;
-            } else {
-                this.isFilled = false;
-            }
-            //watch ingredients
-            this.hasIng = r.ingredients.length < 1 ? false : true;
-            //create id
-            let rTitle = r.title;
-            r.id = rTitle.replace(/[^a-z0-9]+/gi, '-').replace(/^-*|-*$/g, '').toLowerCase();
-            //check if image was uploaded
-            const checkImgSrc = RegExp(/^https:\/\//);
-            this.isImgUploaded = checkImgSrc.test(r.image);
+          const r = this.recipe;
+          if (r.title === '' && r.description === '' && r.ingredients.length < 1 && r.body === '' && r.image === null) {
+              this.isEmpty = true;
+          } else {
+              this.isEmpty = false;
+          }
+          if (r.title !== '' && r.description !== '' && r.ingredients.length > 0 && r.body !== '') {
+              this.isFilled = true;
+          } else {
+              this.isFilled = false;
+          }
+          //watch ingredients
+          this.hasIng = r.ingredients.length < 1 ? false : true;
+          //create id
+          let rTitle = r.title;
+          r.id = rTitle.replace(/[^a-z0-9]+/gi, '-').replace(/^-*|-*$/g, '').toLowerCase();
+          //check if image was uploaded
+          const checkImgSrc = RegExp(/^https:\/\//);
+          this.isImgUploaded = checkImgSrc.test(r.image);
         }
       }
   },
