@@ -151,7 +151,8 @@ export default {
   .recipe-card-img {
     object-fit: cover;
     width: 100%;
-    max-height:300px;
+    height: 300px;
+    max-height: 300px;
     opacity: 0.75;
     transition: all .5s ease-in-out;
   }
