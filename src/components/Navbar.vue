@@ -24,7 +24,6 @@
           <router-link :to="{name: 'create'}" class="nav-link">&plus;Create</router-link>
         </li>
       </ul>
-      <span class="navbar-text mr-3">This is {{ currentPage }}</span>
       <nav-auth class="d-block" />
     </div>
   </nav>
