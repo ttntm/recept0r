@@ -27,13 +27,19 @@
         </li>
       </ul>
       <span class="navbar-text">This is {{ currentPage }}</span>
+      <nav-auth class="ml-3" />
     </div>
   </nav>
 </template>
 
 <script>
+import NavAuth from '@/components/NavAuth.vue';
+
 export default {
   name: 'navbar',
+  components: {
+    NavAuth
+  },
   computed: {
     currentPage() {
       return this.$route.name; //use this to mark the active link in the navigation

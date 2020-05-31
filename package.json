@@ -10,11 +10,13 @@
   "dependencies": {
     "core-js": "^3.6.4",
     "faunadb": "^2.14.1",
+    "netlify-identity-widget": "^1.6.0",
     "tiptap": "^1.27.1",
     "tiptap-extensions": "^1.29.1",
     "vue": "^2.6.11",
     "vue-clazy-load": "^0.4.2",
-    "vue-router": "^3.2.0"
+    "vue-router": "^3.2.0",
+    "vuex": "^3.4.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.3.0",
