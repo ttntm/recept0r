@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="d-flex h-100 flex-column">
-    <Navbar />
+    <Navbar :publicView="publicView" />
     <div class="container flex-grow-1 flex-shrink-0">
       <div class="row">
         <AppHeader />

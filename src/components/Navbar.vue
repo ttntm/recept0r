@@ -35,6 +35,9 @@ import NavAuth from '@/components/NavAuth.vue';
 
 export default {
   name: 'navbar',
+  props: {
+    publicView: Boolean
+  },
   components: {
     NavAuth
   },
