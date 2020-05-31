@@ -18,7 +18,7 @@
       </ul>
       <div class="d-flex flex-row align-items-start">
         <button @click="addIngredient" class="btn btn-outline-dark btn-sm mr-3">Add Ingredient</button>
-        <button v-if="hasIng !== false" @click="removeIngredient" class="btn btn-outline-secondary btn-sm">Remove Ingredient</button>
+        <button v-if="hasIng" @click="removeIngredient" class="btn btn-outline-secondary btn-sm">Remove Ingredient</button>
       </div>
       <hr class="my-4" />
       <h4>Instructions</h4>

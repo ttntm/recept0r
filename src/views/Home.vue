@@ -5,10 +5,10 @@
     </div>
     <div v-else class="col">
       <div class="text-center mb-5">
-        <div class="search shadow-sm mx-auto" :class="{ 'input-group': searchTerm !== '' }">
+        <div class="search shadow-sm mx-auto" :class="{ 'input-group': searchTerm }">
           <input v-model.trim="searchTerm" type="text" class="form-control" placeholder="Search term">
           <div class="input-group-append">
-            <button v-if="searchTerm !== ''" @click="clearSearch" class="btn btn-outline-secondary" type="button" title="Clear search">&times;</button>
+            <button v-if="searchTerm" @click="clearSearch" class="btn btn-outline-secondary" type="button" title="Clear search">&times;</button>
           </div>
         </div>
         <transition name="fade">

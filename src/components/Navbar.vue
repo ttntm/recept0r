@@ -1,8 +1,6 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <span class="navbar-brand">
-      <router-link :to="{name: 'home'}" class="navbar-brand">recept0r</router-link>
-    </span>
+    <span class="navbar-brand">recept0r</span>
     <button
       class="navbar-toggler"
       type="button"
@@ -22,12 +20,12 @@
         <li class="nav-item">
           <router-link :to="{name: 'about'}" class="nav-link">About</router-link>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" v-if="!publicView">
           <router-link :to="{name: 'create'}" class="nav-link">&plus;Create</router-link>
         </li>
       </ul>
-      <span class="navbar-text">This is {{ currentPage }}</span>
-      <nav-auth class="ml-3" />
+      <span class="navbar-text mr-3">This is {{ currentPage }}</span>
+      <nav-auth class="d-block" />
     </div>
   </nav>
 </template>
@@ -39,6 +37,9 @@ export default {
   name: 'navbar',
   components: {
     NavAuth
+  },
+  props: {
+    publicView: Boolean
   },
   computed: {
     currentPage() {

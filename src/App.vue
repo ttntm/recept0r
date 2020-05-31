@@ -5,7 +5,7 @@
       <div class="row">
         <AppHeader />
       </div>
-      <router-view :updateList="updateList" :fPath="fPath" @status:update="updateRecipes" />
+      <router-view :publicView="publicView" :updateList="updateList" :fPath="fPath" @status:update="updateRecipes" />
     </div>
     <AppFooter />
   </div>
@@ -15,6 +15,7 @@
 import Navbar from '@/components/Navbar.vue';
 import AppHeader from '@/components/AppHeader.vue';
 import AppFooter from '@/components/AppFooter.vue';
+import store from "@/store";
 
 export default {
   name: 'App',
@@ -22,6 +23,11 @@ export default {
       Navbar,
       AppHeader,
       AppFooter
+  },
+  computed: {
+    publicView() {
+      return store.state.user.currentUser ? false : true
+    }
   },
   methods: {
     updateRecipes(status) {

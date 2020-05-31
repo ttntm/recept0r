@@ -1,13 +1,13 @@
 <template>
   <div id="recipe" class="row">
     <div class="col">
-      <div v-if="readSuccess !== true">
+      <div v-if="!readSuccess">
         <p class="text-secondary">Loading...</p>
       </div>
       <div v-else>
         <!-- BEGIN CONTENT -->
         <h3 class="font-weight-bold mb-4">
-          <span v-if="editing === false">
+          <span v-if="!editing">
             {{ recipe.title }}
           </span>
           <span v-else>
@@ -21,7 +21,7 @@
           <hr class="my-4" />
         </div>
         <h4>Description</h4>
-        <div v-if="editing === false">
+        <div v-if="!editing">
           <p class="text-dark">{{ recipe.description }}</p>
         </div>
         <div v-else>
@@ -31,7 +31,7 @@
         <h4>Ingredients</h4>
         <ul class="mb-4">
           <li v-for="(ing, index) in recipe.ingredients" :key="index">
-            <span v-if="editing === false">
+            <span v-if="!editing">
               {{ ing }}
             </span>
             <span v-else>
@@ -39,7 +39,7 @@
             </span>
           </li>
         </ul>
-        <div v-if="editing !== false" class="d-flex flex-row align-items-start">
+        <div v-if="editing" class="d-flex flex-row align-items-start">
           <button @click="addIngredient" class="btn btn-outline-dark btn-sm mr-3">Add Ingredient</button>
           <button @click="removeIngredient" class="btn btn-outline-secondary btn-sm">Remove Ingredient</button>
         </div>
@@ -48,10 +48,10 @@
         <recipe-editor :editing="editing" :editorContent="recipe.body" @editor:update="editorUpdate" />
         <hr class="my-4" />
         <div class="d-flex flex-row align-items-start">
-          <div v-if="editing === false">
+          <div v-if="!editing">
             <router-link :to="{name: 'home'}" class="btn btn-outline-secondary btn-sm mr-3">&lt; Go Back</router-link>
-            <button class="btn btn-outline-dark btn-sm mr-3" @click="editMode(recipe)">Edit Recipe</button>
-            <button class="btn btn-outline-danger btn-sm mr-3" @click="deleteRecipe(recipe)">Delete Recipe</button>
+            <button v-if="!publicView" class="btn btn-outline-dark btn-sm mr-3" @click="editMode(recipe)">Edit Recipe</button>
+            <button v-if="!publicView" class="btn btn-outline-danger btn-sm mr-3" @click="deleteRecipe(recipe)">Delete Recipe</button>
           </div>
           <div v-else>
             <button class="btn btn-outline-success btn-sm mr-3" @click="editRecipe(recipe)">Save</button>
@@ -78,7 +78,8 @@ export default {
       RecipeEditor
   },
   props: {
-    fPath: Object
+    fPath: Object,
+    publicView: Boolean
   },
   data() {
     return {

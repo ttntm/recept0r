@@ -1,7 +1,8 @@
 <template>
-  <div id="nav-auth">
+  <div id="nav-auth" class="navbar-text">
     <div v-if="isLoggedIn">
-      <button @click="triggerNetlifyIdentityAction('logout')" class="btn btn-sm btn-outline-secondary">Log Out</button>
+      <span class="text-dark">{{ this.isLoggedIn.email }}</span>
+      <button @click="triggerNetlifyIdentityAction('logout')" class="btn btn-sm btn-outline-secondary ml-2">Log Out</button>
     </div>
     <div v-else>
       <button @click="triggerNetlifyIdentityAction('login')" class="btn btn-sm btn-outline-dark mr-2">Log In</button>
@@ -14,21 +15,12 @@
 import netlifyIdentity from "netlify-identity-widget";
 import { mapActions, mapState } from "vuex";
 
-netlifyIdentity.init({
-  APIUrl: "https://recept0r.netlify.app/.netlify/identity",
-  logo: true // you can try false and see what happens
-});
-
 export default {
   name: 'nav-auth',
-  computed: mapState({
-    isLoggedIn: state => state.user.currentUser
-  }),
-  data() {
-    return {
-      currentUser: null
-    };
-  },
+  computed:
+    mapState({
+      isLoggedIn: state => state.user.currentUser,
+    }),
   methods: {
     ...mapActions({
       setUser: 'user/setUser'
@@ -43,7 +35,9 @@ export default {
       } else if (action == "logout") {
         this.setUser(null);
         netlifyIdentity.logout();
-        this.$router.push('/');
+        if(this.$route.name !== 'home') { //prevent duplicate navigation router error
+            this.$router.push({ name: 'home' });
+        }
       }
     },
   }

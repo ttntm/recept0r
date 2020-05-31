@@ -8,6 +8,8 @@ import Create from "@/views/Create.vue";
 import Recipe from "@/views/Recipe.vue";
 import FourOFour from "@/views/404.vue";
 
+import store from "@/store";
+
 Vue.use(Router);
 
 export default new Router({
@@ -26,7 +28,15 @@ export default new Router({
     {
       path: "/create",
       name: "create",
-      component: Create
+      component: Create,
+      meta: { requiresAuth: true },
+      beforeEnter: (to, from, next) => {
+         if (!store.state.user.currentUser) { //get stored user state from vuex store
+          alert('Nope...');
+        } else {
+          return next();
+        }
+      }
     },
     {
       path: "/recipe/:id/:refId",
