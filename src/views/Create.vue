@@ -1,17 +1,19 @@
 <template>
   <div id="create-recipe" class="row">
-    <div class="col">
+    <div class="col-12">
       <h3 class="font-weight-bold mb-3">Recipe Title</h3>
-      <input type="text" v-model="recipe.title" ref="recipeTitle" class="form-control mb-3">
-      <h4>Description</h4>
-      <input type="text" v-model="recipe.description" class="form-control mb-3">
-      <hr class="my-4" />
+      <input type="text" v-model="recipe.title" ref="recipeTitle" class="form-control w-50 mb-3">
+    </div>
+    <div class="col-sm-12 col-md-6">
       <h4>Image</h4>
       <img class="img-fluid mt-3 mb-4" :src="recipe.image" :alt="recipe.title">
-      <recipe-image :recipe="recipe" @image:update="imageUpdate" />
-      <hr class="my-4" />
-      <h4>Ingredients</h4>
-      <ul class="mb-4">
+      <recipe-image :recipe="recipe" @image:update="imageUpdate" class="mb-3" />
+    </div>
+    <div class="col-sm-12 col-md-6">
+      <h4 class="mb-3">Description</h4>
+      <input type="text" v-model="recipe.description" class="form-control mb-3">
+      <h4 class="mb-3">Ingredients</h4>
+      <ul class="mb-3">
         <li v-for="(ing, index) in recipe.ingredients" :key="index">
           <input type="text" v-model.trim="recipe.ingredients[index]" v-focus class="d-inline form-control form-control-sm mb-3">
         </li>
@@ -20,10 +22,11 @@
         <button @click="addIngredient" class="btn btn-outline-dark btn-sm mr-3">Add Ingredient</button>
         <button v-if="hasIng" @click="removeIngredient" class="btn btn-outline-secondary btn-sm">Remove Ingredient</button>
       </div>
-      <hr class="my-4" />
-      <h4>Instructions</h4>
+    </div>
+    <div class="col">
+      <h4 class="mb-3">Instructions</h4>
       <recipe-editor :editing="true" :editorContent="recipe.body" @editor:update="editorUpdate" />
-      <hr class="my-4" />
+      <hr class="my-4">
       <div class="d-flex flex-row align-items-start">
           <button class="btn btn-outline-success btn-sm mr-3" @click="createRecipe(recipe)" :disabled="isDisabled">Save</button>
           <button class="btn btn-outline-danger btn-sm mr-3" @click="cancelCreate(recipe)">Cancel</button>

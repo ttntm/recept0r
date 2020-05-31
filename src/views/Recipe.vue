@@ -1,50 +1,50 @@
 <template>
   <div id="recipe" class="row">
+    <div v-if="readSuccess" class="col-12">
+      <h3 class="font-weight-bold mb-4">
+        <span v-if="!editing">
+          {{ recipe.title }}
+        </span>
+        <span v-else>
+          <span class="d-block mb-3">Recipe Title</span>
+          <input type="text" v-model="recipe.title" ref="recipeTitle" class="form-control w-50">
+        </span>
+      </h3>
+    </div>
+    <div v-if="readSuccess" class="col-sm-12 col-md-6">
+      <img v-if="recipe.image" class="img-fluid rounded-lg mb-4" :src="recipe.image" :alt="recipe.title">
+      <recipe-image v-if="editing" :recipe="recipe" @image:update="imageUpdate" />
+    </div>
+    <div v-if="readSuccess" class="col-sm-12 col-md-6">
+      <h4 class="mb-3">Description</h4>
+      <div v-if="!editing">
+        <p class="text-dark">{{ recipe.description }}</p>
+      </div>
+      <div v-else>
+        <input type="text" v-model="recipe.description" class="form-control">
+      </div>
+      <h4 class="my-3">Ingredients</h4>
+      <ul class="my-3">
+        <li v-for="(ing, index) in recipe.ingredients" :key="index">
+          <span v-if="!editing">
+            {{ ing }}
+          </span>
+          <span v-else>
+            <input type="text" v-model.trim="recipe.ingredients[index]" v-focus class="d-inline form-control mb-3">
+          </span>
+        </li>
+      </ul>
+      <div v-if="editing" class="d-flex flex-row align-items-start">
+        <button @click="addIngredient" class="btn btn-outline-dark btn-sm mr-3">Add Ingredient</button>
+        <button @click="removeIngredient" class="btn btn-outline-secondary btn-sm">Remove Ingredient</button>
+      </div>
+    </div>
     <div class="col">
       <div v-if="!readSuccess">
         <p class="text-secondary">Loading...</p>
       </div>
       <div v-else>
-        <!-- BEGIN CONTENT -->
-        <h3 class="font-weight-bold mb-4">
-          <span v-if="!editing">
-            {{ recipe.title }}
-          </span>
-          <span v-else>
-            <span class="d-block mb-3">Recipe Title</span>
-            <input type="text" v-model="recipe.title" ref="recipeTitle" class="form-control">
-          </span>
-        </h3>
-        <img v-if="recipe.image" class="img-fluid mb-4" :src="recipe.image" :alt="recipe.title">
-        <div v-if="editing">
-          <recipe-image :recipe="recipe" @image:update="imageUpdate" />
-          <hr class="my-4" />
-        </div>
-        <h4>Description</h4>
-        <div v-if="!editing">
-          <p class="text-dark">{{ recipe.description }}</p>
-        </div>
-        <div v-else>
-          <input type="text" v-model="recipe.description" class="form-control">
-        </div>
-        <hr class="my-4" />
-        <h4>Ingredients</h4>
-        <ul class="mb-4">
-          <li v-for="(ing, index) in recipe.ingredients" :key="index">
-            <span v-if="!editing">
-              {{ ing }}
-            </span>
-            <span v-else>
-              <input type="text" v-model.trim="recipe.ingredients[index]" v-focus class="d-inline form-control mb-3">
-            </span>
-          </li>
-        </ul>
-        <div v-if="editing" class="d-flex flex-row align-items-start">
-          <button @click="addIngredient" class="btn btn-outline-dark btn-sm mr-3">Add Ingredient</button>
-          <button @click="removeIngredient" class="btn btn-outline-secondary btn-sm">Remove Ingredient</button>
-        </div>
-        <hr class="my-4" />
-        <h4>Instructions</h4>
+        <h4 class="mb-3">Instructions</h4>
         <recipe-editor :editing="editing" :editorContent="recipe.body" @editor:update="editorUpdate" />
         <hr class="my-4" />
         <div class="d-flex flex-row align-items-start">
