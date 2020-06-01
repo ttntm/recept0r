@@ -7,7 +7,7 @@
         </span>
         <span v-else>
           <span class="d-block mb-3">Recipe Title</span>
-          <input type="text" v-model="recipe.title" ref="recipeTitle" class="form-control w-50">
+          <input type="text" v-model="recipe.title" ref="recipeTitle" class="form-control">
         </span>
       </h3>
     </div>

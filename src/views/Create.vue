@@ -2,7 +2,7 @@
   <div id="create-recipe" class="row">
     <div class="col-12">
       <h3 class="font-weight-bold mb-3">Recipe Title</h3>
-      <input type="text" v-model="recipe.title" ref="recipeTitle" class="form-control w-50 mb-3">
+      <input type="text" v-model="recipe.title" ref="recipeTitle" class="form-control mb-3">
     </div>
     <div class="col-sm-12 col-md-6">
       <h4>Image</h4>
@@ -28,7 +28,7 @@
       <recipe-editor :editing="true" :editorContent="recipe.body" @editor:update="editorUpdate" />
       <hr class="my-4">
       <div class="d-flex flex-row align-items-start">
-          <button class="btn btn-outline-success btn-sm mr-3" @click="createRecipe(recipe)" :disabled="isDisabled">Save</button>
+          <button class="btn btn-outline-success btn-sm mr-3" @click="createRecipe(recipe)" :disabled="isDisabled">{{ saveBtnTxt }}</button>
           <button class="btn btn-outline-danger btn-sm mr-3" @click="cancelCreate(recipe)">Cancel</button>
       </div>
     </div>
@@ -78,9 +78,12 @@ export default {
     isDisabled() {
       if(this.isEmpty || this.isSaving) {
         return true
-      } else {
-        return false
-      }
+      } else { return false }
+    },
+    saveBtnTxt() {
+      if(this.isSaving) {
+        return "Saving..."
+      } else { return "Save" }
     }
   },
   watch: {
@@ -88,16 +91,12 @@ export default {
         deep: true,
         handler() {
           const r = this.recipe;
-          if (r.title === '' && r.description === '' && r.ingredients.length < 1 && r.body === '' && r.image === null) {
+          if (r.title === '' && r.description === '' && !this.hasIng && r.image === null) {
               this.isEmpty = true;
-          } else {
-              this.isEmpty = false;
-          }
-          if (r.title !== '' && r.description !== '' && r.ingredients.length > 0 && r.body !== '') {
+          } else { this.isEmpty = false; }
+          if (r.title !== '' && r.description !== '' && this.hasIng && r.body !== '') {
               this.isFilled = true;
-          } else {
-              this.isFilled = false;
-          }
+          } else { this.isFilled = false; }
           //watch ingredients
           this.hasIng = r.ingredients.length < 1 ? false : true;
           //create id
@@ -114,13 +113,12 @@ export default {
       this.recipe.image = url;
     },
     addIngredient() {
-      let ing = this.recipe.ingredients;
-      ing.push('');
+      this.recipe.ingredients.push('');
     },
     removeIngredient() {
       let ing = this.recipe.ingredients;
       ing.splice(ing.length - 1);
-      this.hasIng = this.recipe.ingredients.length < 1 ? false : true;
+      this.hasIng = ing.length < 1 ? false : true;
     },
     editorUpdate(editorData) {
       this.recipe.body = editorData;
