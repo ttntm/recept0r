@@ -1,7 +1,6 @@
 <template>
   <div id="nav-auth" class="navbar-text">
     <div v-if="!publicView">
-      <span class="text-dark">Logged in</span>
       <button @click="logout()" class="btn btn-sm btn-outline-secondary ml-2">Log Out</button>
     </div>
     <div v-else>
@@ -96,7 +95,8 @@ export default {
     signup() {
       this.attemptSignup(this.crendentials)
         .then(response => {
-          //alert(`Confirmation email has been sent to you! ${response.id}`);
+          this.toggleShow();
+          alert("Confirmation email has been sent to you!");
           console.log(response);
         })
         .catch(error => {
@@ -121,7 +121,9 @@ export default {
       this.attemptLogout()
         .then(resp => {
           // alert("logged out");
-          this.$router.push({ name: 'home' });
+          if(this.$route.name !== 'home') {
+            this.$router.push({ name: 'home' });
+          }
           console.log("logged out", resp);
         })
         .catch(error => {
@@ -154,6 +156,10 @@ export default {
     margin: 0 auto;
     opacity: 1;
     z-index: 1;
+  }
+
+  @media(max-width:767px){
+    .user-modal {max-width: 95%;}
   }
 
   .user-modal-close {
