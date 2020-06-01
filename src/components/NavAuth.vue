@@ -146,7 +146,7 @@ export default {
   }
 
   .user-modal {
-    background: #f9f8fa;
+    background: #f8f9fa;
     padding: 2rem 2.5rem;
     width: 450px;
     position: fixed;
