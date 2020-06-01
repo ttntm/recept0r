@@ -15,7 +15,7 @@
 import Navbar from '@/components/Navbar.vue';
 import AppHeader from '@/components/AppHeader.vue';
 import AppFooter from '@/components/AppFooter.vue';
-import store from "@/store";
+import store from '@/store';
 
 export default {
   name: 'App',
@@ -26,7 +26,9 @@ export default {
   },
   computed: {
     publicView() {
-      return store.state.user.currentUser ? false : true
+      if (store.getters["user/loggedIn"]) {
+        return false;
+      } else { return true }
     }
   },
   methods: {

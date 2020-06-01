@@ -24,7 +24,7 @@
           <router-link :to="{name: 'create'}" class="nav-link">&plus;Create</router-link>
         </li>
       </ul>
-      <nav-auth class="d-block" />
+      <nav-auth :publicView="publicView" class="d-block" />
     </div>
   </nav>
 </template>

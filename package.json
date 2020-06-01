@@ -10,7 +10,7 @@
   "dependencies": {
     "core-js": "^3.6.4",
     "faunadb": "^2.14.1",
-    "netlify-identity-widget": "^1.6.0",
+    "gotrue-js": "^0.9.25",
     "tiptap": "^1.27.1",
     "tiptap-extensions": "^1.29.1",
     "vue": "^2.6.11",
