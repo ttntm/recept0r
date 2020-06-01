@@ -102,7 +102,7 @@ function detectRecoveryToken() {
  */
 function confirmEmailToken(token) {
     store
-        .dispatch("auth/attemptConfirmation", token)
+        .dispatch("user/attemptConfirmation", token)
         .then(resp => {
             alert(`${resp.email} has been confirmed, please login`);
         })
@@ -120,7 +120,7 @@ function confirmEmailToken(token) {
  */
 function confirmExternalAccessToken(externalAccessTokenObject) {
     store
-        .dispatch("auth/completeExternalLogin", externalAccessTokenObject)
+        .dispatch("user/completeExternalLogin", externalAccessTokenObject)
         .then(() => {
             alert("You have successfully signed in via external provider");
         })
@@ -132,7 +132,7 @@ function confirmExternalAccessToken(externalAccessTokenObject) {
 
 function confirmRecoveryToken(recoveryToken) {
     store
-        .dispatch("auth/attemptPasswordRecovery", recoveryToken)
+        .dispatch("user/attemptPasswordRecovery", recoveryToken)
         .then(() => {
             // router.push("profile?showUpdateUserModal=true");
             alert("Account has been recovered. Update your password now.");
