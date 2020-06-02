@@ -1,61 +1,61 @@
 <template>
-  <div id="recipe" class="row">
-    <div v-if="readSuccess" class="col-12">
-      <h3 class="font-weight-bold mb-4">
+  <div id="recipe" class="flex flex-row flex-wrap">
+    <div v-if="readSuccess" class="w-full">
+      <h3 class="font-bold mb-4">
         <span v-if="!editing">
           {{ recipe.title }}
         </span>
         <span v-else>
-          <span class="d-block mb-3">Recipe Title</span>
+          <span class="block mb-4">Recipe Title</span>
           <input type="text" v-model="recipe.title" ref="recipeTitle" class="form-control">
         </span>
       </h3>
     </div>
-    <div v-if="readSuccess" class="col-sm-12 col-md-6">
+    <div v-if="readSuccess" class="w-full md:w-1/2">
       <img v-if="recipe.image" class="img-fluid rounded-lg mb-4" :src="recipe.image" :alt="recipe.title">
-      <recipe-image v-if="editing" :recipe="recipe" @image:update="imageUpdate" />
+      <recipe-image v-if="editing" :recipe="recipe" @image:update="imageUpdate" class="mb-4" />
     </div>
-    <div v-if="readSuccess" class="col-sm-12 col-md-6">
-      <h4 class="mb-3">Description</h4>
+    <div v-if="readSuccess" class="w-full md:w-1/2 pl-8">
+      <h4 class="mb-4">Description</h4>
       <div v-if="!editing">
-        <p class="text-dark">{{ recipe.description }}</p>
+        <p class="text-gray-800">{{ recipe.description }}</p>
       </div>
       <div v-else>
         <input type="text" v-model="recipe.description" class="form-control">
       </div>
-      <h4 class="my-3">Ingredients</h4>
-      <ul class="my-3">
+      <h4 class="my-4">Ingredients</h4>
+      <ul class="my-4">
         <li v-for="(ing, index) in recipe.ingredients" :key="index">
           <span v-if="!editing">
             {{ ing }}
           </span>
           <span v-else>
-            <input type="text" v-model.trim="recipe.ingredients[index]" v-focus class="d-inline form-control mb-3">
+            <input type="text" v-model.trim="recipe.ingredients[index]" v-focus class="inline form-control mb-4">
           </span>
         </li>
       </ul>
-      <div v-if="editing" class="d-flex flex-row align-items-start">
-        <button @click="addIngredient" class="btn btn-outline-dark btn-sm mr-3">Add Ingredient</button>
-        <button @click="removeIngredient" class="btn btn-outline-secondary btn-sm">Remove Ingredient</button>
+      <div v-if="editing" class="flex flex-row items-start">
+        <button @click="addIngredient" class="btn btn-gray text-sm mr-4">Add Ingredient</button>
+        <button @click="removeIngredient" class="btn btn-red text-sm">Remove Ingredient</button>
       </div>
     </div>
-    <div class="col">
+    <div class="w-full">
       <div v-if="!readSuccess">
-        <p class="text-secondary">Loading...</p>
+        <p class="text-gray-600">Loading...</p>
       </div>
       <div v-else>
-        <h4 class="mb-3">Instructions</h4>
+        <h4 class="mb-4">Instructions</h4>
         <recipe-editor :editing="editing" :editorContent="recipe.body" @editor:update="editorUpdate" />
-        <hr class="my-4" />
-        <div class="d-flex flex-row align-items-start">
+        <hr class="my-8" />
+        <div class="flex flex-row items-start">
           <div v-if="!editing">
-            <router-link :to="{name: 'home'}" class="btn btn-outline-secondary btn-sm mr-3">&lt; Go Back</router-link>
-            <button v-if="!publicView" class="btn btn-outline-dark btn-sm mr-3" @click="editMode(recipe)">Edit Recipe</button>
-            <button v-if="!publicView" class="btn btn-outline-danger btn-sm mr-3" @click="deleteRecipe(recipe)">Delete Recipe</button>
+            <router-link :to="{name: 'home'}" class="btn btn-gray mr-4">&lt; Go Back</router-link>
+            <button v-if="!publicView" class="btn btn-gray mr-4" @click="editMode(recipe)">Edit Recipe</button>
+            <button v-if="!publicView" class="btn btn-red mr-4" @click="deleteRecipe(recipe)">Delete Recipe</button>
           </div>
           <div v-else>
-            <button class="btn btn-outline-success btn-sm mr-3" @click="editRecipe(recipe)">Save</button>
-            <button class="btn btn-outline-danger btn-sm mr-3" @click="cancelEdit(recipe)">Cancel</button>
+            <button class="btn btn-green mr-4" @click="editRecipe(recipe)">Save</button>
+            <button class="btn btn-red mr-4" @click="cancelEdit(recipe)">Cancel</button>
           </div>
         </div>
       </div>
@@ -210,8 +210,14 @@ export default {
 };
 </script>
 
-<style scoped>
-  textarea {
-    min-height: 150px;
+<style lang="postcss" scoped>
+  h3 {
+    @apply tracking-wide text-3xl font-bold;
+  }
+  h4 {
+    @apply text-2xl text-gray-600;
+  }
+  .form-control {
+    @apply block w-full text-base;
   }
 </style>

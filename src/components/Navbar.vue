@@ -1,33 +1,17 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <span class="navbar-brand">
-      <router-link :to="{name: 'home'}" class="navbar-brand">recept0r</router-link>
+  <nav class="w-full flex flex-row justify-start items-center border-b px-2 py-4">
+    <span class="block mr-8">
+      <router-link :to="{name: 'home'}" class="text-xl tracking-wider font-bold text-green-700">recept0r</router-link>
     </span>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-toggle="collapse"
-      data-target="#navbarText"
-      aria-controls="navbarText"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarText">
-      <ul class="navbar-nav mr-auto font-weight-bold">
-        <li class="nav-item">
-          <router-link :to="{name: 'home'}" class="nav-link">Home</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link :to="{name: 'about'}" class="nav-link">About</router-link>
-        </li>
-        <li class="nav-item" v-if="!publicView">
-          <router-link :to="{name: 'create'}" class="nav-link">&plus;Create</router-link>
-        </li>
-      </ul>
-      <nav-auth :publicView="publicView" class="d-block" />
+    <div class="inline-flex flex-row justify-start flex-grow">
+      <router-link :to="{name: 'home'}" class="inline-block font-bold text-gray-600 hover:text-gray-800 p-2 mr-4">Home</router-link>
+      <router-link :to="{name: 'about'}" class="inline-block font-bold text-gray-600 hover:text-gray-800 p-2 mr-4">About</router-link>
+      <router-link v-if="!publicView" :to="{name: 'create'}" class="inline-block font-bold text-gray-600 hover:text-gray-800 p-2">&plus;Create</router-link>
     </div>
+    <nav-auth :publicView="publicView" class="block" />
+    <button class="hidden" type="button">
+      <span class="nav-icon">[]</span>
+    </button>
   </nav>
 </template>
 

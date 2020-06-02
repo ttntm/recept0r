@@ -1,9 +1,7 @@
 <template>
-    <div id="app-footer" class="container-fluid bg-dark text-light py-3 mt-5">
-        <div class="row">
-            <div class="col text-center">
-                <p class="my-2">App footer. Nothing spectacular</p>
-            </div>
+    <div id="app-footer" class="bg-gray-800 text-gray-200 mt-12">
+        <div class="container text-center py-4 mx-auto">
+            <p class="m-0">App footer. Nothing spectacular</p>
         </div>
     </div>
 </template>

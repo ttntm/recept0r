@@ -1,0 +1,69 @@
+@tailwind base;
+
+@tailwind components;
+
+/* BS Reboot */
+
+  h1, h2, h3, h4, h5, h6, p {
+    @apply tracking-wide;
+    @apply mt-0;
+    @apply mb-4;
+  }
+
+  h1 {
+    font-size: calc(1.375rem + 1.5vw);
+  }
+
+  @media (min-width: 1200px) {
+    h1 {
+      @apply text-3xl;
+    }
+  }
+
+  h2 {
+    font-size: calc(1.325rem + 0.9vw);
+  }
+
+  @media (min-width: 1200px) {
+    h2 {
+      @apply text-2xl;
+    }
+  }
+
+  h3 {
+    font-size: calc(1.3rem + 0.6vw);
+  }
+
+  @media (min-width: 1200px) {
+    h3 {
+      @apply text-xl;
+    }
+  }
+
+  ol, ul {
+    @apply pl-8;
+    list-style-type: square;
+  }
+
+  ol, ul, dl {
+    @apply mt-0;
+    @apply mb-4;
+  }
+
+  ol ol, ul ul, ol ul, ul ol {
+    @apply mb-0;
+  }
+
+  b, strong {
+    @apply font-bold;
+  }
+
+  i, em {
+    @apply italic;
+  }
+
+  small {
+    @apply text-sm;
+  }
+
+@tailwind utilities;

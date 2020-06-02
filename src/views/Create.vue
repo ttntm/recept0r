@@ -1,35 +1,35 @@
 <template>
-  <div id="create-recipe" class="row">
-    <div class="col-12">
-      <h3 class="font-weight-bold mb-3">Recipe Title</h3>
-      <input type="text" v-model="recipe.title" ref="recipeTitle" class="form-control mb-3">
+  <div id="create-recipe" class="w-4/5 flex flex-row flex-wrap mx-auto">
+    <div class="w-full">
+      <h3 class="font-bold mb-4">Recipe Title</h3>
+      <input type="text" v-model="recipe.title" ref="recipeTitle" class="form-control mb-4">
     </div>
-    <div class="col-sm-12 col-md-6">
+    <div class="w-full md:w-1/2">
       <h4>Image</h4>
-      <img class="img-fluid mt-3 mb-4" :src="recipe.image" :alt="recipe.title">
-      <recipe-image :recipe="recipe" @image:update="imageUpdate" class="mb-3" />
+      <img class="img-fluid mt-4 mb-4" :src="recipe.image" :alt="recipe.title">
+      <recipe-image :recipe="recipe" @image:update="imageUpdate" class="mb-4" />
     </div>
-    <div class="col-sm-12 col-md-6">
-      <h4 class="mb-3">Description</h4>
-      <input type="text" v-model="recipe.description" class="form-control mb-3">
-      <h4 class="mb-3">Ingredients</h4>
-      <ul class="mb-3">
+    <div class="w-full md:w-1/2">
+      <h4 class="mb-4">Description</h4>
+      <input type="text" v-model="recipe.description" class="form-control mb-4">
+      <h4 class="mb-4">Ingredients</h4>
+      <ul class="mb-4">
         <li v-for="(ing, index) in recipe.ingredients" :key="index">
-          <input type="text" v-model.trim="recipe.ingredients[index]" v-focus class="d-inline form-control form-control-sm mb-3">
+          <input type="text" v-model.trim="recipe.ingredients[index]" v-focus class="form-control mb-4">
         </li>
       </ul>
-      <div class="d-flex flex-row align-items-start">
-        <button @click="addIngredient" class="btn btn-outline-dark btn-sm mr-3">Add Ingredient</button>
-        <button v-if="hasIng" @click="removeIngredient" class="btn btn-outline-secondary btn-sm">Remove Ingredient</button>
+      <div class="flex flex-row items-start">
+        <button @click="addIngredient" class="btn btn-green text-sm mr-4">Add Ingredient</button>
+        <button v-if="hasIng" @click="removeIngredient" class="btn btn-gray text-sm">Remove Ingredient</button>
       </div>
     </div>
-    <div class="col">
-      <h4 class="mb-3">Instructions</h4>
+    <div class="w-full">
+      <h4 class="mb-4">Instructions</h4>
       <recipe-editor :editing="true" :editorContent="recipe.body" @editor:update="editorUpdate" />
-      <hr class="my-4">
-      <div class="d-flex flex-row align-items-start">
-          <button class="btn btn-outline-success btn-sm mr-3" @click="createRecipe(recipe)" :disabled="isDisabled">{{ saveBtnTxt }}</button>
-          <button class="btn btn-outline-danger btn-sm mr-3" @click="cancelCreate(recipe)">Cancel</button>
+      <hr class="my-8">
+      <div class="flex flex-row items-start">
+          <button class="btn btn-green mr-4" @click="createRecipe(recipe)" :disabled="isDisabled">{{ saveBtnTxt }}</button>
+          <button class="btn btn-red mr-4" @click="cancelCreate(recipe)">Cancel</button>
       </div>
     </div>
   </div>
@@ -53,6 +53,7 @@ export default {
       isEmpty: true,
       isFilled: false,
       hasIng: false,
+      wasEdited: false,
       isSaving: false,
       isImgUploaded: false,
       recipe: {
@@ -91,7 +92,7 @@ export default {
         deep: true,
         handler() {
           const r = this.recipe;
-          if (r.title === '' && r.description === '' && !this.hasIng && r.image === null) {
+          if (r.title === '' && r.description === '' && !this.hasIng && r.image === null && !this.wasEdited) {
               this.isEmpty = true;
           } else { this.isEmpty = false; }
           if (r.title !== '' && r.description !== '' && this.hasIng && r.body !== '') {
@@ -122,6 +123,7 @@ export default {
     },
     editorUpdate(editorData) {
       this.recipe.body = editorData;
+      this.wasEdited = true;
     },
     addRecipe(recipe) {
       const newRecipe = recipe;
@@ -186,5 +188,14 @@ export default {
 };
 </script>
 
-<style>
+<style lang="postcss" scoped>
+  h3 {
+    @apply tracking-wide text-3xl font-bold;
+  }
+  h4 {
+    @apply text-2xl text-gray-600;
+  }
+  .form-control {
+    @apply block w-full text-base;
+  }
 </style>

@@ -1,52 +1,52 @@
 <template>
   <div id="nav-auth" class="navbar-text">
     <div v-if="!publicView">
-      <button @click="logout()" class="btn btn-sm btn-outline-secondary ml-2">Log Out</button>
+      <button @click="logout()" class="btn btn-gray py-1">Log Out</button>
     </div>
     <div v-else>
-      <button @click="toggleShow()" class="btn btn-sm btn-outline-dark mr-2">Log In</button>
+      <button @click="toggleShow()" ref="loginButton" class="btn btn-gray py-1">Log In</button>
     </div>
     <transition name="fade">
-      <div v-if="isShowing" class="user-modal rounded-lg shadow-lg border border-secondary">
+      <div v-if="isShowing" v-closable="{exclude: ['loginButton'],handler: 'toggleShow'}" class="user-modal rounded-lg shadow-lg border">
         <div class="user-modal-close" @click="toggleShow()">&times;</div>
         <div class="form">
+          <!-- SIGNUP PART -->
           <form v-if="mode === 'register'" class="" @keyup.enter="signup()">
-            <h2 class="mb-3">👋 Register Here</h2>
+            <h2 class="text-xl mb-4">👋 Register Here</h2>
             <div class="form-group">
               <label for="name">Name</label>
               <input class="form-control" id="name" v-model="crendentials.name" ref="firstInput" type="text" placeholder="Arnold Schwarzenegger"/>
             </div>
             <div class="form-group">
               <label for="email">Email</label>
-              <input class="form-control" id="email" v-model="crendentials.email" type="text" placeholder="arnie@terminator.com"/>
+              <input class="form-control" id="email" type="email" v-model="crendentials.email" placeholder="arnie@terminator.com"/>
             </div>
             <div class="form-group">
               <label for="password">Password</label>
               <input class="form-control" id="password" type="password" v-model="crendentials.password" placeholder="******"/>
             </div>
-            <button class="btn btn-outline-dark mb-2" type="button" @click="signup()">Sign Up</button>
-            <p class="message">
-              Already registered?
-              <a href="#" @click="toggleMode">Sign In</a>
+            <button class="btn btn-gray py-1 mb-2" type="button" @click="signup()">Sign Up</button>
+            <p class="text-sm">
+              Already registered? <a href="#" @click="toggleMode">Sign In</a>
             </p>
           </form>
-
+          <!-- LOGIN PART -->
           <form v-if="mode === 'login'" class="login-form stack" @keyup.enter="login()">
-            <h2 class="mb-3">🔐 Login Here</h2>
+            <h2 class="text-xl mb-4">🔐 Login Here</h2>
             <div class="form-group">
               <label for="email">Email</label>
-              <input class="form-control" id="email" v-model="crendentials.email" ref="firstInput" type="text" placeholder="hey@email.com"/>
+              <input class="form-control" id="email" type="email" v-model="crendentials.email" ref="firstInput" placeholder="hey@email.com"/>
             </div>
             <div class="form-group">
               <label for="password">Password</label>
               <input class="form-control" id="password" type="password" v-model="crendentials.password" placeholder="******"/>
             </div>
-            <button class="btn btn-outline-dark mb-2" type="button" @click="login()">Login</button>
-            <p class="message">
-              Not registered?
-              <a href="#" @click="toggleMode">Create an account</a>
+            <button class="btn btn-gray py-1 mb-2" type="button" @click="login()">Login</button>
+            <p class="text-sm">
+              Not registered? <a href="#" @click="toggleMode">Create an account</a>
             </p>
           </form>
+          <p v-if="cValidateMsg !== ''" class="font-bold" :class="{ 'error' : !cValidate }">{{ cValidateMsg }}</p>
         </div>
       </div>
     </transition>
@@ -69,10 +69,44 @@ export default {
         email: ""
       },
       mode: "login",
-      isShowing: false
+      isShowing: false,
+      cValidateMsg: ''
     };
   },
-   methods: {
+  computed: {
+    cValidate() {
+      let c = this.crendentials;
+      let rx = RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
+      let valid = rx.test(c.email);
+      if(this.mode === 'login') {
+        if(!c.password || !c.email) {
+          return false;
+        } else if(c.password && c.email && valid) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        if(!c.password || !c.email || !c.name) {
+          return false;
+        } else if(c.password && c.email && c.name && valid) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    }
+  },
+  watch: {
+    isShowing: {
+      handler() {
+        if(!this.isShowing) {
+          this.crendentials = { name: "", password: "", email: "" };
+        }
+      }
+    }
+  },
+  methods: {
     ...mapActions("user", [
       "attemptLogin",
       "attemptSignup",
@@ -84,6 +118,7 @@ export default {
       if(this.isShowing) {
         this.$nextTick(function () {
           this.$refs['firstInput'].focus();
+          this.cValidateMsg = null;
         });
       }
     },
@@ -91,31 +126,42 @@ export default {
       this.mode === "register"
         ? (this.mode = "login")
         : (this.mode = "register");
+      this.cValidateMsg = null;
     },
     signup() {
-      this.attemptSignup(this.crendentials)
-        .then(response => {
-          this.toggleShow();
-          alert("Confirmation email has been sent to you!");
-          console.log(response);
-        })
-        .catch(error => {
-          alert(`Somethings gone wrong signing up.
-                 Error: ${error}`);
-          console.error(error, "Somethings gone wrong signing up");
-        });
+      if(!this.cValidate) {
+        this.cValidateMsg = "Please enter valid information.";
+      } else {
+        this.cValidateMsg = "Signing up...";
+        this.attemptSignup(this.crendentials)
+          .then(response => {
+            this.toggleShow();
+            alert("Confirmation email has been sent to you, please check your inbox!");
+            console.log(response);
+          })
+          .catch(error => {
+            alert(`Something's gone wrong signing up.
+                  Error: ${error}`);
+            console.error(error, "Somethings gone wrong signing up");
+          });
+      }
     },
     login() {
-      this.attemptLogin({ ...this.crendentials })
-        .then(() => {
-          //alert(`You have signed in!`);
-          this.toggleShow();
-        })
-        .catch(error => {
-          alert(`Somethings gone wrong logging in.
-                 Error: ${error}`);
-          console.error(error, "Somethings gone wrong logging in");
-        });
+      if(!this.cValidate) {
+        this.cValidateMsg = "Please enter valid information.";
+      } else {
+        this.cValidateMsg = "Logging in...";
+        this.attemptLogin({ ...this.crendentials })
+          .then(() => {
+            //alert(`You have signed in!`);
+            this.toggleShow();
+          })
+          .catch(error => {
+            alert(`Something's gone wrong logging in.
+                  Error: ${error}`);
+            console.error(error, "Somethings gone wrong logging in");
+          });
+      }
     },
     logout() {
       this.attemptLogout()
@@ -127,16 +173,48 @@ export default {
           console.log("logged out", resp);
         })
         .catch(error => {
-          alert("problem with logout");
-          location.reload();
+          //alert("Problem with logout");
+          location.reload(); //this forces logout due to cleared local storage - error state "hidden" from user...
           console.error("problem with logout", error);
         });
+    },
+    escHandler(e) {
+      if((e.key=='Escape'||e.key=='Esc'||e.keyCode==27)){
+        //console.log("ESC");
+        if(this.isShowing) {
+          this.toggleShow();
+        }
+      }
     }
+  },
+  mounted() {
+    var vm = this;
+    window.addEventListener('keydown', vm.escHandler);
+  },
+  destroyed() {
+    var vm = this;
+    window.removeEventListener('keydown', vm.escHandler);
   }
 };
 </script>
 
-<style scoped>
+<style lang="postcss" scoped>
+  .form-group {
+    @apply flex flex-col mb-4;
+  }
+
+  a:link {
+    @apply text-green-600 underline;
+  }
+
+  a:hover {
+    @apply text-green-800 no-underline;
+  }
+
+  .error {
+    color: salmon;
+  }
+
   .fade-enter-active, .fade-leave-active {
     transition: opacity 0.2s ease-out;
   }
@@ -146,15 +224,10 @@ export default {
   }
 
   .user-modal {
+    @apply fixed left-0 right-0 opacity-100 px-10 py-8 mx-auto;
     background: #f8f9fa;
-    padding: 2rem 2.5rem;
     width: 450px;
-    position: fixed;
-    top: 150px;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-    opacity: 1;
+    top: 100px;
     z-index: 1;
   }
 
@@ -163,10 +236,8 @@ export default {
   }
 
   .user-modal-close {
-    position: absolute;
+    @apply absolute top-0 cursor-pointer;
     font-size: 2rem;
-    top: 0;
     right: 10px;
-    cursor: pointer;
   }
 </style>

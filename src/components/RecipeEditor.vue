@@ -3,52 +3,52 @@
     <editor-menu-bar v-if="editing" :editor="editor" v-slot="{ commands, isActive }">
       <div class="btn-group mb-3">
         <button
-          class="btn btn-outline-secondary btn-sm"
+          class="btn btn-gray text-sm"
           :class="{ 'is-active': isActive.bold() }"
           @click="commands.bold"
         ><strong>B</strong></button>
         <button
-          class="btn btn-outline-secondary btn-sm"
+          class="btn btn-gray text-sm"
           :class="{ 'is-active': isActive.italic() }"
           @click="commands.italic"
         ><em>i</em></button>
         <button
-          class="btn btn-outline-secondary btn-sm"
+          class="btn btn-gray text-sm"
           :class="{ 'is-active': isActive.underline() }"
           @click="commands.underline"
         ><u>U</u></button>
         <button
-          class="btn btn-outline-secondary btn-sm"
+          class="btn btn-gray text-sm"
           :class="{ 'is-active': isActive.paragraph() }"
           @click="commands.paragraph"
         >P</button>
         <button
-          class="btn btn-outline-secondary btn-sm"
+          class="btn btn-gray text-sm"
           :class="{ 'is-active': isActive.heading({ level: 1 }) }"
           @click="commands.heading({ level: 1 })"
         >H1</button>
         <button
-          class="btn btn-outline-secondary btn-sm"
+          class="btn btn-gray text-sm"
           :class="{ 'is-active': isActive.heading({ level: 2 }) }"
           @click="commands.heading({ level: 2 })"
         >H2</button>
         <button
-          class="btn btn-outline-secondary btn-sm"
+          class="btn btn-gray text-sm"
           :class="{ 'is-active': isActive.heading({ level: 3 }) }"
           @click="commands.heading({ level: 3 })"
         >H3</button>
         <button
-          class="btn btn-outline-secondary btn-sm"
+          class="btn btn-gray text-sm"
           :class="{ 'is-active': isActive.bullet_list() }"
           @click="commands.bullet_list"
         >&bull; UL</button>
         <button
-          class="btn btn-outline-secondary btn-sm"
+          class="btn btn-gray text-sm"
           :class="{ 'is-active': isActive.ordered_list() }"
           @click="commands.ordered_list"
         >1. OL</button>
-        <button class="btn btn-outline-secondary btn-sm" @click="commands.undo">&lt;</button>
-        <button class="btn btn-outline-secondary btn-sm" @click="commands.redo">&gt;</button>
+        <button class="btn btn-gray text-sm" @click="commands.undo">&lt;</button>
+        <button class="btn btn-gray text-sm" @click="commands.redo">&gt;</button>
       </div>
     </editor-menu-bar>
     <editor-content class="editor__content" :editor="editor" :class="{ 'editor-active': editing }"/>
@@ -122,23 +122,23 @@ export default {
 </script>
 
 <style>
-.is-active {
-  background-color: #ccc;
-}
+  .is-active {
+    background-color: #ccc;
+  }
 
-.ProseMirror:focus {
-    outline: none;
-}
+  .ProseMirror:focus {
+      outline: none;
+  }
 
-.editor-active > .ProseMirror {
-  padding: 0.5rem;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-}
+  .editor-active > .ProseMirror {
+    padding: 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+  }
 
-.editor-active > .ProseMirror:focus {
-    border-color: #80bdff;
-    outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
-}
+  .editor-active > .ProseMirror:focus {
+      border-color: #80bdff;
+      outline: 0;
+      box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+  }
 </style>

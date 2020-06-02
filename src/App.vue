@@ -1,10 +1,8 @@
 <template>
-  <div id="app" class="d-flex h-100 flex-column">
-    <Navbar :publicView="publicView" />
-    <div class="container flex-grow-1 flex-shrink-0">
-      <div class="row">
-        <AppHeader />
-      </div>
+  <div id="app" class="flex h-full flex-col">
+    <Navbar :publicView="publicView" class="mb-12" />
+    <div class="container flex-grow flex-shrink-0 px-4 mx-auto">
+      <AppHeader />
       <router-view :publicView="publicView" :updateList="updateList" :fPath="fPath" @status:update="updateRecipes" />
     </div>
     <AppFooter />
@@ -51,5 +49,47 @@ export default {
 };
 </script>
 
-<style>
+<style lang="postcss">
+  *:hover {
+      transition: all .35s ease;
+  }
+  body, html {
+    @apply text-gray-800;
+  }
+  .btn:focus, .form-control:focus {
+    outline: 0;
+    @apply shadow-outline;
+  }
+  .btn {
+    @apply inline-block border rounded-md px-3 py-2;
+  }
+  .btn:disabled {
+    cursor: not-allowed;
+  }
+  .btn-gray {
+    @apply border-gray-800 text-gray-800;
+  }
+  .btn-gray:hover {
+    @apply bg-gray-800 text-gray-200;
+  }
+  .btn-green {
+    @apply border-green-700 text-green-700;
+  }
+  .btn-green:not(:disabled):hover {
+    @apply bg-green-700 text-gray-200;
+  }
+  .btn-red {
+    border-color: salmon;
+    color: salmon;
+  }
+  .btn-red:hover {
+    background-color: salmon;
+    @apply text-white;
+  }
+  .form-group label {
+    @apply tracking-wide mb-2;
+  }
+  .form-control {
+    @apply border rounded-md px-3 py-1;
+  }
 </style>

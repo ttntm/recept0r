@@ -11,6 +11,7 @@
     "core-js": "^3.6.4",
     "faunadb": "^2.14.1",
     "gotrue-js": "^0.9.25",
+    "tailwindcss": "^1.4.6",
     "tiptap": "^1.27.1",
     "tiptap-extensions": "^1.29.1",
     "vue": "^2.6.11",
