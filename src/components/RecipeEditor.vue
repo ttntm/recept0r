@@ -84,16 +84,16 @@ export default {
     };
   },
   watch: {
-      editing: {
-          handler() {
-            if(this.editing) {
-                this.editor.options.editable = true;
-            } else {
-                this.editor.options.editable = false;
-                this.editor.setContent(this.editorContent);  //reset when cached old data come back after "cancel" of edit mode
-            }
-          }
+    editing: {
+      handler() {
+        if(this.editing) {
+          this.editor.options.editable = true;
+        } else {
+          this.editor.options.editable = false;
+          this.editor.setContent(this.editorContent);  //reset when cached old data come back after "cancel" of edit mode
+        }
       }
+    }
   },
   mounted() {
     this.editor = new Editor({
@@ -125,20 +125,17 @@ export default {
   .is-active {
     background-color: #ccc;
   }
-
   .ProseMirror:focus {
-      outline: none;
+    outline: none;
   }
-
   .editor-active > .ProseMirror {
     padding: 0.5rem;
     border: 1px solid #ced4da;
     border-radius: 0.25rem;
   }
-
   .editor-active > .ProseMirror:focus {
-      border-color: #80bdff;
-      outline: 0;
-      box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
   }
 </style>

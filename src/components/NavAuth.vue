@@ -1,5 +1,5 @@
 <template>
-  <div id="nav-auth" class="navbar-text">
+  <div id="nav-auth" class="">
     <div v-if="!publicView">
       <button @click="logout()" class="btn btn-gray py-1">Log Out</button>
     </div>
@@ -27,7 +27,7 @@
             </div>
             <button class="btn btn-gray py-1 mb-2" type="button" @click="signup()">Sign Up</button>
             <p class="text-sm">
-              Already registered? <a href="#" @click="toggleMode">Sign In</a>
+              Already registered? <a href="#" @click="toggleMode()">Sign In</a>
             </p>
           </form>
           <!-- LOGIN PART -->
@@ -43,7 +43,7 @@
             </div>
             <button class="btn btn-gray py-1 mb-2" type="button" @click="login()">Login</button>
             <p class="text-sm">
-              Not registered? <a href="#" @click="toggleMode">Create an account</a>
+              Not registered? <a href="#" @click="toggleMode()">Create an account</a>
             </p>
           </form>
           <p v-if="cValidateMsg !== ''" class="font-bold" :class="{ 'error' : !cValidate }">{{ cValidateMsg }}</p>
@@ -101,7 +101,8 @@ export default {
     isShowing: {
       handler() {
         if(!this.isShowing) {
-          this.crendentials = { name: "", password: "", email: "" };
+          this.crendentials = { name: "", password: "", email: "" }; //clear credentials object when modal closes
+          this.cValidateMsg = null; //clear message when modal closes
         }
       }
     }
@@ -113,12 +114,12 @@ export default {
       "attemptLogout",
       "getCurrentUser",
     ]),
+    ...mapActions("app", ["toggleMenu"]),
     toggleShow() {
       this.isShowing = !this.isShowing;
       if(this.isShowing) {
         this.$nextTick(function () {
           this.$refs['firstInput'].focus();
-          this.cValidateMsg = null;
         });
       }
     },
@@ -136,8 +137,9 @@ export default {
         this.attemptSignup(this.crendentials)
           .then(response => {
             this.toggleShow();
-            alert("Confirmation email has been sent to you, please check your inbox!");
+            alert("A confirmation email has been sent to you, please check your inbox!");
             console.log(response);
+            this.toggleMenu(false);
           })
           .catch(error => {
             alert(`Something's gone wrong signing up.
@@ -155,6 +157,7 @@ export default {
           .then(() => {
             //alert(`You have signed in!`);
             this.toggleShow();
+            this.toggleMenu(false);
           })
           .catch(error => {
             alert(`Something's gone wrong logging in.
@@ -166,7 +169,8 @@ export default {
     logout() {
       this.attemptLogout()
         .then(resp => {
-          // alert("logged out");
+          // alert("logged out"); --> display toast message
+          this.toggleMenu(false);
           if(this.$route.name !== 'home') {
             this.$router.push({ name: 'home' });
           }
@@ -191,7 +195,7 @@ export default {
     var vm = this;
     window.addEventListener('keydown', vm.escHandler);
   },
-  destroyed() {
+  beforeDestroy() {
     var vm = this;
     window.removeEventListener('keydown', vm.escHandler);
   }

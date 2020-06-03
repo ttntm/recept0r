@@ -12,7 +12,7 @@ import store from "@/store";
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   mode: "history",
   routes: [
     {
@@ -51,5 +51,14 @@ export default new Router({
   ],
   scrollBehavior () {
     return { x: 0, y: 0 }
-  }
+  },
 });
+
+router.beforeEach((to, from, next) => {
+  if (store.state.app.menuOpen) {
+    store.dispatch('app/toggleMenu', false);
+    return next();
+  } else { return next(); }
+});
+
+export default router;

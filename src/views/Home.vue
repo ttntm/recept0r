@@ -7,7 +7,7 @@
         <div class="search shadow-sm mx-auto" :class="{ 'input-group': searchTerm }">
           <input v-model.trim="searchTerm" type="text" class="w-full search-input" placeholder="Search term">
           <div class="input-group-append">
-            <button v-if="searchTerm" @click="clearSearch" class="btn border-0 font-bold" type="button" title="Clear search">&times;</button>
+            <button v-if="searchTerm" @click="clearSearch()" class="btn border-0 font-bold" type="button" title="Clear search">&times;</button>
           </div>
         </div>
         <transition name="fade">
@@ -16,8 +16,8 @@
       </div>
       <!-- RECIPE GRID -->
       <transition-group name="list" tag="div" class="recipe-grid">
-        <div v-for="recipe in recipesReversed" :key="recipe.refId" class="recipe-card border rounded-md">
-          <clazy-load v-if="recipe.image" :src="recipe.image" class="clazy-container relative border-b" is="VueClazyLoad">
+        <div v-for="recipe in recipesReversed" :key="recipe.refId" class="recipe-card border border-gray-500 rounded-md">
+          <clazy-load v-if="recipe.image" :src="recipe.image" class="clazy-container relative border-b border-gray-500" is="VueClazyLoad">
             <transition name="fade">
               <img class="recipe-card-img" :src="recipe.image" crossorigin="anonymous">
             </transition>
@@ -33,7 +33,7 @@
             <h3 class="font-bold text-2xl tracking-wide text-gray-800">{{ recipe.title }}</h3>
             <p class="text-gray-600 text-lg mt-4">{{ recipe.description }}</p>
             <hr class="my-8" />
-            <router-link :to="{name: 'recipe', params: {id: recipe.id, refId: recipe.refId}}" class="btn btn-gray inline-block">Show Recipe &gt;</router-link>
+            <router-link :to="{name: 'recipe', params: {id: recipe.id, refId: recipe.refId}}" class="btn btn-gray inline-block">View Recipe &gt;</router-link>
           </div>
         </div>
       </transition-group>
@@ -156,7 +156,7 @@ export default {
       @apply w-full;
     }
     .recipe-grid {
-        grid-template-columns: 1fr;
+      grid-template-columns: 1fr;
     }
   }
   .recipe-card:hover {

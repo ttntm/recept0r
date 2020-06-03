@@ -1,6 +1,6 @@
 <template>
-  <div id="app" class="flex h-full flex-col">
-    <Navbar :publicView="publicView" class="mb-12" />
+  <div id="app" :class="{ 'overflow-hidden' : menuOpen }" class="flex h-full flex-col">
+    <Navbar :publicView="publicView" />
     <div class="container flex-grow flex-shrink-0 px-4 mx-auto">
       <AppHeader />
       <router-view :publicView="publicView" :updateList="updateList" :fPath="fPath" @status:update="updateRecipes" />
@@ -13,7 +13,6 @@
 import Navbar from '@/components/Navbar.vue';
 import AppHeader from '@/components/AppHeader.vue';
 import AppFooter from '@/components/AppFooter.vue';
-import store from '@/store';
 
 export default {
   name: 'App',
@@ -24,9 +23,10 @@ export default {
   },
   computed: {
     publicView() {
-      if (store.getters["user/loggedIn"]) {
-        return false;
-      } else { return true }
+      return this.$store.state.user.currentUser ? false : true
+    },
+    menuOpen() {
+      return this.$store.state.app.menuOpen;
     }
   },
   methods: {

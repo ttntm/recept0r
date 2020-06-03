@@ -5,13 +5,15 @@ export default {
   state() {
     return {
       isDevEnvironment: false,
-      siteURL: 'recept0r.com'
+      siteURL: 'recept0r.com',
+      menuOpen : false
     };
   },
 
   getters: {
     isDevEnvironment: state => state.isDevEnvironment,
-    siteURL: state => state.siteURL
+    siteURL: state => state.siteURL,
+    menuState: state => state.menuOpen
   },
 
   mutations: {
@@ -20,6 +22,15 @@ export default {
     },
     SET_SITE_URL(state, value) {
       state.siteURL = value;
+    },
+    SET_MENU_OPEN(state, value) {
+      state.menuOpen = value;
+    }
+  },
+
+  actions: {
+    toggleMenu({ commit }, newState) {
+      commit('SET_MENU_OPEN', newState);
     }
   }
 };

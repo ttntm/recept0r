@@ -19,8 +19,8 @@
         </li>
       </ul>
       <div class="flex flex-row items-start">
-        <button @click="addIngredient" class="btn btn-green text-sm mr-4">Add Ingredient</button>
-        <button v-if="hasIng" @click="removeIngredient" class="btn btn-gray text-sm">Remove Ingredient</button>
+        <button @click="addIngredient()" class="btn btn-green text-sm mr-4">Add Ingredient</button>
+        <button v-if="hasIng" @click="removeIngredient()" class="btn btn-gray text-sm">Remove Ingredient</button>
       </div>
     </div>
     <div class="w-full">
@@ -88,26 +88,26 @@ export default {
     }
   },
   watch: {
-      recipe: {
-        deep: true,
-        handler() {
-          const r = this.recipe;
-          if (r.title === '' && r.description === '' && !this.hasIng && r.image === null && !this.wasEdited) {
-              this.isEmpty = true;
-          } else { this.isEmpty = false; }
-          if (r.title !== '' && r.description !== '' && this.hasIng && r.body !== '') {
-              this.isFilled = true;
-          } else { this.isFilled = false; }
-          //watch ingredients
-          this.hasIng = r.ingredients.length < 1 ? false : true;
-          //create id
-          let rTitle = r.title;
-          r.id = rTitle.replace(/[^a-z0-9]+/gi, '-').replace(/^-*|-*$/g, '').toLowerCase();
-          //check if image was uploaded
-          const checkImgSrc = RegExp(/^https:\/\//);
-          this.isImgUploaded = checkImgSrc.test(r.image);
-        }
+    recipe: {
+      deep: true,
+      handler() {
+        const r = this.recipe;
+        if (r.title === '' && r.description === '' && !this.hasIng && r.image === null && !this.wasEdited) {
+            this.isEmpty = true;
+        } else { this.isEmpty = false; }
+        if (r.title !== '' && r.description !== '' && this.hasIng && r.body !== '') {
+            this.isFilled = true;
+        } else { this.isFilled = false; }
+        //watch ingredients
+        this.hasIng = r.ingredients.length < 1 ? false : true;
+        //create id = slug
+        let rTitle = r.title;
+        r.id = rTitle.replace(/[^a-z0-9]+/gi, '-').replace(/^-*|-*$/g, '').toLowerCase();
+        //check if image was uploaded
+        const checkImgSrc = RegExp(/^https:\/\//);
+        this.isImgUploaded = checkImgSrc.test(r.image);
       }
+    }
   },
   methods: {
     imageUpdate(url) {
@@ -165,9 +165,9 @@ export default {
   },
   directives: {
     focus: {
-        inserted: function (el) {
-            el.focus()
-        }
+      inserted: function (el) {
+          el.focus()
+      }
     }
   },
   mounted() {
@@ -177,12 +177,12 @@ export default {
   },
   beforeRouteLeave (to, from, next) {
     if(!this.isEmpty && !this.isFilled) { //if NOT empty _and_ NOT filled
-        const answer = window.confirm('Do you really want to leave? There might be unsaved changes!');
-        if (answer) {
-            next();
-        } else { return }
+      const answer = window.confirm('Do you really want to leave? There might be unsaved changes!');
+      if (answer) {
+          next();
+      } else { return }
     } else {
-        next();
+      next();
     }
   }
 };

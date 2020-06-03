@@ -35,8 +35,8 @@
         </li>
       </ul>
       <div v-if="editing" class="flex flex-row items-start">
-        <button @click="addIngredient" class="btn btn-gray text-sm mr-4">Add Ingredient</button>
-        <button @click="removeIngredient" class="btn btn-red text-sm">Remove Ingredient</button>
+        <button @click="addIngredient()" class="btn btn-gray text-sm mr-4">Add Ingredient</button>
+        <button @click="removeIngredient()" class="btn btn-red text-sm">Remove Ingredient</button>
       </div>
     </div>
     <div class="w-full">
@@ -59,7 +59,6 @@
           </div>
         </div>
       </div>
-      <!-- END CONTENT -->
     </div>
   </div>
 </template>
@@ -74,8 +73,8 @@ var cacheStr = '';
 export default {
   name: "recipe",
   components: {
-      RecipeImage,
-      RecipeEditor
+    RecipeImage,
+    RecipeEditor
   },
   props: {
     fPath: Object,
@@ -94,18 +93,18 @@ export default {
     this.readRecipe(cRefId); //query DB for the respective record
   },
   watch: {
-      recipe: {
-        deep: true,
-        handler() {
-          const r = this.recipe;
-          //create id
-          let rTitle = r.title;
-          r.id = rTitle.replace(/[^a-z0-9]+/gi, '-').replace(/^-*|-*$/g, '').toLowerCase();
-          //check if image was uploaded
-          const checkImgSrc = RegExp(/^https:\/\//);
-          this.isImgUploaded = checkImgSrc.test(r.image);
-        }
+    recipe: {
+      deep: true,
+      handler() {
+        const r = this.recipe;
+        //create id
+        let rTitle = r.title;
+        r.id = rTitle.replace(/[^a-z0-9]+/gi, '-').replace(/^-*|-*$/g, '').toLowerCase();
+        //check if image was uploaded
+        const checkImgSrc = RegExp(/^https:\/\//);
+        this.isImgUploaded = checkImgSrc.test(r.image);
       }
+    }
   },
   methods: {
     editMode(recipe) {
@@ -189,9 +188,9 @@ export default {
   },
   directives: {
     focus: {
-        inserted: function (el) {
-            el.focus()
-        }
+      inserted: function (el) {
+          el.focus()
+      }
     }
   },
   beforeRouteLeave (to, from, next) {

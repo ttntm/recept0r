@@ -18,6 +18,8 @@ store.dispatch("user/initAuth");
 
 attemptToAuthoriseTokens();
 
+// GLOBAL DIRECTIVE - click outside element should close the respective element
+// source: https://tahazsh.com/detect-outside-click-in-vue
 let handleOutsideClick;
 Vue.directive('closable', {
   bind (el, binding, vnode) {
