@@ -1,14 +1,14 @@
 <template>
   <div id="nav-auth" class="">
     <div v-if="!publicView">
-      <button @click="logout()" class="btn btn-gray py-1">Log Out</button>
+      <button @click="logout()" class="btn text-gray-600 border-gray-600 hover:text-white hover:bg-gray-600 py-1">Log Out</button>
     </div>
     <div v-else>
       <button @click="toggleShow()" ref="loginButton" class="btn btn-gray py-1">Log In</button>
     </div>
     <transition name="fade">
-      <div v-if="isShowing" v-closable="{exclude: ['loginButton'],handler: 'toggleShow'}" class="user-modal rounded-lg shadow-lg border">
-        <div class="user-modal-close" @click="toggleShow()">&times;</div>
+      <div v-if="isShowing" v-closable="{exclude: ['loginButton'],handler: 'toggleShow'}" class="user-modal">
+        <div class="user-modal-close text-gray-500 hover:text-gray-800" @click="toggleShow()">&times;</div>
         <div class="form">
           <!-- SIGNUP PART -->
           <form v-if="mode === 'register'" class="" @keyup.enter="signup()">
@@ -25,7 +25,7 @@
               <label for="password">Password</label>
               <input class="form-control" id="password" type="password" v-model="crendentials.password" placeholder="******"/>
             </div>
-            <button class="btn btn-gray py-1 mb-2" type="button" @click="signup()">Sign Up</button>
+            <button class="btn btn-gray py-1 mb-4" type="button" @click="signup()">Sign Up</button>
             <p class="text-sm">
               Already registered? <a href="#" @click="toggleMode()">Sign In</a>
             </p>
@@ -41,7 +41,7 @@
               <label for="password">Password</label>
               <input class="form-control" id="password" type="password" v-model="crendentials.password" placeholder="******"/>
             </div>
-            <button class="btn btn-gray py-1 mb-2" type="button" @click="login()">Login</button>
+            <button class="btn btn-gray py-1 mb-4" type="button" @click="login()">Login</button>
             <p class="text-sm">
               Not registered? <a href="#" @click="toggleMode()">Create an account</a>
             </p>
@@ -206,42 +206,27 @@ export default {
   .form-group {
     @apply flex flex-col mb-4;
   }
-
   a:link {
     @apply text-green-600 underline;
   }
-
   a:hover {
     @apply text-green-800 no-underline;
   }
-
-  .error {
-    color: salmon;
-  }
-
-  .fade-enter-active, .fade-leave-active {
-    transition: opacity 0.2s ease-out;
-  }
-
-  .fade-enter, .fade-leave-to {
-    opacity: 0;
-  }
-
+  .error { color: salmon; }
+  .fade-enter-active, .fade-leave-active { transition: opacity 0.2s ease-out; }
+  .fade-enter, .fade-leave-to { opacity: 0; }
   .user-modal {
-    @apply fixed left-0 right-0 opacity-100 px-10 py-8 mx-auto;
-    background: #f8f9fa;
+    @apply fixed left-0 right-0 opacity-100 rounded-lg shadow-lg border border-gray-500 text-left px-10 py-8 mx-auto;
+    background: linear-gradient(190deg, rgba(247,250,252,1) 0%, rgba(237,242,247,1) 100%);
     width: 450px;
     top: 100px;
     z-index: 1;
   }
-
   @media(max-width:767px){
     .user-modal {max-width: 95%;}
   }
-
   .user-modal-close {
-    @apply absolute top-0 cursor-pointer;
-    font-size: 2rem;
+    @apply absolute top-0 cursor-pointer text-3xl;
     right: 10px;
   }
 </style>

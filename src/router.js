@@ -1,52 +1,54 @@
-import Vue from "vue";
-import Router from "vue-router";
+import Vue from 'vue';
+import Router from 'vue-router';
 
 //import views
-import About from "@/views/About.vue";
-import Home from "@/views/Home.vue";
-import Create from "@/views/Create.vue";
-import Recipe from "@/views/Recipe.vue";
-import FourOFour from "@/views/404.vue";
+import About from '@/views/About.vue';
+import Home from '@/views/Home.vue';
+import Create from '@/views/Create.vue';
+import Recipe from '@/views/Recipe.vue';
+//import FourOFour from '@/views/404.vue';
 
-import store from "@/store";
+import store from '@/store';
 
 Vue.use(Router);
 
 const router = new Router({
-  mode: "history",
+  mode: 'history',
   routes: [
     {
-      path: "/",
-      name: "home",
+      path: '/',
+      name: 'home',
       component: Home
     },
     {
-      path: "/about",
-      name: "about",
+      path: '/about',
+      name: 'about',
       component: About
     },
     {
-      path: "/create",
-      name: "create",
+      path: '/create',
+      name: 'create',
       component: Create,
-      meta: { requiresAuth: true },
       beforeEnter: (to, from, next) => {
          if (!store.state.user.currentUser) { //get stored user state from vuex store
-          alert('Nope...');
+          router.push({ name: 'home' });
         } else {
           return next();
         }
       }
     },
     {
-      path: "/recipe/:id/:refId",
-      name: "recipe",
+      path: '/recipe/:id/:refId',
+      name: 'recipe',
       component: Recipe
     },
     {
-      path: "*",
-      name: "404*",
-      component: FourOFour
+      path: '*',
+      name: '404*',
+      //component: FourOFour,
+      beforeEnter: () => {
+        return router.push({ name: 'home' }); //redirect invalid calls home for now
+      }
     }
   ],
   scrollBehavior () {

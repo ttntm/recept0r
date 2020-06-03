@@ -1,7 +1,7 @@
 <template>
   <div id="edit-image">
-    <input @change="addImage" class="form-control-file mb-4" type="file" accept="image/*" />
-    <p v-if="imageStatus !== null" class="text-muted small ml-4 mb-4">{{ imageStatus }}</p>
+    <input @change="addImage" class="w-full md:w-4/5 form-control py-2 mb-4" type="file" accept="image/*" />
+    <p v-if="imageStatus !== null" class="text-sm text-gray-600 ml-4 mb-4">{{ imageStatus }}</p>
     <div v-if="recipe.image !== null" class="flex flex-row align-items-center justify-content-start">
       <button @click="uploadImage" class="btn btn-green text-sm mr-4">Upload Image</button>
       <button @click="removeImage" class="btn btn-gray text-sm mr-4">Remove Image</button>

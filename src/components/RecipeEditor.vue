@@ -1,54 +1,54 @@
 <template>
   <div class="editor">
     <editor-menu-bar v-if="editing" :editor="editor" v-slot="{ commands, isActive }">
-      <div class="btn-group mb-3">
+      <div class="btn-group mb-4">
         <button
-          class="btn btn-gray text-sm"
+          class="btn btn-gray text-sm rounded-none"
           :class="{ 'is-active': isActive.bold() }"
           @click="commands.bold"
         ><strong>B</strong></button>
         <button
-          class="btn btn-gray text-sm"
+          class="btn btn-gray text-sm rounded-none"
           :class="{ 'is-active': isActive.italic() }"
           @click="commands.italic"
         ><em>i</em></button>
         <button
-          class="btn btn-gray text-sm"
+          class="btn btn-gray text-sm rounded-none"
           :class="{ 'is-active': isActive.underline() }"
           @click="commands.underline"
         ><u>U</u></button>
         <button
-          class="btn btn-gray text-sm"
+          class="btn btn-gray text-sm rounded-none"
           :class="{ 'is-active': isActive.paragraph() }"
           @click="commands.paragraph"
         >P</button>
         <button
-          class="btn btn-gray text-sm"
+          class="btn btn-gray text-sm rounded-none"
           :class="{ 'is-active': isActive.heading({ level: 1 }) }"
           @click="commands.heading({ level: 1 })"
         >H1</button>
         <button
-          class="btn btn-gray text-sm"
+          class="btn btn-gray text-sm rounded-none"
           :class="{ 'is-active': isActive.heading({ level: 2 }) }"
           @click="commands.heading({ level: 2 })"
         >H2</button>
         <button
-          class="btn btn-gray text-sm"
+          class="btn btn-gray text-sm rounded-none"
           :class="{ 'is-active': isActive.heading({ level: 3 }) }"
           @click="commands.heading({ level: 3 })"
         >H3</button>
         <button
-          class="btn btn-gray text-sm"
+          class="btn btn-gray text-sm rounded-none"
           :class="{ 'is-active': isActive.bullet_list() }"
           @click="commands.bullet_list"
         >&bull; UL</button>
         <button
-          class="btn btn-gray text-sm"
+          class="btn btn-gray text-sm rounded-none"
           :class="{ 'is-active': isActive.ordered_list() }"
           @click="commands.ordered_list"
         >1. OL</button>
-        <button class="btn btn-gray text-sm" @click="commands.undo">&lt;</button>
-        <button class="btn btn-gray text-sm" @click="commands.redo">&gt;</button>
+        <button class="btn btn-gray text-sm rounded-none" @click="commands.undo">&lt;</button>
+        <button class="btn btn-gray text-sm rounded-none" @click="commands.redo">&gt;</button>
       </div>
     </editor-menu-bar>
     <editor-content class="editor__content" :editor="editor" :class="{ 'editor-active': editing }"/>

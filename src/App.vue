@@ -61,7 +61,10 @@ export default {
     @apply shadow-outline;
   }
   .btn {
-    @apply inline-block border rounded-md px-3 py-2;
+    @apply inline-block border rounded shadow-sm px-3 py-2;
+  }
+  .btn:hover {
+    @apply shadow-none;
   }
   .btn:disabled {
     cursor: not-allowed;
@@ -87,9 +90,9 @@ export default {
     @apply text-white;
   }
   .form-group label {
-    @apply tracking-wide mb-2;
+    @apply tracking-wide text-gray-800 mb-2;
   }
   .form-control {
-    @apply border rounded-md px-3 py-1;
+    @apply border rounded px-3 py-1;
   }
 </style>

@@ -1,24 +1,24 @@
 <template>
-  <div id="create-recipe" class="w-4/5 flex flex-row flex-wrap mx-auto">
+  <div id="create-recipe" class="w-full md:w-4/5 flex flex-row flex-wrap mx-auto">
     <div class="w-full">
       <h3 class="font-bold mb-4">Recipe Title</h3>
       <input type="text" v-model="recipe.title" ref="recipeTitle" class="form-control mb-4">
     </div>
     <div class="w-full md:w-1/2">
       <h4>Image</h4>
-      <img class="img-fluid mt-4 mb-4" :src="recipe.image" :alt="recipe.title">
+      <img v-if="recipe.image" class="rounded-lg mt-4 mb-4" :src="recipe.image" :alt="recipe.title">
       <recipe-image :recipe="recipe" @image:update="imageUpdate" class="mb-4" />
     </div>
-    <div class="w-full md:w-1/2">
+    <div class="w-full md:w-1/2 md:pl-8">
       <h4 class="mb-4">Description</h4>
       <input type="text" v-model="recipe.description" class="form-control mb-4">
       <h4 class="mb-4">Ingredients</h4>
-      <ul class="mb-4">
+      <ul class="mb-6">
         <li v-for="(ing, index) in recipe.ingredients" :key="index">
-          <input type="text" v-model.trim="recipe.ingredients[index]" v-focus class="form-control mb-4">
+          <input type="text" v-model.trim="recipe.ingredients[index]" v-focus class="inline-block form-control text-sm mb-4">
         </li>
       </ul>
-      <div class="flex flex-row items-start">
+      <div class="flex flex-row items-start mb-4">
         <button @click="addIngredient()" class="btn btn-green text-sm mr-4">Add Ingredient</button>
         <button v-if="hasIng" @click="removeIngredient()" class="btn btn-gray text-sm">Remove Ingredient</button>
       </div>
@@ -193,9 +193,9 @@ export default {
     @apply tracking-wide text-3xl font-bold;
   }
   h4 {
-    @apply text-2xl text-gray-600;
+    @apply text-2xl text-gray-700;
   }
   .form-control {
-    @apply block w-full text-base;
+    @apply block w-full;
   }
 </style>

@@ -31,8 +31,8 @@
           </clazy-load>
           <div class="p-8">
             <h3 class="font-bold text-2xl tracking-wide text-gray-800">{{ recipe.title }}</h3>
-            <p class="text-gray-600 text-lg mt-4">{{ recipe.description }}</p>
-            <hr class="my-8" />
+            <p class="text-gray-600 text-lg mt-4 mb-8">{{ recipe.description }}</p>
+            <!-- <hr class="my-8" /> -->
             <router-link :to="{name: 'recipe', params: {id: recipe.id, refId: recipe.refId}}" class="btn btn-gray inline-block">View Recipe &gt;</router-link>
           </div>
         </div>
@@ -115,10 +115,10 @@ export default {
 
 <style lang="postcss" scoped>
   .search {
-    @apply w-1/2 border rounded-md;
+    @apply w-1/2 border rounded;
   }
   .search-input {
-    @apply rounded-md px-3 py-2;
+    @apply rounded px-3 py-2;
   }
   .search-input:focus {
     outline: 0;
