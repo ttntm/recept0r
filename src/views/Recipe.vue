@@ -1,7 +1,7 @@
 <template>
   <div id="recipe" class="flex flex-row flex-wrap">
     <div v-if="readSuccess" class="w-full">
-      <h3 class="font-bold mb-4">
+      <h3 class="mb-6">
         <span v-if="!editing">
           {{ recipe.title }}
         </span>

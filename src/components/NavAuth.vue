@@ -55,6 +55,7 @@
 
 <script>
 import { mapActions } from 'vuex';
+import { EventBus } from '@/event-bus.js';
 
 export default {
   name: 'nav-auth',
@@ -133,18 +134,23 @@ export default {
       if(!this.cValidate) {
         this.cValidateMsg = "Please enter valid information.";
       } else {
+        let msg = { text: '', type: ''}
         this.cValidateMsg = "Signing up...";
         this.attemptSignup(this.crendentials)
           .then(response => {
-            this.toggleShow();
-            alert("A confirmation email has been sent to you, please check your inbox!");
             console.log(response);
-            this.toggleMenu(false);
+            msg.text = "A confirmation email has been sent to you, please check your inbox!";
+            msg.type =  'info';
+            this.toggleShow();
+            this.toggleMenu(false); //vuex action
+            this.toast(msg); //emit toast into EventBus
           })
           .catch(error => {
-            alert(`Something's gone wrong signing up.
-                  Error: ${error}`);
-            console.error(error, "Somethings gone wrong signing up");
+            this.cValidateMsg = null;
+            console.error(error, "Something's gone wrong signing up");
+            msg.text = "Something's gone wrong signing up, please try again later.";
+            msg.type =  'error';
+            this.toast(msg); //emit toast into EventBus
           });
       }
     },
@@ -152,43 +158,55 @@ export default {
       if(!this.cValidate) {
         this.cValidateMsg = "Please enter valid information.";
       } else {
+        let msg = { text: '', type: ''}
         this.cValidateMsg = "Logging in...";
         this.attemptLogin({ ...this.crendentials })
           .then(() => {
-            //alert(`You have signed in!`);
             this.toggleShow();
             this.toggleMenu(false);
+            msg.text = "You're logged in now 😀";
+            msg.type =  'success';
+            this.toast(msg); //emit toast into EventBus
           })
           .catch(error => {
-            alert(`Something's gone wrong logging in.
-                  Error: ${error}`);
-            console.error(error, "Somethings gone wrong logging in");
+            this.cValidateMsg = null;
+            console.error(error, "Something's gone wrong logging in");
+            msg.text = "Something's gone wrong logging in, please try again later.";
+            msg.type =  'error';
+            this.toast(msg); //emit toast into EventBus
           });
       }
     },
     logout() {
+      let msg = { text: '', type: ''}
       this.attemptLogout()
         .then(resp => {
-          // alert("logged out"); --> display toast message
-          this.toggleMenu(false);
-          if(this.$route.name !== 'home') {
-            this.$router.push({ name: 'home' });
-          }
           console.log("logged out", resp);
+          this.toggleMenu(false);
+          // if(this.$route.name === 'create') {
+          //   this.$router.push({ name: 'home' });
+          // }
+          msg.text = "You're logged out now, cya soon 😉";
+          msg.type =  'info';
+          this.toast(msg); //emit toast into EventBus
         })
         .catch(error => {
-          //alert("Problem with logout");
-          location.reload(); //this forces logout due to cleared local storage - error state "hidden" from user...
           console.error("problem with logout", error);
+          msg.text = "Problem with logout, forcing page refresh.";
+          msg.type =  'error';
+          this.toast(msg); //emit toast into EventBus
+          location.reload(); //this forces logout due to cleared local storage - error state "hidden" from user...
         });
     },
     escHandler(e) {
       if((e.key=='Escape'||e.key=='Esc'||e.keyCode==27)){
-        //console.log("ESC");
         if(this.isShowing) {
           this.toggleShow();
         }
       }
+    },
+    toast(message) {
+      EventBus.$emit('toast-message', message);
     }
   },
   mounted() {

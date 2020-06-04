@@ -68,6 +68,11 @@ export default {
 </script>
 
 <style lang="postcss">
+  @media(min-width:768px) {
+    nav {
+      background: linear-gradient(90deg, rgba(247, 250, 252, 1) 0%, rgba(255,255,255,1) 100%);
+    }
+  }
   .mobile-bg {
     background: linear-gradient(165deg, rgba(203,213,224,1) 0%, rgba(160,174,192,1) 100%);
   }

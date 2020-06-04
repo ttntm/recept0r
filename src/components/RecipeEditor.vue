@@ -121,7 +121,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="postcss">
   .is-active {
     background-color: #ccc;
   }
@@ -137,5 +137,20 @@ export default {
     border-color: #80bdff;
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+  }
+  .btn-group {
+    @apply text-sm;
+  }
+  .btn-group button {
+    @apply py-1 px-2;
+  }
+  .btn-group button:not(:nth-child(1)) {
+    border-left-width: 0!important;
+  }
+  .btn-group button:first-child {
+    @apply rounded-tl rounded-bl;
+  }
+  .btn-group button:last-child {
+    @apply rounded-tr rounded-br;
   }
 </style>

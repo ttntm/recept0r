@@ -1,7 +1,7 @@
 <template>
   <div id="create-recipe" class="w-full md:w-4/5 flex flex-row flex-wrap mx-auto">
     <div class="w-full">
-      <h3 class="font-bold mb-4">Recipe Title</h3>
+      <h3 class="mb-6">Recipe Title</h3>
       <input type="text" v-model="recipe.title" ref="recipeTitle" class="form-control mb-4">
     </div>
     <div class="w-full md:w-1/2">

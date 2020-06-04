@@ -163,12 +163,13 @@ export default {
     box-shadow: 0 0.45rem 0.9rem rgba(0,0,0,.1);
     transition: all .35s ease;
   }
-  .clazy-container, .recipe-card-img {
+  .clazy-container {
     height: 300px;
   }
   .recipe-card-img {
     @apply w-full rounded-tl-md rounded-tr-md object-cover opacity-75;
-    max-height: 300px;
+    height: 299px;
+    max-height: 299px;
     transition: all .5s ease-in-out;
   }
   .recipe-card:hover .recipe-card-img {

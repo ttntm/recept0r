@@ -6,6 +6,7 @@
       <router-view :publicView="publicView" :updateList="updateList" :fPath="fPath" @status:update="updateRecipes" />
     </div>
     <AppFooter />
+    <toast-message />
   </div>
 </template>
 
@@ -13,13 +14,15 @@
 import Navbar from '@/components/Navbar.vue';
 import AppHeader from '@/components/AppHeader.vue';
 import AppFooter from '@/components/AppFooter.vue';
+import ToastMessage from '@/components/ToastMessage.vue';
 
 export default {
   name: 'App',
   components: {
       Navbar,
       AppHeader,
-      AppFooter
+      AppFooter,
+      ToastMessage
   },
   computed: {
     publicView() {
