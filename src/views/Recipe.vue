@@ -66,6 +66,7 @@
 <script>
 import RecipeImage from '@/components/RecipeImage.vue';
 import RecipeEditor from '@/components/RecipeEditor.vue';
+import { EventBus } from '@/event-bus.js';
 
 var cache = Object.create(null);
 var cacheStr = '';
@@ -103,6 +104,13 @@ export default {
         //check if image was uploaded
         const checkImgSrc = RegExp(/^https:\/\//);
         this.isImgUploaded = checkImgSrc.test(r.image);
+      }
+    },
+    publicView: {
+      handler() {
+        if(this.publicView) {
+          this.cancelEdit(this.recipe);
+        }
       }
     }
   },
@@ -152,11 +160,11 @@ export default {
     },
     editRecipe(recipe) {
       if (recipe.title === '' || recipe.description === '' || recipe.ingredients.length == 0 || recipe.body === '') {
-          alert("Please fill all fields.");
+          EventBus.$emit('toast-message', { text: "Please fill all fields.", type: 'error' });
           return
       } else {
         if(recipe.image !== null && !this.isImgUploaded) {
-          alert('An image was selected but never uploaded. Please click "Upload Image" before saving.');
+          EventBus.$emit('toast-message', { text: 'An image was selected but never uploaded. Please click "Upload Image" before saving.', type: 'error' });
         } else { //all necessary data available, send it off
           let rId = recipe.refId;
           fetch(`${this.fPath.edit}/${rId}`, {
@@ -188,8 +196,8 @@ export default {
   },
   directives: {
     focus: {
-      inserted: function (el) {
-          el.focus()
+      inserted: function(el) {
+        el.focus()
       }
     }
   },

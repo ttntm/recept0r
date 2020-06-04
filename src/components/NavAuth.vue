@@ -183,9 +183,9 @@ export default {
         .then(resp => {
           console.log("logged out", resp);
           this.toggleMenu(false);
-          // if(this.$route.name === 'create') {
-          //   this.$router.push({ name: 'home' });
-          // }
+          if(this.$route.name === 'create') {
+            this.$router.push({ name: 'home' });
+          }
           msg.text = "You're logged out now, cya soon 😉";
           msg.type =  'info';
           this.toast(msg); //emit toast into EventBus

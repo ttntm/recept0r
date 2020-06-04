@@ -38,6 +38,7 @@
 <script>
 import RecipeImage from '@/components/RecipeImage.vue';
 import RecipeEditor from '@/components/RecipeEditor.vue';
+import { EventBus } from '@/event-bus.js';
 
 export default {
   name: "create-recipe",
@@ -147,16 +148,20 @@ export default {
       })
     },
     createRecipe(recipe) {
-      if (recipe.title === '' || recipe.description === '' || recipe.ingredients.length == 0 || recipe.body === '') {
-          alert("Please fill all fields.");
-          return
-      } else {
-        if(recipe.image !== null && !this.isImgUploaded) {
-          alert('An image was selected but never uploaded. Please click "Upload Image" before saving.');
-        } else { //all necessary data available, send it off
-          this.isSaving = true;
-          this.addRecipe(recipe);
+      if(this.$store.state.user.currentUser) {
+        if (recipe.title === '' || recipe.description === '' || recipe.ingredients.length == 0 || recipe.body === '') {
+            EventBus.$emit('toast-message', { text: "Please fill all fields.", type: 'error' });
+            return
+        } else {
+          if(recipe.image !== null && !this.isImgUploaded) {
+            EventBus.$emit('toast-message', { text: 'An image was selected but never uploaded. Please click "Upload Image" before saving.', type: 'error' });
+          } else { //all necessary data available, send it off
+            this.isSaving = true;
+            this.addRecipe(recipe);
+          }
         }
+      } else {
+        EventBus.$emit('toast-message', { text: "Please log in again to save your changes.", type: 'error' });
       }
     },
     cancelCreate() {
@@ -165,21 +170,21 @@ export default {
   },
   directives: {
     focus: {
-      inserted: function (el) {
-          el.focus()
+      inserted: function(el) {
+        el.focus()
       }
     }
   },
   mounted() {
-    this.$nextTick(function () {
-        this.$refs['recipeTitle'].focus();
+    this.$nextTick(function() {
+      this.$refs['recipeTitle'].focus();
     });
   },
   beforeRouteLeave (to, from, next) {
-    if(!this.isEmpty && !this.isFilled) { //if NOT empty _and_ NOT filled
+    if(!this.isEmpty || this.isFilled) { //if NOT empty OR filled
       const answer = window.confirm('Do you really want to leave? There might be unsaved changes!');
       if (answer) {
-          next();
+        next();
       } else { return }
     } else {
       next();
