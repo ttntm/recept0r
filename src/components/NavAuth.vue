@@ -55,7 +55,7 @@
 
 <script>
 import { mapActions } from 'vuex';
-import { EventBus } from '@/event-bus.js';
+import { EventBus } from '@/helpers/event-bus.js';
 
 export default {
   name: 'nav-auth',

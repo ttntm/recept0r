@@ -38,7 +38,7 @@
 <script>
 import RecipeImage from '@/components/RecipeImage.vue';
 import RecipeEditor from '@/components/RecipeEditor.vue';
-import { EventBus } from '@/event-bus.js';
+import { EventBus } from '@/helpers/event-bus.js';
 
 export default {
   name: "create-recipe",
@@ -52,7 +52,6 @@ export default {
   data() {
     return {
       isEmpty: true,
-      isFilled: false,
       hasIng: false,
       wasEdited: false,
       isSaving: false,
@@ -96,9 +95,6 @@ export default {
         if (r.title === '' && r.description === '' && !this.hasIng && r.image === null && !this.wasEdited) {
             this.isEmpty = true;
         } else { this.isEmpty = false; }
-        if (r.title !== '' && r.description !== '' && this.hasIng && r.body !== '') {
-            this.isFilled = true;
-        } else { this.isFilled = false; }
         //watch ingredients
         this.hasIng = r.ingredients.length < 1 ? false : true;
         //create id = slug
@@ -135,17 +131,20 @@ export default {
           body: JSON.stringify(data),
           method: 'POST'
         }).then(response => {
+          EventBus.$emit('toast-message', { text: `Recipe "${newRecipe.title}" created 😊`, type: 'success' });
           return response.json();
         }).catch((error) => {
           console.log("API error", error);
         })
       }
 
-      postRecipe(newRecipe).then((response) => {
-        console.log(newRecipe.title + " created.", response);
-        this.$emit("status:update", true); //make sure the DB operation has finished before emitting the status update
-        this.$router.push({ name: 'home' }); // navigate when done
-      })
+      postRecipe(newRecipe)
+        .then((res) => {
+          let newId = res.data.id;
+          let newRefId = res.ref['@ref'].id;
+          let newRecipePath = `/recipe/${newId}/${newRefId}`
+          this.$router.push(newRecipePath); //go to new recipe page
+        })
     },
     createRecipe(recipe) {
       if(this.$store.state.user.currentUser) {
@@ -181,7 +180,7 @@ export default {
     });
   },
   beforeRouteLeave (to, from, next) {
-    if(!this.isEmpty || this.isFilled) { //if NOT empty OR filled
+    if(!this.isEmpty && !this.isSaving) { //if NOT empty OR filled
       const answer = window.confirm('Do you really want to leave? There might be unsaved changes!');
       if (answer) {
         next();

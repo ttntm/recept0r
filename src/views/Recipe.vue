@@ -66,7 +66,7 @@
 <script>
 import RecipeImage from '@/components/RecipeImage.vue';
 import RecipeEditor from '@/components/RecipeEditor.vue';
-import { EventBus } from '@/event-bus.js';
+import { EventBus } from '@/helpers/event-bus.js';
 
 var cache = Object.create(null);
 var cacheStr = '';

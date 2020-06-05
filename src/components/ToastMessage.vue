@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { EventBus } from "@/event-bus.js";
+import { EventBus } from "@/helpers/event-bus.js";
 
 export default {
   name: "toast-message",

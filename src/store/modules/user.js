@@ -41,7 +41,7 @@ export default {
      * @property {string} credentials.password - password string
      */
     attemptLogin({ commit, state }, credentials) {
-      console.log(`Attempting login for ${credentials.email}`);
+      //console.log(`Attempting login for ${credentials.email}`);
       return new Promise((resolve, reject) => {
         state.GoTrueAuth.login(credentials.email, credentials.password, true)
           .then(response => {
@@ -63,13 +63,13 @@ export default {
      * @property {string} credentials.password - password string
      */
     attemptSignup({ state }, credentials) {
-      console.log(`Attempting signup for ${credentials.email}...`, credentials);
+      //console.log(`Attempting signup for ${credentials.email}...`, credentials);
       return new Promise((resolve, reject) => {
         state.GoTrueAuth.signup(credentials.email, credentials.password, {
           full_name: credentials.name
         })
           .then(response => {
-            console.log(`Confirmation email sent`, response);
+            //console.log(`Confirmation email sent`, response);
             resolve(response);
           })
           .catch(error => {
@@ -86,11 +86,11 @@ export default {
      * @param {string} token - token from confimration email eg. "BFX7olHxIwThlfjLGGfaCA"
      */
     attemptConfirmation({ state }, token) {
-      console.log("Attempting to verify token", token);
+      //console.log("Attempting to verify token", token);
       return new Promise((resolve, reject) => {
         state.GoTrueAuth.confirm(token)
           .then(response => {
-            console.log("User has been confirmed");
+            //console.log("User has been confirmed");
             resolve(response);
           })
           .catch(error => {
@@ -110,8 +110,7 @@ export default {
         state.GoTrueAuth.currentUser()
           .logout()
           .then(resp => {
-            console.log("User logged out", resp);
-            //alert("you have logged out");
+            //console.log("User logged out", resp);
             commit("SET_CURRENT_USER", null);
             resolve(resp);
           })
@@ -172,13 +171,13 @@ export default {
       // possible to set the URL for the netlify identity in the login component.
       // TODO : Move this logic into a separate action.
       if (hostName.match(IPv4Pattern) || hostName === "localhost") {
-        console.log("Looks like your in a dev environment", hostName);
+        //console.log("Looks like your in a dev environment", hostName);
         commit("app/SET_DEV_ENV", true, { root: true });
 
-        console.log(
-          "Initialising Go True client with",
-          `https://${rootGetters["app/siteURL"]}/.netlify/identity`
-        );
+        // console.log(
+        //   "Initialising Go True client with",
+        //   `https://${rootGetters["app/siteURL"]}/.netlify/identity`
+        // );
         commit(
           "SET_GOTRUE",
           initNewGoTrue(
@@ -204,7 +203,7 @@ export default {
         return;
       }
 
-      console.log("Initialising Go True client with ", APIUrl);
+      //console.log("Initialising Go True client with ", APIUrl);
       commit("SET_GOTRUE", initNewGoTrue(APIUrl));
     },
 
