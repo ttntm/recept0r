@@ -19,10 +19,10 @@ import ToastMessage from '@/components/ToastMessage.vue';
 export default {
   name: 'App',
   components: {
-      Navbar,
-      AppHeader,
-      AppFooter,
-      ToastMessage
+    Navbar,
+    AppHeader,
+    AppFooter,
+    ToastMessage
   },
   computed: {
     publicView() {

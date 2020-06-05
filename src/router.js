@@ -57,7 +57,7 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  if (store.state.app.menuOpen) {
+  if(store.state.app.menuOpen) {
     store.dispatch('app/toggleMenu', false);
     return next();
   } else { return next(); }

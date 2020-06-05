@@ -187,14 +187,18 @@ export default {
     deleteRecipe(recipe) {
       let rId = recipe.refId;
       let rName = recipe.title;
-      fetch(`${this.fPath.delete}/${rId}`, {
-        method: 'POST',
-      }).then(response => {
-        this.$router.push({ name: 'home' }); // navigate when done
-        console.log("Recipe " + rName + " deleted", response);
-      }).catch((error) => {
-        console.log("API error", error);
-      })
+      const confirmDelete = window.confirm('This action is irreversible. Do you really want to delete this recipe?');
+      if(confirmDelete) {
+        fetch(`${this.fPath.delete}/${rId}`, {
+          method: 'POST',
+        }).then(response => {
+          EventBus.$emit('toast-message', { text: `Recipe "${rName}" deleted.`, type: 'info' });
+          this.$router.push({ name: 'home' }); // navigate when done
+          console.log(`Recipe "${rName}" deleted.`, response);
+        }).catch((error) => {
+          console.log("API error", error);
+        })
+      } else { return }
     },
   },
   directives: {
