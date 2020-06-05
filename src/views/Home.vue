@@ -50,7 +50,6 @@ export default {
     VueClazyLoad
   },
   props: {
-    updateList: Boolean,
     fPath: Object
   },
   methods: {
@@ -75,16 +74,6 @@ export default {
   },
   created() {
     this.getRecipes();
-  },
-  watch: {
-    updateList: () => {
-      if(this.updateList) { //if an update is neccessary...
-        console.log("updating...");
-        this.getRecipes(); //...do it!
-        this.updateList = false; // and make sure you let others know it's done
-        console.log("...updated!");
-      }
-    }
   },
   data() {
     return {

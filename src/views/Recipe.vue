@@ -12,7 +12,8 @@
       </h3>
     </div>
     <div v-if="readSuccess" class="w-full md:w-1/2">
-      <img v-if="recipe.image" class="w-full rounded-lg shadow-sm mb-4" :src="recipe.image" :alt="recipe.title">
+      <h4 v-if="editing" class="mb-4">Image</h4>
+      <img v-if="recipe.image" class="w-full rounded-lg shadow-sm mb-4" :src="recipe.image" :alt="recipe.title" key="image">
       <recipe-image v-if="editing" :recipe="recipe" @image:update="imageUpdate" class="mb-4" />
     </div>
     <div v-if="readSuccess" class="w-full md:w-1/2 md:pl-8">
@@ -51,11 +52,11 @@
           <div v-if="!editing">
             <router-link :to="{name: 'home'}" class="btn btn-gray mr-4">&lt; Go Back</router-link>
             <button v-if="!publicView" class="btn btn-gray mr-4" @click="editMode(recipe)">Edit Recipe</button>
-            <button v-if="!publicView" class="btn btn-red mr-4" @click="deleteRecipe(recipe)">Delete Recipe</button>
+            <button v-if="!publicView" class="btn btn-red" @click="deleteRecipe(recipe)">Delete Recipe</button>
           </div>
           <div v-else>
             <button class="btn btn-green mr-4" @click="editRecipe(recipe)">Save</button>
-            <button class="btn btn-red mr-4" @click="cancelEdit(recipe)">Cancel</button>
+            <button class="btn btn-red" @click="cancelEdit()">Cancel</button>
           </div>
         </div>
       </div>
@@ -84,7 +85,7 @@ export default {
   data() {
     return {
       editing: false,
-      isImgUploaded: false,
+      isImgUploaded: null,
       recipe: null,
       readSuccess: false
     };
@@ -101,9 +102,6 @@ export default {
         //create id
         let rTitle = r.title;
         r.id = rTitle.replace(/[^a-z0-9]+/gi, '-').replace(/^-*|-*$/g, '').toLowerCase();
-        //check if image was uploaded
-        const checkImgSrc = RegExp(/^https:\/\//);
-        this.isImgUploaded = checkImgSrc.test(r.image);
       }
     },
     publicView: {
@@ -124,7 +122,7 @@ export default {
       });
     },
     imageUpdate(url) {
-      this.recipe.image = url;
+      this.recipe = Object.assign({}, this.recipe, { image: url});
     },
     addIngredient() {
       let ing = this.recipe.ingredients;
@@ -137,9 +135,9 @@ export default {
     editorUpdate(editorData) {
       this.recipe.body = editorData;
     },
-    cancelEdit(recipe) {
+    cancelEdit() {
       cache = JSON.parse(cacheStr);
-      Object.assign(recipe, cache);
+      this.recipe = Object.assign({}, cache);
       this.editing = false;
     },
     readRecipe(refId) {
@@ -158,12 +156,19 @@ export default {
         console.log("API error", error);
       })
     },
+    checkImageStatus() {
+      if('image' in this.recipe && this.recipe.image !== null) {
+        const checkImgSrc = RegExp(/^https:\/\//);
+        this.isImgUploaded = checkImgSrc.test(this.recipe.image);
+      }
+    },
     editRecipe(recipe) {
       if (recipe.title === '' || recipe.description === '' || recipe.ingredients.length == 0 || recipe.body === '') {
           EventBus.$emit('toast-message', { text: "Please fill all fields.", type: 'error' });
           return
       } else {
-        if(recipe.image !== null && !this.isImgUploaded) {
+        this.checkImageStatus();
+        if(this.isImgUploaded === false) {
           EventBus.$emit('toast-message', { text: 'An image was selected but never uploaded. Please click "Upload Image" before saving.', type: 'error' });
         } else { //all necessary data available, send it off
           let rId = recipe.refId;
@@ -172,7 +177,6 @@ export default {
             method: 'POST'
           }).then(response => {
             console.log("recipe " + recipe.title + " successfully updated.", response);
-            this.$emit("status:update", true); //make sure the DB operation has finished before emitting the status update
             this.editing = false; //reset state when done editing
           }).catch((error) => {
             console.log("API error", error);
@@ -186,7 +190,6 @@ export default {
       fetch(`${this.fPath.delete}/${rId}`, {
         method: 'POST',
       }).then(response => {
-        this.$emit("status:update", true); //make sure the DB operation has finished before emitting the status update
         this.$router.push({ name: 'home' }); // navigate when done
         console.log("Recipe " + rName + " deleted", response);
       }).catch((error) => {

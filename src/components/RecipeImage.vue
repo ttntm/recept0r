@@ -2,9 +2,9 @@
   <div id="edit-image">
     <input @change="addImage" class="w-full md:w-4/5 form-control py-2 mb-4" type="file" accept="image/*" />
     <p v-if="imageStatus !== null" class="text-sm text-gray-600 ml-4 mb-4">{{ imageStatus }}</p>
-    <div v-if="recipe.image !== null" class="flex flex-row align-items-center justify-content-start">
+    <div class="flex flex-row align-items-center justify-content-start">
       <button @click="uploadImage" class="btn btn-green text-sm mr-4">Upload Image</button>
-      <button @click="removeImage" class="btn btn-gray text-sm mr-4">Remove Image</button>
+      <button @click="removeImage" class="btn btn-gray text-sm">Remove Image</button>
     </div>
   </div>
 </template>
@@ -36,31 +36,40 @@ export default {
       }
     },
     removeImage() {
-      this.$emit("image:update", null);
-      this.imageStatus = "Image removed.";
+      if(this.recipe.image) {
+        this.$emit("image:update", null);
+        this.imageStatus = "Image removed.";
+      } else {
+        this.imageStatus = "Please select an image first";
+      }
     },
     uploadImage () {
-      let uData = new FormData();
-      uData.append('upload_preset', this.uPreset);
-      uData.append('tags', this.recipe.id);
-      uData.append('file', this.recipe.image);
-
+      const vm = this;
       function postImage(data) {
         return fetch('https://api.cloudinary.com/v1_1/ttntm/image/upload', {
           body: data,
           method: 'POST'
         }).then(response => {
+          vm.imageStatus = "Image successfully uploaded";
           return response.json();
         }).catch((error) => {
           console.log("CDNRY API error", error);
+          vm.imageStatus = "Error uploading image";
         })
       }
+      if(this.recipe.image) {
+        let uData = new FormData();
+        uData.append('upload_preset', this.uPreset);
+        uData.append('tags', this.recipe.id);
+        uData.append('file', this.recipe.image);
 
-      postImage(uData).then((response) => {
-        let temp = Object.assign({}, response);
-        this.$emit("image:update", temp.secure_url);
-        this.imageStatus = "Image successfully uploaded";
-      })
+        postImage(uData).then((response) => {
+          let temp = Object.assign({}, response);
+          this.$emit("image:update", temp.secure_url);
+        })
+      } else {
+        this.imageStatus = "Please select an image first";
+      }
     }
   }
 };

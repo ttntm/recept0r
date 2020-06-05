@@ -28,8 +28,8 @@
       <recipe-editor :editing="true" :editorContent="recipe.body" @editor:update="editorUpdate" />
       <hr class="my-8">
       <div class="flex flex-row items-start">
-          <button class="btn btn-green mr-4" @click="createRecipe(recipe)" :disabled="isDisabled">{{ saveBtnTxt }}</button>
-          <button class="btn btn-red mr-4" @click="cancelCreate(recipe)">Cancel</button>
+        <button class="btn btn-green mr-4" @click="createRecipe(recipe)" :disabled="isDisabled">{{ saveBtnTxt }}</button>
+        <button class="btn btn-red" @click="cancelCreate(recipe)">Cancel</button>
       </div>
     </div>
   </div>

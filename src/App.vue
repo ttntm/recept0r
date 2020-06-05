@@ -3,7 +3,7 @@
     <Navbar :publicView="publicView" />
     <div class="container flex-grow flex-shrink-0 px-4 mx-auto">
       <AppHeader />
-      <router-view :publicView="publicView" :updateList="updateList" :fPath="fPath" @status:update="updateRecipes" />
+      <router-view :publicView="publicView" :fPath="fPath" />
     </div>
     <AppFooter />
     <toast-message />
@@ -30,11 +30,6 @@ export default {
     },
     menuOpen() {
       return this.$store.state.app.menuOpen;
-    }
-  },
-  methods: {
-    updateRecipes(status) {
-      this.updateList = status[0];
     }
   },
   data() {
