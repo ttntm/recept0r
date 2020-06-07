@@ -19,19 +19,22 @@
     <div v-if="readSuccess" class="w-full md:w-1/2 md:pl-8">
       <h4 class="mb-4">Description</h4>
       <div v-if="!editing">
-        <p class="text-gray-800">{{ recipe.description }}</p>
+        <p class="text-blue-600">{{ recipe.description }}</p>
       </div>
       <div v-else>
         <input type="text" v-model="recipe.description" class="form-control">
       </div>
       <h4 class="my-4">Ingredients</h4>
-      <ul class="mt-4 mb-6">
+      <ul class="mt-4 mb-4">
         <li v-for="(ing, index) in recipe.ingredients" :key="index">
           <span v-if="!editing">
             {{ ing }}
           </span>
-          <span v-else>
+          <span v-else class="flex flex-row items-center">
             <input type="text" v-model.trim="recipe.ingredients[index]" v-focus class="inline-block form-control text-sm mb-4">
+            <button class="inline-block text-lg opacity-75 hover:opacity-100 p-1 ml-2 mb-4"
+              @click="removeIngredient(index)"
+            >&times;</button>
           </span>
         </li>
       </ul>
@@ -128,9 +131,14 @@ export default {
       let ing = this.recipe.ingredients;
       ing.push('New ingredient' + (ing.length + 1)); //avoid duplicate key warning
     },
-    removeIngredient() {
+    removeIngredient(index) {
       let ing = this.recipe.ingredients;
-      ing.splice(ing.length - 1);
+      if(index) {
+        ing.splice(index, 1);
+      } else {
+        ing.splice(ing.length - 1);
+      }
+      this.hasIng = ing.length < 1 ? false : true;
     },
     editorUpdate(editorData) {
       this.recipe.body = editorData;
@@ -226,10 +234,10 @@ export default {
 
 <style lang="postcss" scoped>
   h3 {
-    @apply tracking-wide text-3xl font-bold;
+    @apply tracking-wide text-3xl font-bold text-blue-600;
   }
   h4 {
-    @apply text-2xl text-gray-700;
+    @apply text-2xl text-blue-500;
   }
   .form-control {
     @apply block w-full;

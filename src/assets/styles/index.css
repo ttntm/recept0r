@@ -2,6 +2,13 @@
 
 @tailwind components;
 
+  *:hover {
+    transition: all .35s ease;
+  }
+  body, html {
+    @apply text-blue-600;
+  }
+
 /* BS Reboot */
 
   h1, h2, h3, h4, h5, h6, p {
@@ -42,7 +49,14 @@
 
   ol, ul {
     @apply pl-8;
+  }
+
+  ul {
     list-style-type: square;
+  }
+
+  ol {
+    list-style-type: decimal;
   }
 
   ol, ul, dl {
@@ -64,6 +78,12 @@
 
   small {
     @apply text-sm;
+  }
+
+  /* OTHER */
+
+  hr {
+    @apply border-gray-500 my-8;
   }
 
 @tailwind utilities;

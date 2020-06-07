@@ -13,9 +13,14 @@
       <h4 class="mb-4">Description</h4>
       <input type="text" v-model="recipe.description" class="form-control mb-4">
       <h4 class="mb-4">Ingredients</h4>
-      <ul class="mb-6">
+      <ul class="mb-4">
         <li v-for="(ing, index) in recipe.ingredients" :key="index">
-          <input type="text" v-model.trim="recipe.ingredients[index]" v-focus class="inline-block form-control text-sm mb-4">
+          <span class="flex flex-row items-center">
+            <input type="text" v-model.trim="recipe.ingredients[index]" v-focus class="inline-block form-control text-sm mb-4">
+            <button class="inline-block text-lg opacity-75 hover:opacity-100 p-1 ml-2 mb-4"
+              @click="removeIngredient(index)"
+            >&times;</button>
+          </span>
         </li>
       </ul>
       <div class="flex flex-row items-start mb-4">
@@ -113,9 +118,13 @@ export default {
     addIngredient() {
       this.recipe.ingredients.push('');
     },
-    removeIngredient() {
+    removeIngredient(index) {
       let ing = this.recipe.ingredients;
-      ing.splice(ing.length - 1);
+      if(index) {
+        ing.splice(index, 1);
+      } else {
+        ing.splice(ing.length - 1);
+      }
       this.hasIng = ing.length < 1 ? false : true;
     },
     editorUpdate(editorData) {

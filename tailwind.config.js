@@ -25,27 +25,25 @@ module.exports = {
 
       black: '#000',
       white: '#fff',
+      'cool-gray': '#B9C7E5',
 
+      blue: {
+        500: '#234CAD', //TITLE blue shade
+        600: '#012477', //PRIMARY blue shade
+        700: '#152E68',
+        800: '#10224E',
+        900: '#0B1734',
+      },
       gray: {
-        100: '#f7fafc',
-        200: '#edf2f7',
-        300: '#e2e8f0',
-        400: '#cbd5e0',
-        500: '#a0aec0',
-        600: '#718096',
-        700: '#4a5568',
-        800: '#2d3748',
-        900: '#1a202c',
+        500: '#F2F6FF', //PRIMARY gray shade
+        600: '#DADDE6',
+        700: '#919499',
+        800: '#6D6F73',
+        900: '#494A4D',
       },
       green: {
-        100: '#f0fff4',
         200: '#c6f6d5',
-        300: '#9ae6b4',
-        400: '#68d391',
-        500: '#48bb78',
-        600: '#38a169',
         700: '#2f855a',
-        800: '#276749',
         900: '#22543d',
       },
     },
@@ -144,6 +142,7 @@ module.exports = {
     },
     fontFamily: {
       sans: [
+        'Nunito',
         'system-ui',
         '-apple-system',
         'BlinkMacSystemFont',

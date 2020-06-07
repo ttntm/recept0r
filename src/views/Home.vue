@@ -1,9 +1,9 @@
 <template>
   <div id="all-recipes" class="">
-    <p v-if="isLoading" class="text-gray-800 text-center font-bold">Loading recipes...</p>
+    <p v-if="isLoading" class="text-blue-600 text-center font-bold">Loading recipes...</p>
     <div v-else class="">
       <!-- SEARCH -->
-      <div class="text-center mb-12">
+      <div class="text-center pb-12 mb-12">
         <div class="search shadow-sm mx-auto" :class="{ 'input-group': searchTerm }">
           <input v-model.trim="searchTerm" type="text" class="w-full search-input" placeholder="Search term">
           <div class="input-group-append">
@@ -16,10 +16,12 @@
       </div>
       <!-- RECIPE GRID -->
       <transition-group name="list" tag="div" class="recipe-grid">
-        <div v-for="recipe in recipesReversed" :key="recipe.refId" class="recipe-card border border-gray-500 rounded-md">
-          <clazy-load v-if="recipe.image" :src="recipe.image" class="clazy-container relative border-b border-gray-500" is="VueClazyLoad">
+        <div v-for="recipe in recipesReversed" :key="recipe.refId" class="recipe-card rounded-lg">
+          <clazy-load v-if="recipe.image" :src="recipe.image" class="clazy-container relative" is="VueClazyLoad">
             <transition name="fade">
-              <img class="recipe-card-img" :src="recipe.image" crossorigin="anonymous">
+              <router-link :to="{name: 'recipe', params: {id: recipe.id, refId: recipe.refId}}">
+                <img class="recipe-card-img" :src="recipe.image" crossorigin="anonymous">
+              </router-link>
             </transition>
             <transition name="fade" slot="placeholder">
               <div class="preloader">
@@ -30,10 +32,10 @@
             </transition>
           </clazy-load>
           <div class="p-8">
-            <h3 class="font-bold text-2xl tracking-wide text-gray-800">{{ recipe.title }}</h3>
-            <p class="text-gray-600 text-lg mt-4 mb-8">{{ recipe.description }}</p>
-            <!-- <hr class="my-8" /> -->
-            <router-link :to="{name: 'recipe', params: {id: recipe.id, refId: recipe.refId}}" class="btn btn-gray inline-block">View Recipe &gt;</router-link>
+            <router-link :to="{name: 'recipe', params: {id: recipe.id, refId: recipe.refId}}">
+              <h3 class="font-bold text-2xl tracking-wide text-blue-500 hover:text-blue-700">{{ recipe.title }}</h3>
+            </router-link>
+            <p class="text-blue-600 mt-4">{{ recipe.description }}</p>
           </div>
         </div>
       </transition-group>
@@ -104,10 +106,11 @@ export default {
 
 <style lang="postcss" scoped>
   .search {
-    @apply w-1/2 border rounded;
+    @apply w-1/2 shadow-sm bg-gray-500 rounded-lg;
   }
   .search-input {
-    @apply rounded px-3 py-2;
+    @apply rounded-lg bg-gray-500 px-3 py-2;
+    z-index: 3;
   }
   .search-input:focus {
     outline: 0;
@@ -123,7 +126,7 @@ export default {
     @apply flex;
   }
   .input-group-append button {
-    @apply relative rounded-tl-none rounded-bl-none;
+    @apply relative rounded-tl-none rounded-bl-none shadow-none bg-gray-500;
     z-index: 2;
   }
   .no-results {
@@ -137,8 +140,8 @@ export default {
   }
   .recipe-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 1rem;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 2rem;
   }
   @media(max-width:768px) {
     .search {
@@ -148,6 +151,14 @@ export default {
       grid-template-columns: 1fr;
     }
   }
+  @media(min-width:768px) and (max-width:1024px) {
+    .recipe-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .recipe-card {
+    @apply bg-gray-500;
+  }
   .recipe-card:hover {
     box-shadow: 0 0.45rem 0.9rem rgba(0,0,0,.1);
     transition: all .35s ease;
@@ -156,7 +167,7 @@ export default {
     height: 300px;
   }
   .recipe-card-img {
-    @apply w-full rounded-tl-md rounded-tr-md object-cover opacity-75;
+    @apply w-full rounded-tl-lg rounded-tr-lg object-cover opacity-75;
     height: 299px;
     max-height: 299px;
     transition: all .5s ease-in-out;

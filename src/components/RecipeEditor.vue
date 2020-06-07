@@ -6,49 +6,70 @@
           class="btn btn-gray text-sm rounded-none"
           :class="{ 'is-active': isActive.bold() }"
           @click="commands.bold"
+          title="Bold"
         ><strong>B</strong></button>
         <button
           class="btn btn-gray text-sm rounded-none"
           :class="{ 'is-active': isActive.italic() }"
           @click="commands.italic"
+          title="Italic"
         ><em>i</em></button>
         <button
           class="btn btn-gray text-sm rounded-none"
           :class="{ 'is-active': isActive.underline() }"
           @click="commands.underline"
+          title="Underline"
         ><u>U</u></button>
         <button
           class="btn btn-gray text-sm rounded-none"
           :class="{ 'is-active': isActive.paragraph() }"
           @click="commands.paragraph"
+          title="Paragraph"
         >P</button>
         <button
           class="btn btn-gray text-sm rounded-none"
           :class="{ 'is-active': isActive.heading({ level: 1 }) }"
           @click="commands.heading({ level: 1 })"
+          title="Heading 1"
         >H1</button>
         <button
           class="btn btn-gray text-sm rounded-none"
           :class="{ 'is-active': isActive.heading({ level: 2 }) }"
           @click="commands.heading({ level: 2 })"
+          title="Heading 2"
         >H2</button>
         <button
           class="btn btn-gray text-sm rounded-none"
           :class="{ 'is-active': isActive.heading({ level: 3 }) }"
           @click="commands.heading({ level: 3 })"
+          title="Heading 3"
         >H3</button>
         <button
           class="btn btn-gray text-sm rounded-none"
           :class="{ 'is-active': isActive.bullet_list() }"
           @click="commands.bullet_list"
+          title="Unordered list"
         >&bull; UL</button>
         <button
           class="btn btn-gray text-sm rounded-none"
           :class="{ 'is-active': isActive.ordered_list() }"
           @click="commands.ordered_list"
+          title="Ordered list"
         >1. OL</button>
-        <button class="btn btn-gray text-sm rounded-none" @click="commands.undo">&lt;</button>
-        <button class="btn btn-gray text-sm rounded-none" @click="commands.redo">&gt;</button>
+        <button
+          class="btn btn-gray text-sm rounded-none"
+          @click="commands.horizontal_rule"
+          title="Horizontal rule"
+        >HR
+        </button>
+        <button class="btn btn-gray text-sm rounded-none"
+          @click="commands.undo"
+          title="Undo"
+        >&lt;</button>
+        <button class="btn btn-gray text-sm rounded-none"
+          @click="commands.redo"
+          title="Redo"
+        >&gt;</button>
       </div>
     </editor-menu-bar>
     <editor-content class="editor__content" :editor="editor" :class="{ 'editor-active': editing }"/>
@@ -65,6 +86,7 @@ import {
   Bold,
   Italic,
   Underline,
+  HorizontalRule,
   History
 } from "tiptap-extensions";
 
@@ -75,8 +97,8 @@ export default {
     EditorContent
   },
   props: {
-      editing: Boolean,
-      editorContent: Object
+    editing: Boolean,
+    editorContent: Object
   },
   data() {
     return {
@@ -107,6 +129,7 @@ export default {
         new Bold(),
         new Italic(),
         new Underline(),
+        new HorizontalRule(),
         new History()
       ],
       onUpdate: () => {
@@ -123,26 +146,28 @@ export default {
 
 <style lang="postcss">
   .is-active {
-    background-color: #ccc;
+    @apply bg-cool-gray;
   }
   .ProseMirror:focus {
     outline: none;
   }
   .editor-active > .ProseMirror {
-    padding: 0.5rem;
-    border: 1px solid #ced4da;
-    border-radius: 0.25rem;
+    @apply border border-gray-500 rounded-lg px-3 py-1;
   }
   .editor-active > .ProseMirror:focus {
-    border-color: #80bdff;
-    outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+    @apply shadow-outline;
+  }
+  .editor-active > .ProseMirror hr {
+    @apply my-8;
   }
   .btn-group {
     @apply text-sm;
   }
   .btn-group button {
-    @apply py-1 px-2;
+    @apply rounded-none py-1 px-2;
+  }
+  .btn-group button:focus {
+    @apply shadow-none bg-gray-600;
   }
   .btn-group button:not(:nth-child(1)) {
     border-left-width: 0!important;

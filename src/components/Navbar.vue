@@ -1,36 +1,27 @@
 <template>
-  <nav
-    :class="{ 'min-h-screen mobile-bg' : menuOpen }"
-    class="w-full absolute md:relative flex flex-col md:flex-row justify-start items-start md:items-center md:border-b md:border-gray-500 p-3 z-10"
-  >
-    <button @click="menuClickHandler()" class="inline-block md:hidden" type="button">
-      <span class="font-bold text-xl">[{{ icon }}]</span>
+  <nav class="container flex flex-row justify-start md:justify-center items-center pt-4 md:pt-12 pb-8 px-6 md:px-4 mx-auto z-10">
+    <button @click="menuClickHandler()" class="block md:hidden mr-8" type="button">
+      <span class="gg-menu"></span>
     </button>
-    <span class="hidden md:block md:mr-8">
+    <router-link :to="{name: 'home'}">
+      <img src="@/assets/logo.svg" class="hover:opacity-75 pt-2">
+    </router-link>
+    <div class="hidden md:flex flex-row justify-center items-center flex-grow">
       <router-link
         :to="{name: 'home'}"
-        class="text-xl tracking-wider font-bold text-gray-600 hover:text-gray-800"
-      >recept0r</router-link>
-    </span>
-    <div
-      :class="{ 'hidden' : !menuOpen }"
-      class="w-full md:w-auto flex md:inline-flex flex-col md:flex-row justify-start items-center md:items-start md:flex-grow mt-12 md:my-0"
-    >
-      <router-link
-        :to="{name: 'home'}"
-        class="block md:inline-block font-bold text-xl md:text-base text-gray-800 hover:text-gray-600 p-2 mb-12 md:mb-0 md:mr-4"
+        class="block md:inline-block font-bold text-lg text-blue-500 rounded-lg hover:bg-gray-500 px-4 py-2 mx-4"
       >Home</router-link>
       <router-link
         :to="{name: 'about'}"
-        class="block md:inline font-bold text-xl md:text-base text-gray-800 hover:text-gray-600 p-2 mb-12 md:mb-0 md:mr-4"
+        class="block md:inline font-bold text-lg text-blue-500 rounded-lg hover:bg-gray-500 px-4 py-2 mx-4"
       >About</router-link>
       <router-link
         v-if="!publicView"
         :to="{name: 'create'}"
-        class="block md:inline font-bold text-xl md:text-base text-gray-800 hover:text-gray-600 p-2 mb-12 md:mb-0"
+        class="block md:inline font-bold text-lg text-blue-500 rounded-lg hover:bg-gray-500 px-4 py-2 mx-4"
       >&plus;Create</router-link>
     </div>
-    <nav-auth :class="{ 'hidden' : !menuOpen }" :publicView="publicView" class="w-full md:w-auto block md:block text-center" />
+    <nav-auth :publicView="publicView" class="hidden md:block" />
   </nav>
 </template>
 
@@ -52,9 +43,6 @@ export default {
     },
     menuOpen() {
       return this.$store.state.app.menuOpen;
-    },
-    icon() {
-      return this.menuOpen ? "x" : "-";
     }
   },
   methods: {
@@ -68,12 +56,20 @@ export default {
 </script>
 
 <style lang="postcss">
-  @media(min-width:768px) {
-    nav {
-      background: linear-gradient(90deg, rgba(247, 250, 252, 1) 0%, rgba(255,255,255,1) 100%);
-    }
+  .gg-menu,
+  .gg-menu::after,
+  .gg-menu::before {
+    @apply relative block bg-blue-500;
+    width: 20px;
+    height: 2px;
   }
-  .mobile-bg {
-    background: linear-gradient(165deg, rgba(203,213,224,1) 0%, rgba(160,174,192,1) 100%);
+  .gg-menu::after,
+  .gg-menu::before {
+    content: "";
+    position: absolute;
+    top: -6px
+  }
+  .gg-menu::after {
+    top: 6px
   }
 </style>

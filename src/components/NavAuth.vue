@@ -1,50 +1,64 @@
 <template>
   <div id="nav-auth" class="">
     <div v-if="!publicView">
-      <button @click="logout()" class="btn text-gray-600 border-gray-600 hover:text-white hover:bg-gray-600 py-1">Log Out</button>
+      <button @click="logout()" class="btn btn-gray">Log Out</button>
     </div>
     <div v-else>
-      <button @click="toggleShow()" ref="loginButton" class="btn btn-gray py-1">Log In</button>
+      <button @click="toggleShow()" ref="loginButton" class="btn btn-gray">Log In</button>
     </div>
     <transition name="fade">
-      <div v-if="isShowing" v-closable="{exclude: ['loginButton'],handler: 'toggleShow'}" class="user-modal">
-        <div class="user-modal-close text-gray-500 hover:text-gray-800" @click="toggleShow()">&times;</div>
+      <div v-if="isShowing" v-closable="{exclude: ['loginButton','toLogin','toSignup'],handler: 'toggleShow'}" class="user-modal">
+        <div class="user-modal-close text-cool-gray hover:text-blue-500" @click="toggleShow()">&times;</div>
         <div class="form">
+          <div class="flex flex-row justify-around mt-4 mb-6">
+            <h3 class="">
+              <a href="#"
+                class="text-cool-gray pb-1 border-b border-transparent"
+                :class="{ 'border-blue-500 text-blue-500': mode === 'register' }"
+                @click="toggleMode('register')"
+                ref="toSignup"
+              >
+                Sign Up
+              </a>
+            </h3>
+            <h3 class="">
+              <a href="#"
+                class="text-cool-gray pb-1 border-b border-transparent"
+                :class="{ 'border-blue-500 text-blue-500': mode === 'login' }"
+                @click="toggleMode('login')"
+                ref="toLogin"
+              >
+                Login
+              </a>
+            </h3>
+          </div>
           <!-- SIGNUP PART -->
           <form v-if="mode === 'register'" class="" @keyup.enter="signup()">
-            <h2 class="text-xl mb-4">👋 Register Here</h2>
             <div class="form-group">
               <label for="name">Name</label>
-              <input class="form-control" id="name" v-model="crendentials.name" ref="firstInput" type="text" placeholder="Arnold Schwarzenegger"/>
+              <input class="auth-form-control" id="name" v-model="crendentials.name" ref="firstInput" type="text" placeholder="Arnold Schwarzenegger"/>
             </div>
             <div class="form-group">
               <label for="email">Email</label>
-              <input class="form-control" id="email" type="email" v-model="crendentials.email" placeholder="arnie@terminator.com"/>
+              <input class="auth-form-control" id="email" type="email" v-model="crendentials.email" placeholder="arnie@terminator.com"/>
             </div>
             <div class="form-group">
               <label for="password">Password</label>
-              <input class="form-control" id="password" type="password" v-model="crendentials.password" placeholder="******"/>
+              <input class="auth-form-control" id="password" type="password" v-model="crendentials.password" placeholder="******"/>
             </div>
-            <button class="btn btn-gray py-1 mb-4" type="button" @click="signup()">Sign Up</button>
-            <p class="text-sm">
-              Already registered? <a href="#" @click="toggleMode()">Sign In</a>
-            </p>
+            <button class="modal-btn px-8 py-2 mt-8 mb-4 mx-auto" type="button" @click="signup()">Sign Up</button>
           </form>
           <!-- LOGIN PART -->
-          <form v-if="mode === 'login'" class="login-form stack" @keyup.enter="login()">
-            <h2 class="text-xl mb-4">🔐 Login Here</h2>
+          <form v-if="mode === 'login'" class="" @keyup.enter="login()">
             <div class="form-group">
               <label for="email">Email</label>
-              <input class="form-control" id="email" type="email" v-model="crendentials.email" ref="firstInput" placeholder="hey@email.com"/>
+              <input class="auth-form-control" id="email" type="email" v-model="crendentials.email" ref="firstInput" placeholder="hey@email.com"/>
             </div>
             <div class="form-group">
               <label for="password">Password</label>
-              <input class="form-control" id="password" type="password" v-model="crendentials.password" placeholder="******"/>
+              <input class="auth-form-control" id="password" type="password" v-model="crendentials.password" placeholder="******"/>
             </div>
-            <button class="btn btn-gray py-1 mb-4" type="button" @click="login()">Login</button>
-            <p class="text-sm">
-              Not registered? <a href="#" @click="toggleMode()">Create an account</a>
-            </p>
+            <button class="modal-btn px-8 py-2 mt-8 mb-4 mx-auto" type="button" @click="login()">Login</button>
           </form>
           <p v-if="cValidateMsg !== ''" class="font-bold" :class="{ 'error' : !cValidate }">{{ cValidateMsg }}</p>
         </div>
@@ -124,11 +138,18 @@ export default {
         });
       }
     },
-    toggleMode() {
-      this.mode === "register"
-        ? (this.mode = "login")
-        : (this.mode = "register");
-      this.cValidateMsg = null;
+    toggleMode(current) {
+      if(this.mode === current) {
+        return
+      } else {
+        this.mode === "register"
+          ? (this.mode = "login")
+          : (this.mode = "register");
+        this.cValidateMsg = null;
+        this.$nextTick(function () {
+          this.$refs['firstInput'].focus();
+        });
+      }
     },
     signup() {
       if(!this.cValidate) {
@@ -222,26 +243,37 @@ export default {
 
 <style lang="postcss" scoped>
   .form-group {
-    @apply flex flex-col mb-4;
+    @apply flex flex-col border-b border-cool-gray mb-4;
   }
-  a:link {
-    @apply text-green-600 underline;
+  .form-group label {
+    @apply tracking-wide;
+    @apply text-gray-800;
+    @apply mb-2;
   }
-  a:hover {
-    @apply text-green-800 no-underline;
+  .auth-form-control {
+    @apply bg-gray-500 px-3 py-1;
+  }
+  .auth-form-control:focus {
+    outline: 0;
+    @apply shadow-outline;
   }
   .error { color: salmon; }
   .fade-enter-active, .fade-leave-active { transition: opacity 0.2s ease-out; }
   .fade-enter, .fade-leave-to { opacity: 0; }
   .user-modal {
-    @apply fixed left-0 right-0 opacity-100 rounded-lg shadow-lg border border-gray-500 text-left px-10 py-8 mx-auto;
-    background: linear-gradient(190deg, rgba(247,250,252,1) 0%, rgba(237,242,247,1) 100%);
+    @apply fixed left-0 right-0 opacity-100 rounded-lg shadow-lg bg-gray-500 text-left px-12 py-8 mx-auto;
     width: 450px;
     top: 100px;
     z-index: 1;
   }
   @media(max-width:767px){
     .user-modal {max-width: 95%;}
+  }
+  .modal-btn {
+    @apply block font-bold border border-blue-500 text-blue-500 rounded-lg shadow-sm;
+  }
+  .modal-btn:hover {
+    @apply bg-cool-gray border-cool-gray shadow-none;
   }
   .user-modal-close {
     @apply absolute top-0 cursor-pointer text-3xl;

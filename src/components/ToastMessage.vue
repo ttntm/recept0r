@@ -6,7 +6,7 @@
         :class="{
             'error': message.type === 'error',
             'success': message.type === 'success',
-            'bg-gray-200': message.type === 'info',
+            'bg-gray-500': message.type === 'info',
         }"
         class="rounded-lg shadow-md p-6 pr-10"
         style="min-width: 240px"
