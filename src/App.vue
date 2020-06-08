@@ -53,7 +53,7 @@ export default {
     @apply shadow-outline;
   }
   .btn {
-    @apply inline-block rounded-lg shadow-sm px-3 py-2;
+    @apply inline-block font-bold rounded-lg shadow-sm px-6 py-2;
   }
   .btn:hover {
     @apply shadow-none;
@@ -62,13 +62,10 @@ export default {
     cursor: not-allowed;
   }
   .btn-gray {
-    @apply border-gray-500;
-    @apply bg-gray-500;
-    @apply text-blue-600;
+    @apply border border-gray-500 bg-gray-500 text-blue-500;
   }
   .btn-gray:hover {
-    @apply bg-gray-900;
-    @apply text-gray-500;
+    @apply bg-cool-gray-400;
   }
   .btn-green {
     border: 1px solid;

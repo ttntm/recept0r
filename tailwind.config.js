@@ -25,7 +25,18 @@ module.exports = {
 
       black: '#000',
       white: '#fff',
-      'cool-gray': '#B9C7E5',
+
+      'cool-gray': {
+        // 100: '#F8F9FC',
+        // 200: '#EEF1F9',
+        // 300: '#E3E9F5',
+        400: '#CED8ED',
+        500: '#B9C7E5', //PRIMARY cool gray
+        600: '#A7B3CE',
+        700: '#6F7789',
+        // 800: '#535A67',
+        // 900: '#383C45',
+      },
 
       blue: {
         500: '#234CAD', //TITLE blue shade
@@ -88,7 +99,7 @@ module.exports = {
       sm: '0.125rem',
       default: '0.25rem',
       md: '0.375rem',
-      lg: '0.5rem',
+      lg: '1rem',
       full: '9999px',
     },
     borderWidth: {
@@ -107,7 +118,7 @@ module.exports = {
       xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
       '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
       inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
-      outline: '0 0 0 3px rgba(66, 153, 225, 0.5)',
+      outline: '0 0 0 2px rgba(185, 199, 229, 0.75)',
       none: 'none',
     },
     container: {},

@@ -140,7 +140,7 @@ export default {
           body: JSON.stringify(data),
           method: 'POST'
         }).then(response => {
-          EventBus.$emit('toast-message', { text: `Recipe "${newRecipe.title}" created 😊`, type: 'success' });
+          EventBus.$emit('toast-message', { text: `Recipe "${newRecipe.title}" created`, type: 'success' });
           return response.json();
         }).catch((error) => {
           console.log("API error", error);

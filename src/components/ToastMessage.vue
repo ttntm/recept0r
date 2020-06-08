@@ -15,7 +15,14 @@
           @click.prevent="message = null"
           class="font-bold opacity-75 cursor-pointer absolute top-0 right-0 py-2 px-3 hover:opacity-100"
         >×</button>
-        <div class="flex items-center">{{ message.text }}</div>
+        <div class="flex items-center">
+          <img v-if="message.type === 'error'" src="@/assets/sad.svg" class="smiley block w-6 h-6 mr-2">
+          <img v-if="message.type === 'success'" src="@/assets/happy.svg" class="smiley block w-6 h-6 mr-2">
+          <img v-if="message.type === 'info'" src="@/assets/happy.svg" class="smiley block w-6 h-6 mr-2">
+          <span class="block font-bold">
+            {{ message.text }}
+          </span>
+        </div>
       </div>
     </Transition>
   </div>
@@ -62,5 +69,16 @@ export default {
 .slide-fade-leave-to {
   transform: translateX(400px);
   opacity: 0;
+}
+.smiley {
+  animation: roll 1s linear infinite;
+}
+@keyframes roll {
+  0% {
+    transform: rotate(-20deg);
+  }
+  100% {
+    transform: rotate(20deg);
+  }
 }
 </style>

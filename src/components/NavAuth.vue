@@ -8,13 +8,13 @@
     </div>
     <transition name="fade">
       <div v-if="isShowing" v-closable="{exclude: ['loginButton','toLogin','toSignup'],handler: 'toggleShow'}" class="user-modal">
-        <div class="user-modal-close text-cool-gray hover:text-blue-500" @click="toggleShow()">&times;</div>
+        <div class="user-modal-close text-cool-gray-500 hover:text-blue-500" @click="toggleShow()">&times;</div>
         <div class="form">
-          <div class="flex flex-row justify-around mt-4 mb-6">
+          <div class="w-3/4 flex flex-row justify-around mt-4 mb-6 mx-auto">
             <h3 class="">
               <a href="#"
-                class="text-cool-gray pb-1 border-b border-transparent"
-                :class="{ 'border-blue-500 text-blue-500': mode === 'register' }"
+                class="text-cool-gray-500 text-lg pb-1 border-b border-transparent"
+                :class="{ 'border-blue-500 text-blue-500 font-bold': mode === 'register' }"
                 @click="toggleMode('register')"
                 ref="toSignup"
               >
@@ -23,8 +23,8 @@
             </h3>
             <h3 class="">
               <a href="#"
-                class="text-cool-gray pb-1 border-b border-transparent"
-                :class="{ 'border-blue-500 text-blue-500': mode === 'login' }"
+                class="text-cool-gray-500 text-lg pb-1 border-b border-transparent"
+                :class="{ 'border-blue-500 text-blue-500 font-bold': mode === 'login' }"
                 @click="toggleMode('login')"
                 ref="toLogin"
               >
@@ -185,7 +185,7 @@ export default {
           .then(() => {
             this.toggleShow();
             this.toggleMenu(false);
-            msg.text = "You're logged in now 😀";
+            msg.text = "You're logged in now";
             msg.type =  'success';
             this.toast(msg); //emit toast into EventBus
           })
@@ -207,7 +207,7 @@ export default {
           if(this.$route.name === 'create') {
             this.$router.push({ name: 'home' });
           }
-          msg.text = "You're logged out now, cya soon 😉";
+          msg.text = "You're logged out now, cya soon";
           msg.type =  'info';
           this.toast(msg); //emit toast into EventBus
         })
@@ -243,19 +243,17 @@ export default {
 
 <style lang="postcss" scoped>
   .form-group {
-    @apply flex flex-col border-b border-cool-gray mb-4;
+    @apply flex flex-col border-b border-cool-gray-500 mb-8;
   }
   .form-group label {
-    @apply tracking-wide;
-    @apply text-gray-800;
-    @apply mb-2;
+    @apply tracking-wide text-sm text-cool-gray-700 mb-1;
   }
   .auth-form-control {
     @apply bg-gray-500 px-3 py-1;
   }
   .auth-form-control:focus {
     outline: 0;
-    @apply shadow-outline;
+    @apply shadow-outline bg-white;
   }
   .error { color: salmon; }
   .fade-enter-active, .fade-leave-active { transition: opacity 0.2s ease-out; }
@@ -267,13 +265,16 @@ export default {
     z-index: 1;
   }
   @media(max-width:767px){
-    .user-modal {max-width: 95%;}
+    .user-modal {
+      max-width: 90%;
+      top: 20px;
+    }
   }
   .modal-btn {
     @apply block font-bold border border-blue-500 text-blue-500 rounded-lg shadow-sm;
   }
   .modal-btn:hover {
-    @apply bg-cool-gray border-cool-gray shadow-none;
+    @apply bg-cool-gray-500 border-cool-gray-500 shadow-none;
   }
   .user-modal-close {
     @apply absolute top-0 cursor-pointer text-3xl;

@@ -146,7 +146,7 @@ export default {
 
 <style lang="postcss">
   .is-active {
-    @apply bg-cool-gray;
+    @apply bg-cool-gray-500;
   }
   .ProseMirror:focus {
     outline: none;

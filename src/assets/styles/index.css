@@ -5,6 +5,12 @@
   *:hover {
     transition: all .35s ease;
   }
+
+  *:focus {
+    @apply outline-none;
+    @apply shadow-outline;
+  }
+
   body, html {
     @apply text-blue-600;
   }

@@ -7,11 +7,11 @@
         <div class="search shadow-sm mx-auto" :class="{ 'input-group': searchTerm }">
           <input v-model.trim="searchTerm" type="text" class="w-full search-input" placeholder="Search term">
           <div class="input-group-append">
-            <button v-if="searchTerm" @click="clearSearch()" class="btn border-0 font-bold" type="button" title="Clear search">&times;</button>
+            <button v-if="searchTerm" @click="clearSearch()" class="btn border-0 font-bold text-lg px-4" type="button" title="Clear search">&times;</button>
           </div>
         </div>
         <transition name="fade">
-          <span v-if="noResults" class="no-results text-center text-gray-600 mt-6">No results for your search query :(</span>
+          <span v-if="noResults" class="no-results text-center text-cool-gray-500 mt-6">No results for your search query :(</span>
         </transition>
       </div>
       <!-- RECIPE GRID -->
@@ -161,20 +161,22 @@ export default {
   }
   .recipe-card:hover {
     box-shadow: 0 0.45rem 0.9rem rgba(0,0,0,.1);
-    transition: all .35s ease;
+    transition: all .35s ease-in-out;
   }
   .clazy-container {
     height: 300px;
   }
   .recipe-card-img {
-    @apply w-full rounded-tl-lg rounded-tr-lg object-cover opacity-75;
+    @apply w-full rounded-tl-lg rounded-tr-lg object-cover;
     height: 299px;
     max-height: 299px;
     transition: all .5s ease-in-out;
   }
-  .recipe-card:hover .recipe-card-img {
-    opacity: 1;
-    transition: all .5s ease-in-out;
+  @media screen and (min-width:1024px) {
+    .recipe-card:hover {
+      transform: translateY(-0.5rem);
+      transition: all .35s ease-in-out;
+    }
   }
   .list-enter-active, .list-leave-active {
     transition: all .5s;
