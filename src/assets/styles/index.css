@@ -17,8 +17,10 @@
 
 /* BS Reboot */
 
-  h1, h2, h3, h4, h5, h6, p {
+  h1, h2, h3, h4, h5, h6 {
     @apply tracking-wide;
+    @apply text-blue-500;
+    @apply font-bold;
     @apply mt-0;
     @apply mb-4;
   }
@@ -29,7 +31,7 @@
 
   @media (min-width: 1200px) {
     h1 {
-      @apply text-3xl;
+      @apply text-4xl;
     }
   }
 
@@ -39,7 +41,7 @@
 
   @media (min-width: 1200px) {
     h2 {
-      @apply text-2xl;
+      @apply text-3xl;
     }
   }
 
@@ -49,8 +51,16 @@
 
   @media (min-width: 1200px) {
     h3 {
+      @apply text-2xl;
+    }
+    h4 {
       @apply text-xl;
     }
+  }
+
+  p {
+    @apply mt-0;
+    @apply mb-4;
   }
 
   ol, ul {

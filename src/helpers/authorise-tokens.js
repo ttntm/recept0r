@@ -2,7 +2,6 @@
 Extract and validate tokens in the URL if they are present.
 */
 import store from "@/store";
-import { EventBus } from '@/helpers/event-bus.js';
 // import router from "../router";
 
 /**
@@ -102,13 +101,18 @@ function detectRecoveryToken() {
  * @param {string} token - authentication token used to confirm a user who has created an account via email signup.
  */
 function confirmEmailToken(token) {
+    let msg = { text: '', type: ''};
     store
         .dispatch("user/attemptConfirmation", token)
         .then(resp => {
-            EventBus.$emit('toast-message', { text: `${resp.email} has been confirmed, please login`, type: 'success' });
+            msg.text = `${resp.email} has been confirmed, please login`;
+            msg.type = 'success';
+            store.dispatch('app/sendToastMessage', msg)
         })
         .catch(error => {
-            EventBus.$emit('toast-message', { text: `Can't authorise your account right now. Please try again`, type: 'error' });
+            msg.text = `Can't authorise your account right now. Please try again`;
+            msg.type = 'error';
+            store.dispatch('app/sendToastMessage', msg)
             console.error(error, "Something's gone wrong confirming user");
         });
 }

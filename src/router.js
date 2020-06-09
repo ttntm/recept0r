@@ -30,7 +30,7 @@ const router = new Router({
       name: 'create',
       component: Create,
       beforeEnter: (to, from, next) => {
-         if (!store.state.user.currentUser) { //get stored user state from vuex store
+         if(!store.state.user.currentUser) { //get stored user state from vuex store
           router.push({ name: 'home' });
         } else {
           return next();

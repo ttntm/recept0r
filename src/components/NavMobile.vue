@@ -16,19 +16,19 @@
         <div class="w-full flex flex-col justify-start items-center mt-12">
           <router-link
             :to="{name: 'home'}"
-            class="block font-bold text-xl text-blue-600 hover:text-gray-600 p-2 mb-12"
+            class="block font-bold text-xl text-blue-600 hover:text-cool-gray-500 p-2 mb-12"
           >Home</router-link>
           <router-link
             :to="{name: 'about'}"
-            class="block font-bold text-xl text-blue-600 hover:text-gray-600 p-2 mb-12"
+            class="block font-bold text-xl text-blue-600 hover:text-cool-gray-500 p-2 mb-12"
           >About</router-link>
           <router-link
-            v-if="!publicView"
+            v-if="loggedIn"
             :to="{name: 'create'}"
-            class="block font-bold text-xl text-blue-600 hover:text-gray-600 p-2 mb-12"
+            class="block font-bold text-xl text-blue-600 hover:text-cool-gray-500 p-2 mb-12"
           >&plus;Create</router-link>
         </div>
-        <nav-auth :publicView="publicView" class="w-full block text-center" />
+        <nav-auth class="w-full block text-center" />
       </div>
     </Transition>
   </div>
@@ -36,22 +36,18 @@
 
 <script>
 import NavAuth from "@/components/NavAuth.vue";
-import { mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: "nav-mobile",
   components: {
     NavAuth
   },
-  props: {
-    publicView: Boolean
-  },
   computed: {
+    ...mapGetters('app',['menuOpen']),
+    ...mapGetters('user',['loggedIn']),
     currentPage() {
       return this.$route.name; //use this to mark the active link in the navigation
-    },
-    menuOpen() {
-      return this.$store.state.app.menuOpen;
     }
   },
   methods: {

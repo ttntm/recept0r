@@ -6,14 +6,16 @@ export default {
     return {
       isDevEnvironment: false,
       siteURL: 'recept0r.com',
-      menuOpen : false
+      menuOpen: false,
+      toastMessage: null
     };
   },
 
   getters: {
     isDevEnvironment: state => state.isDevEnvironment,
     siteURL: state => state.siteURL,
-    menuState: state => state.menuOpen
+    menuOpen: state => state.menuOpen,
+    toastMessage: state => state.toastMessage
   },
 
   mutations: {
@@ -25,12 +27,29 @@ export default {
     },
     SET_MENU_OPEN(state, value) {
       state.menuOpen = value;
+    },
+    SET_TOAST_MESSAGE(state, value) {
+      state.toastMessage = value;
     }
   },
 
   actions: {
     toggleMenu({ commit }, newState) {
       commit('SET_MENU_OPEN', newState);
+    },
+    /**
+   * @param {object} message - a message object as required by ToastMeassage.vue with 2 keys, "text" and "type"
+   */
+    sendToastMessage({ commit }, message) {
+      let timer;
+
+      clearTimeout(timer);
+
+      commit('SET_TOAST_MESSAGE', message);
+
+      timer = setTimeout(() => {
+        commit('SET_TOAST_MESSAGE', null);
+      }, 5000);
     }
   }
 };

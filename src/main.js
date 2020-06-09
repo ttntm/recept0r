@@ -8,16 +8,6 @@ require('@/assets/styles/index.css');
 
 Vue.config.productionTip = false;
 
-new Vue({
-  router,
-  store,
-  render: h => h(App),
-}).$mount('#app');
-
-store.dispatch("user/initAuth");
-
-attemptToAuthoriseTokens();
-
 // GLOBAL DIRECTIVE - click outside element should close the respective element
 // source: https://tahazsh.com/detect-outside-click-in-vue
 let handleOutsideClick;
@@ -45,3 +35,20 @@ Vue.directive('closable', {
     document.removeEventListener('touchstart', handleOutsideClick);
   }
 })
+
+//GLOBAL "blur" directive
+Vue.directive('blur', {
+  inserted: function (el) {
+    el.onclick = (ev) => ev.target.blur();
+  }
+});
+
+new Vue({
+  router,
+  store,
+  render: h => h(App),
+}).$mount('#app');
+
+store.dispatch("user/initAuth");
+
+attemptToAuthoriseTokens();

@@ -1,12 +1,12 @@
 <template>
   <div id="app" :class="{ 'overflow-hidden' : menuOpen }" class="flex h-full flex-col">
-    <Navbar :publicView="publicView" />
-    <NavMobile :publicView="publicView" />
+    <Navbar />
+    <NavMobile />
     <div class="container flex-grow flex-shrink-0 px-4 mt-12 mx-auto">
-      <router-view :publicView="publicView" :fPath="fPath" />
+      <router-view :fPath="fPath" />
     </div>
     <AppFooter />
-    <toast-message />
+    <ToastMessage />
   </div>
 </template>
 
@@ -15,6 +15,7 @@ import Navbar from '@/components/Navbar.vue';
 import NavMobile from '@/components/NavMobile.vue';
 import AppFooter from '@/components/AppFooter.vue';
 import ToastMessage from '@/components/ToastMessage.vue';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'App',
@@ -25,16 +26,11 @@ export default {
     ToastMessage
   },
   computed: {
-    publicView() {
-      return this.$store.state.user.currentUser ? false : true
-    },
-    menuOpen() {
-      return this.$store.state.app.menuOpen;
-    }
+    ...mapGetters('app',['menuOpen']),
+    ...mapGetters('user',['loggedIn'])
   },
   data() {
     return {
-      updateList: false,
       fPath: {
         readAll: process.env.VUE_APP_FUNC_PATH_ALL,
         readOne: process.env.VUE_APP_FUNC_PATH_ONE,
@@ -55,7 +51,7 @@ export default {
   .btn {
     @apply inline-block font-bold rounded-lg shadow-sm px-6 py-2;
   }
-  .btn:hover {
+  .btn:hover, .btn:focus {
     @apply shadow-none;
   }
   .btn:disabled {
@@ -64,7 +60,7 @@ export default {
   .btn-gray {
     @apply border border-gray-500 bg-gray-500 text-blue-500;
   }
-  .btn-gray:hover {
+  .btn-gray:hover, .btn-gray:focus {
     @apply bg-cool-gray-400;
   }
   .btn-green {
@@ -72,7 +68,7 @@ export default {
     @apply border-green-700;
     @apply text-green-700;
   }
-  .btn-green:not(:disabled):hover {
+  .btn-green:not(:disabled):hover, .btn-green:focus {
     @apply bg-green-700;
     @apply text-gray-500;
   }
@@ -80,7 +76,7 @@ export default {
     border: 1px solid salmon;
     color: salmon;
   }
-  .btn-red:hover {
+  .btn-red:hover, .btn-red:focus {
     background-color: salmon;
     @apply text-white;
   }

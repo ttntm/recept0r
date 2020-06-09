@@ -1,18 +1,18 @@
 <template>
   <div id="create-recipe" class="w-full md:w-4/5 flex flex-row flex-wrap mx-auto">
     <div class="w-full">
-      <h3 class="mb-6">Recipe Title</h3>
+      <h2 class="mb-6">Recipe Title</h2>
       <input type="text" v-model="recipe.title" ref="recipeTitle" class="form-control mb-4">
     </div>
     <div class="w-full md:w-1/2">
-      <h4>Image</h4>
+      <h3>Image</h3>
       <img v-if="recipe.image" class="rounded-lg mt-4 mb-4" :src="recipe.image" :alt="recipe.title">
       <recipe-image :recipe="recipe" @image:update="imageUpdate" class="mb-4" />
     </div>
     <div class="w-full md:w-1/2 md:pl-8">
-      <h4 class="mb-4">Description</h4>
+      <h3 class="mb-4">Description</h3>
       <input type="text" v-model="recipe.description" class="form-control mb-4">
-      <h4 class="mb-4">Ingredients</h4>
+      <h3 class="mb-4">Ingredients</h3>
       <ul class="mb-4">
         <li v-for="(ing, index) in recipe.ingredients" :key="index">
           <span class="flex flex-row items-center">
@@ -29,7 +29,7 @@
       </div>
     </div>
     <div class="w-full">
-      <h4 class="mb-4">Instructions</h4>
+      <h3 class="mb-4">Instructions</h3>
       <recipe-editor :editing="true" :editorContent="recipe.body" @editor:update="editorUpdate" />
       <hr class="my-8">
       <div class="flex flex-row items-start">
@@ -43,7 +43,7 @@
 <script>
 import RecipeImage from '@/components/RecipeImage.vue';
 import RecipeEditor from '@/components/RecipeEditor.vue';
-import { EventBus } from '@/helpers/event-bus.js';
+import { mapActions } from 'vuex';
 
 export default {
   name: "create-recipe",
@@ -112,6 +112,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions('app', ['sendToastMessage']),
     imageUpdate(url) {
       this.recipe.image = url;
     },
@@ -140,7 +141,7 @@ export default {
           body: JSON.stringify(data),
           method: 'POST'
         }).then(response => {
-          EventBus.$emit('toast-message', { text: `Recipe "${newRecipe.title}" created`, type: 'success' });
+          this.sendToastMessage({ text: `Recipe "${newRecipe.title}" created`, type: 'success' });
           return response.json();
         }).catch((error) => {
           console.log("API error", error);
@@ -158,18 +159,18 @@ export default {
     createRecipe(recipe) {
       if(this.$store.state.user.currentUser) {
         if (recipe.title === '' || recipe.description === '' || recipe.ingredients.length == 0 || recipe.body === '') {
-            EventBus.$emit('toast-message', { text: "Please fill all fields.", type: 'error' });
+            this.sendToastMessage({ text: "Please fill all fields.", type: 'error' });
             return
         } else {
           if(recipe.image !== null && !this.isImgUploaded) {
-            EventBus.$emit('toast-message', { text: 'An image was selected but never uploaded. Please click "Upload Image" before saving.', type: 'error' });
+            this.sendToastMessage({ text: 'An image was selected but never uploaded. Please click "Upload Image" before saving.', type: 'error' });
           } else { //all necessary data available, send it off
             this.isSaving = true;
             this.addRecipe(recipe);
           }
         }
       } else {
-        EventBus.$emit('toast-message', { text: "Please log in again to save your changes.", type: 'error' });
+        this.sendToastMessage({ text: "Please log in again to save your changes.", type: 'error' });
       }
     },
     cancelCreate() {
@@ -202,12 +203,6 @@ export default {
 </script>
 
 <style lang="postcss" scoped>
-  h3 {
-    @apply tracking-wide text-3xl font-bold;
-  }
-  h4 {
-    @apply text-2xl text-gray-700;
-  }
   .form-control {
     @apply block w-full;
   }

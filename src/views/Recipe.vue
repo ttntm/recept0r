@@ -1,7 +1,7 @@
 <template>
   <div id="recipe" class="flex flex-row flex-wrap">
     <div v-if="readSuccess" class="w-full">
-      <h3 class="mb-6">
+      <h2 class="mb-6">
         <span v-if="!editing">
           {{ recipe.title }}
         </span>
@@ -9,22 +9,22 @@
           <span class="block mb-4">Recipe Title</span>
           <input type="text" v-model="recipe.title" ref="recipeTitle" class="form-control">
         </span>
-      </h3>
+      </h2>
     </div>
     <div v-if="readSuccess" class="w-full md:w-1/2">
-      <h4 v-if="editing" class="mb-4">Image</h4>
+      <h3 v-if="editing" class="mb-4">Image</h3>
       <img v-if="recipe.image" class="w-full rounded-lg shadow-sm mb-4" :src="recipe.image" :alt="recipe.title" key="image">
       <recipe-image v-if="editing" :recipe="recipe" @image:update="imageUpdate" class="mb-4" />
     </div>
     <div v-if="readSuccess" class="w-full md:w-1/2 md:pl-8">
-      <h4 class="mb-4">Description</h4>
+      <h3 class="mb-4">Description</h3>
       <div v-if="!editing">
         <p class="text-blue-600">{{ recipe.description }}</p>
       </div>
       <div v-else>
         <input type="text" v-model="recipe.description" class="form-control">
       </div>
-      <h4 class="my-4">Ingredients</h4>
+      <h3 class="my-4">Ingredients</h3>
       <ul class="mt-4 mb-4">
         <li v-for="(ing, index) in recipe.ingredients" :key="index">
           <span v-if="!editing">
@@ -45,17 +45,17 @@
     </div>
     <div class="w-full">
       <div v-if="!readSuccess">
-        <p class="text-gray-600">Loading...</p>
+        <p class="text-cool-gray-500">Loading...</p>
       </div>
       <div v-else>
-        <h4 class="mb-4">Instructions</h4>
+        <h3 class="mb-4">Instructions</h3>
         <recipe-editor :editing="editing" :editorContent="recipe.body" @editor:update="editorUpdate" />
         <hr class="my-8" />
         <div class="flex flex-row items-start">
           <div v-if="!editing">
             <router-link :to="{name: 'home'}" class="btn btn-gray mr-4">&lt; Go Back</router-link>
-            <button v-if="!publicView" class="btn btn-gray mr-4" @click="editMode(recipe)">Edit Recipe</button>
-            <button v-if="!publicView" class="btn btn-red" @click="deleteRecipe(recipe)">Delete Recipe</button>
+            <button v-if="loggedIn" class="btn btn-gray mr-4" @click="editMode(recipe)">Edit Recipe</button>
+            <button v-if="loggedIn" class="btn btn-red" @click="deleteRecipe(recipe)">Delete Recipe</button>
           </div>
           <div v-else>
             <button class="btn btn-green mr-4" @click="editRecipe(recipe)">Save</button>
@@ -70,7 +70,7 @@
 <script>
 import RecipeImage from '@/components/RecipeImage.vue';
 import RecipeEditor from '@/components/RecipeEditor.vue';
-import { EventBus } from '@/helpers/event-bus.js';
+import { mapGetters, mapActions } from 'vuex';
 
 var cache = Object.create(null);
 var cacheStr = '';
@@ -82,8 +82,10 @@ export default {
     RecipeEditor
   },
   props: {
-    fPath: Object,
-    publicView: Boolean
+    fPath: Object
+  },
+  computed: {
+    ...mapGetters('user',['loggedIn']),
   },
   data() {
     return {
@@ -107,15 +109,16 @@ export default {
         r.id = rTitle.replace(/[^a-z0-9]+/gi, '-').replace(/^-*|-*$/g, '').toLowerCase();
       }
     },
-    publicView: {
+    loggedIn: {
       handler() {
-        if(this.publicView) {
+        if(!this.loggedIn && this.editing) {
           this.cancelEdit(this.recipe);
         }
       }
     }
   },
   methods: {
+    ...mapActions('app', ['sendToastMessage']),
     editMode(recipe) {
       Object.assign(cache, recipe);
       cacheStr = JSON.stringify(cache);
@@ -172,12 +175,12 @@ export default {
     },
     editRecipe(recipe) {
       if (recipe.title === '' || recipe.description === '' || recipe.ingredients.length == 0 || recipe.body === '') {
-          EventBus.$emit('toast-message', { text: "Please fill all fields.", type: 'error' });
+          this.sendToastMessage({ text: "Please fill all fields.", type: 'error' });
           return
       } else {
         this.checkImageStatus();
         if(this.isImgUploaded === false) {
-          EventBus.$emit('toast-message', { text: 'An image was selected but never uploaded. Please click "Upload Image" before saving.', type: 'error' });
+          this.sendToastMessage({ text: 'An image was selected but never uploaded. Please click "Upload Image" before saving.', type: 'error' });
         } else { //all necessary data available, send it off
           let rId = recipe.refId;
           fetch(`${this.fPath.edit}/${rId}`, {
@@ -200,7 +203,7 @@ export default {
         fetch(`${this.fPath.delete}/${rId}`, {
           method: 'POST',
         }).then(response => {
-          EventBus.$emit('toast-message', { text: `Recipe "${rName}" deleted.`, type: 'info' });
+          this.sendToastMessage({ text: `Recipe "${rName}" deleted.`, type: 'info' });
           this.$router.push({ name: 'home' }); // navigate when done
           console.log(`Recipe "${rName}" deleted.`, response);
         }).catch((error) => {
@@ -233,12 +236,6 @@ export default {
 </script>
 
 <style lang="postcss" scoped>
-  h3 {
-    @apply tracking-wide text-3xl font-bold text-blue-600;
-  }
-  h4 {
-    @apply text-2xl text-blue-500;
-  }
   .form-control {
     @apply block w-full;
   }

@@ -1,6 +1,6 @@
 <template>
   <div id="nav-auth" class="">
-    <div v-if="!publicView">
+    <div v-if="loggedIn">
       <button @click="logout()" class="btn btn-gray">Log Out</button>
     </div>
     <div v-else>
@@ -33,7 +33,7 @@
             </h3>
           </div>
           <!-- SIGNUP PART -->
-          <form v-if="mode === 'register'" class="" @keyup.enter="signup()">
+          <form v-if="mode === 'register'" class="" @submit.prevent>
             <div class="form-group">
               <label for="name">Name</label>
               <input class="auth-form-control" id="name" v-model="crendentials.name" ref="firstInput" type="text" placeholder="Arnold Schwarzenegger"/>
@@ -49,18 +49,18 @@
             <button class="modal-btn px-8 py-2 mt-8 mb-4 mx-auto" type="button" @click="signup()">Sign Up</button>
           </form>
           <!-- LOGIN PART -->
-          <form v-if="mode === 'login'" class="" @keyup.enter="login()">
+          <form v-if="mode === 'login'" class="" @submit.prevent>
             <div class="form-group">
               <label for="email">Email</label>
               <input class="auth-form-control" id="email" type="email" v-model="crendentials.email" ref="firstInput" placeholder="hey@email.com"/>
             </div>
             <div class="form-group">
               <label for="password">Password</label>
-              <input class="auth-form-control" id="password" type="password" v-model="crendentials.password" placeholder="******"/>
+              <input class="auth-form-control" id="password" type="password" v-model="crendentials.password" @keyup.enter="login()" placeholder="******"/>
             </div>
             <button class="modal-btn px-8 py-2 mt-8 mb-4 mx-auto" type="button" @click="login()">Login</button>
           </form>
-          <p v-if="cValidateMsg !== ''" class="font-bold" :class="{ 'error' : !cValidate }">{{ cValidateMsg }}</p>
+          <p v-if="cValidateMsg !== ''" class="font-bold mt-8 mb-2" :class="{ 'error' : !cValidate }">{{ cValidateMsg }}</p>
         </div>
       </div>
     </transition>
@@ -68,14 +68,10 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-import { EventBus } from '@/helpers/event-bus.js';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'nav-auth',
-  props: {
-    publicView: Boolean
-  },
   data() {
     return {
       crendentials: {
@@ -89,6 +85,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters('user',['loggedIn']),
     cValidate() {
       let c = this.crendentials;
       let rx = RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
@@ -123,13 +120,16 @@ export default {
     }
   },
   methods: {
-    ...mapActions("user", [
-      "attemptLogin",
-      "attemptSignup",
-      "attemptLogout",
-      "getCurrentUser",
+    ...mapActions('user', [
+      'attemptLogin',
+      'attemptSignup',
+      'attemptLogout',
+      'getCurrentUser',
     ]),
-    ...mapActions("app", ["toggleMenu"]),
+    ...mapActions('app', [
+      'toggleMenu',
+      'sendToastMessage'
+    ]),
     toggleShow() {
       this.isShowing = !this.isShowing;
       if(this.isShowing) {
@@ -164,14 +164,14 @@ export default {
             msg.type =  'info';
             this.toggleShow();
             this.toggleMenu(false); //vuex action
-            this.toast(msg); //emit toast into EventBus
+            this.sendToastMessage(msg); //vuex action sendToastMessage(message)
           })
           .catch(error => {
             this.cValidateMsg = null;
             console.error(error, "Something's gone wrong signing up");
             msg.text = "Something's gone wrong signing up, please try again later.";
             msg.type =  'error';
-            this.toast(msg); //emit toast into EventBus
+            this.sendToastMessage(msg); //vuex action sendToastMessage(message)
           });
       }
     },
@@ -187,14 +187,14 @@ export default {
             this.toggleMenu(false);
             msg.text = "You're logged in now";
             msg.type =  'success';
-            this.toast(msg); //emit toast into EventBus
+            this.sendToastMessage(msg); //vuex action sendToastMessage(message)
           })
           .catch(error => {
             this.cValidateMsg = null;
             console.error(error, "Something's gone wrong logging in");
             msg.text = "Something's gone wrong logging in, please try again later.";
             msg.type =  'error';
-            this.toast(msg); //emit toast into EventBus
+            this.sendToastMessage(msg); //vuex action sendToastMessage(message)
           });
       }
     },
@@ -209,13 +209,13 @@ export default {
           }
           msg.text = "You're logged out now, cya soon";
           msg.type =  'info';
-          this.toast(msg); //emit toast into EventBus
+          this.sendToastMessage(msg); //vuex action sendToastMessage(message)
         })
         .catch(error => {
           console.error("problem with logout", error);
           msg.text = "Problem with logout, forcing page refresh.";
           msg.type =  'error';
-          this.toast(msg); //emit toast into EventBus
+          this.sendToastMessage(msg); //vuex action sendToastMessage(message)
           location.reload(); //this forces logout due to cleared local storage - error state "hidden" from user...
         });
     },
@@ -226,9 +226,6 @@ export default {
         }
       }
     },
-    toast(message) {
-      EventBus.$emit('toast-message', message);
-    }
   },
   mounted() {
     var vm = this;
@@ -273,8 +270,11 @@ export default {
   .modal-btn {
     @apply block font-bold border border-blue-500 text-blue-500 rounded-lg shadow-sm;
   }
-  .modal-btn:hover {
+  .modal-btn:hover, .modal-btn:focus {
     @apply bg-cool-gray-500 border-cool-gray-500 shadow-none;
+  }
+  .modal-btn:focus {
+    @apply outline-none shadow-outline;
   }
   .user-modal-close {
     @apply absolute top-0 cursor-pointer text-3xl;

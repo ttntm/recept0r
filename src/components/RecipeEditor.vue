@@ -146,10 +146,11 @@ export default {
 
 <style lang="postcss">
   .is-active {
-    @apply bg-cool-gray-500;
+    @apply bg-cool-gray-600 text-white;
   }
   .ProseMirror:focus {
     outline: none;
+    box-shadow: none;
   }
   .editor-active > .ProseMirror {
     @apply border border-gray-500 rounded-lg px-3 py-1;
@@ -164,7 +165,7 @@ export default {
     @apply text-sm;
   }
   .btn-group button {
-    @apply rounded-none py-1 px-2;
+    @apply border-none rounded-none font-normal py-1 px-2;
   }
   .btn-group button:focus {
     @apply shadow-none bg-gray-600;
