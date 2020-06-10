@@ -4,7 +4,7 @@
     <p v-if="imageStatus !== null" class="text-sm text-cool-gray-500 ml-4 mb-4">{{ imageStatus }}</p>
     <div class="flex flex-row align-items-center justify-content-start">
       <button @click="uploadImage" class="btn btn-green text-sm mr-4">Upload Image</button>
-      <button @click="removeImage" class="btn btn-gray text-sm">Remove Image</button>
+      <button @click="removeImage" class="btn btn-red text-sm">Remove Image</button>
     </div>
   </div>
 </template>

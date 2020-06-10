@@ -153,13 +153,22 @@ export default {
     box-shadow: none;
   }
   .editor-active > .ProseMirror {
-    @apply border border-gray-500 rounded-lg px-3 py-1;
+    @apply border border-gray-600 rounded-lg px-3 py-1;
   }
   .editor-active > .ProseMirror:focus {
     @apply shadow-outline;
   }
   .editor-active > .ProseMirror hr {
     @apply my-8;
+  }
+  .editor-active > .ProseMirror h1 {
+    @apply text-2xl;
+  }
+  .editor-active > .ProseMirror h2 {
+    @apply text-xl;
+  }
+  .editor-active > .ProseMirror h3 {
+    @apply text-lg;
   }
   .btn-group {
     @apply text-sm;

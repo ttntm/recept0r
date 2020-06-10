@@ -52,10 +52,19 @@ module.exports = {
         800: '#6D6F73',
         900: '#494A4D',
       },
-      green: {
-        200: '#c6f6d5',
-        700: '#2f855a',
-        900: '#22543d',
+      'red': {
+        500: '#FFE5D7',
+        600: '#E6CEC2',
+        700: '#998981',
+        800: '#736761',
+        900: '#4D4541',
+      },
+      'green': {
+        500: '#DEF0D5',
+        600: '#C8D8C0',
+        700: '#859080',
+        800: '#646C60',
+        900: '#434840',
       },
     },
     spacing: {
@@ -549,6 +558,7 @@ module.exports = {
     alignContent: ['responsive'],
     alignItems: ['responsive'],
     alignSelf: ['responsive'],
+    appearance: ['responsive'],
     backgroundColor: ['hover','focus'],
     borderColor: ['responsive', 'hover', 'focus'],
     borderOpacity: ['responsive', 'hover', 'focus'],
@@ -621,7 +631,6 @@ module.exports = {
   },
   corePlugins: {
     accessibility: false,
-    appearance: false,
     backgroundAttachment: false,
     backgroundOpacity: false,
     backgroundPosition: false,

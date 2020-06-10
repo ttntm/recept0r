@@ -157,7 +157,7 @@ export default {
     }
   }
   .recipe-card {
-    @apply bg-gray-500;
+    @apply bg-gray-500 shadow-sm;
   }
   .recipe-card:hover {
     box-shadow: 0 0.45rem 0.9rem rgba(0,0,0,.1);
@@ -174,7 +174,7 @@ export default {
   }
   @media screen and (min-width:1024px) {
     .recipe-card:hover {
-      transform: translateY(-0.5rem);
+      transform: translateY(-0.25rem);
       transition: all .35s ease-in-out;
     }
   }

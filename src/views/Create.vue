@@ -1,22 +1,50 @@
 <template>
   <div id="create-recipe" class="w-full md:w-4/5 flex flex-row flex-wrap mx-auto">
-    <div class="w-full">
-      <h2 class="mb-6">Recipe Title</h2>
-      <input type="text" v-model="recipe.title" ref="recipeTitle" class="form-control mb-4">
-    </div>
     <div class="w-full md:w-1/2">
       <h3>Image</h3>
       <img v-if="recipe.image" class="rounded-lg mt-4 mb-4" :src="recipe.image" :alt="recipe.title">
       <recipe-image :recipe="recipe" @image:update="imageUpdate" class="mb-4" />
     </div>
     <div class="w-full md:w-1/2 md:pl-8">
-      <h3 class="mb-4">Description</h3>
-      <input type="text" v-model="recipe.description" class="form-control mb-4">
-      <h3 class="mb-4">Ingredients</h3>
+      <h3 class="">Recipe Title</h3>
+      <input type="text" v-model="recipe.title" ref="recipeTitle" class="form-control mb-4" placeholder="A great title...">
+      <h4 class="mb-4">Description</h4>
+      <input type="text" v-model="recipe.description" class="form-control mb-4" placeholder="A fancy description...">
+    </div>
+    <div class="w-full md:w-1/2">
+      <h4 class="mb-4">Metadata</h4>
+      <input type="text" v-model="recipe.portions" class="form-control text-sm mb-4" placeholder="Portions; how many people does this recipe serve?">
+      <input type="text" v-model="recipe.duration" class="form-control text-sm mb-4" placeholder="Duration; how long does it take to cook this?">
+      <div class="relative mb-4">
+        <select name="diet" id="select-diet" v-model="recipe.diet" class="form-control text-sm appearance-none">
+          <option disabled value="">Please select a diet</option>
+          <option v-for="(diet, index) in recipeDiet" :key="index" :value="diet">{{ diet }}</option>
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-cool-gray-500">
+          <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+        </div>
+      </div>
+      <div class="relative mb-4">
+        <select name="diet" id="select-category" v-model="recipe.category" class="form-control text-sm appearance-none">
+          <option disabled value="">Please select a category</option>
+          <option v-for="(cat, index) in recipeCategory" :key="index" :value="cat">{{ cat }}</option>
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-cool-gray-500">
+          <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+        </div>
+      </div>
+    </div>
+    <div class="w-full md:w-1/2 md:pl-8">
+      <h4 class="mb-4">Ingredients</h4>
       <ul class="mb-4">
         <li v-for="(ing, index) in recipe.ingredients" :key="index">
           <span class="flex flex-row items-center">
-            <input type="text" v-model.trim="recipe.ingredients[index]" v-focus class="inline-block form-control text-sm mb-4">
+            <input type="text"
+              v-model.trim="recipe.ingredients[index]"
+              v-focus class="inline-block form-control text-sm mb-4"
+              @keydown.enter="addIngredient(index)"
+              :placeholder="`Ingredient ${index+1}`"
+            >
             <button class="inline-block text-lg opacity-75 hover:opacity-100 p-1 ml-2 mb-4"
               @click="removeIngredient(index)"
             >&times;</button>
@@ -25,14 +53,13 @@
       </ul>
       <div class="flex flex-row items-start mb-4">
         <button @click="addIngredient()" class="btn btn-green text-sm mr-4">Add Ingredient</button>
-        <button v-if="hasIng" @click="removeIngredient()" class="btn btn-gray text-sm">Remove Ingredient</button>
       </div>
     </div>
     <div class="w-full">
-      <h3 class="mb-4">Instructions</h3>
+      <h4 class="mb-4">Instructions</h4>
       <recipe-editor :editing="true" :editorContent="recipe.body" @editor:update="editorUpdate" />
       <hr class="my-8">
-      <div class="flex flex-row items-start">
+      <div class="flex flex-row justify-center lg:justify-start">
         <button class="btn btn-green mr-4" @click="createRecipe(recipe)" :disabled="isDisabled">{{ saveBtnTxt }}</button>
         <button class="btn btn-red" @click="cancelCreate(recipe)">Cancel</button>
       </div>
@@ -43,7 +70,7 @@
 <script>
 import RecipeImage from '@/components/RecipeImage.vue';
 import RecipeEditor from '@/components/RecipeEditor.vue';
-import { mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: "create-recipe",
@@ -64,23 +91,32 @@ export default {
       recipe: {
         id: '',
         title: '',
+        category: '',
         description: '',
+        diet: '',
+        duration: '',
         image: null,
         ingredients: [],
+        portions: '',
         body: {
           "type":"doc",
-          "content":[{
-            "type":"paragraph",
-            "content":[{
-              "type":"text",
-              "text":"Recipe description goes into this editor right here..."
-            }]
-          }]
+          "content":[
+            {"type":"heading","attrs":{"level":2},"content":[{"type":"text","text":"About this Recipe"}]},
+            {"type":"paragraph","content":[{"type":"text","text":"About text"}]},
+            {"type":"heading","attrs":{"level":1},"content":[{"type":"text","text":"Instructions"}]},
+            {"type":"paragraph","content":[{"type":"text","text":"What to do..."}]},
+            {"type":"horizontal_rule"},
+            {"type":"heading","attrs":{"level":2},"content":[{"type":"text","text":"Notes"}]}
+          ]
         }
       }
     };
   },
   computed: {
+    ...mapGetters('app',[
+      'recipeCategory',
+      'recipeDiet'
+    ]),
     isDisabled() {
       if(this.isEmpty || this.isSaving) {
         return true
@@ -116,12 +152,17 @@ export default {
     imageUpdate(url) {
       this.recipe.image = url;
     },
-    addIngredient() {
-      this.recipe.ingredients.push('');
+    addIngredient(index) {
+      let ing = this.recipe.ingredients;
+      if(index > -1) {
+        ing.splice(index + 1, 0, '');
+      } else {
+        ing.push('');
+      }
     },
     removeIngredient(index) {
       let ing = this.recipe.ingredients;
-      if(index) {
+      if(index > -1) {
         ing.splice(index, 1);
       } else {
         ing.splice(ing.length - 1);
@@ -135,13 +176,14 @@ export default {
     addRecipe(recipe) {
       const newRecipe = recipe;
       const functions = this.fPath;
+      const vm = this;
 
       function postRecipe(data) {
         return fetch(`${functions.create}`, {
           body: JSON.stringify(data),
           method: 'POST'
         }).then(response => {
-          this.sendToastMessage({ text: `Recipe "${newRecipe.title}" created`, type: 'success' });
+          vm.sendToastMessage({ text: `Recipe "${newRecipe.title}" created`, type: 'success' });
           return response.json();
         }).catch((error) => {
           console.log("API error", error);

@@ -7,7 +7,24 @@ export default {
       isDevEnvironment: false,
       siteURL: 'recept0r.com',
       menuOpen: false,
-      toastMessage: null
+      toastMessage: null,
+      recipeCategory: [
+        'Bread',
+        'Salad',
+        'Dessert',
+        'Drink',
+        'Main',
+        'Snack',
+        'Soup',
+        'Pastry',
+        'Other'
+      ],
+      recipeDiet: [
+        'Keto',
+        'None',
+        'Vegetarian',
+        'Vegan'
+      ]
     };
   },
 
@@ -15,7 +32,9 @@ export default {
     isDevEnvironment: state => state.isDevEnvironment,
     siteURL: state => state.siteURL,
     menuOpen: state => state.menuOpen,
-    toastMessage: state => state.toastMessage
+    toastMessage: state => state.toastMessage,
+    recipeCategory: state => state.recipeCategory,
+    recipeDiet: state => state.recipeDiet
   },
 
   mutations: {

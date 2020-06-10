@@ -73,14 +73,12 @@ export default {
     @apply text-gray-500;
   }
   .btn-red {
-    border: 1px solid salmon;
-    color: salmon;
+    @apply border border-red-600 text-red-600;
   }
   .btn-red:hover, .btn-red:focus {
-    background-color: salmon;
-    @apply text-white;
+    @apply bg-red-600 text-white;
   }
   .form-control {
-    @apply border border-gray-500 rounded-lg px-3 py-1;
+    @apply border border-gray-600 rounded-lg px-3 py-1;
   }
 </style>

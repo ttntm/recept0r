@@ -32,8 +32,15 @@
               </a>
             </h3>
           </div>
+          <!-- SIGNUP PART - TEMP INVITE ONLY -->
+          <div v-if="mode === 'register'">
+            <p class="text-center font-bold">
+              Thanks for your interest in recept0r.<br><br>
+              Public registrations are suspended until further notice, this is currently an invite only service.
+            </p>
+          </div>
           <!-- SIGNUP PART -->
-          <form v-if="mode === 'register'" class="" @submit.prevent>
+          <form v-if="mode === 'register-allowed'" class="" @submit.prevent>
             <div class="form-group">
               <label for="name">Name</label>
               <input class="auth-form-control" id="name" v-model="crendentials.name" ref="firstInput" type="text" placeholder="Arnold Schwarzenegger"/>
@@ -278,6 +285,6 @@ export default {
   }
   .user-modal-close {
     @apply absolute top-0 cursor-pointer text-3xl;
-    right: 10px;
+    right: 15px;
   }
 </style>

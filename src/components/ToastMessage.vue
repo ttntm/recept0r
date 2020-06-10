@@ -44,11 +44,10 @@ export default {
 
 <style lang="postcss" scoped>
 .error {
-  @apply text-white;
-  background-color: salmon;
+  @apply bg-red-500 text-white;
 }
 .success {
-  @apply bg-green-200 text-green-900;
+  @apply bg-green-500 text-blue-500;
 }
 .slide-fade-enter-active,
 .slide-fade-leave-active {
