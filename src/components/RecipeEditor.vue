@@ -40,12 +40,6 @@
         >H2</button>
         <button
           class="btn btn-gray text-sm rounded-none"
-          :class="{ 'is-active': isActive.heading({ level: 3 }) }"
-          @click="commands.heading({ level: 3 })"
-          title="Heading 3"
-        >H3</button>
-        <button
-          class="btn btn-gray text-sm rounded-none"
           :class="{ 'is-active': isActive.bullet_list() }"
           @click="commands.bullet_list"
           title="Unordered list"
@@ -123,7 +117,7 @@ export default {
       content: this.editorContent,
       extensions: [
         new BulletList(),
-        new Heading({ levels: [1, 2, 3] }),
+        new Heading({ levels: [1, 2] }),
         new ListItem(),
         new OrderedList(),
         new Bold(),
@@ -158,16 +152,13 @@ export default {
   .editor-active > .ProseMirror:focus {
     @apply shadow-outline;
   }
-  .editor-active > .ProseMirror hr {
+  .editor__content > .ProseMirror hr {
     @apply my-8;
   }
-  .editor-active > .ProseMirror h1 {
-    @apply text-2xl;
-  }
-  .editor-active > .ProseMirror h2 {
+  .editor__content > .ProseMirror h1 {
     @apply text-xl;
   }
-  .editor-active > .ProseMirror h3 {
+  .editor__content > .ProseMirror h2 {
     @apply text-lg;
   }
   .btn-group {

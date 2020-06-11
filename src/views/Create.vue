@@ -40,10 +40,12 @@
         <li v-for="(ing, index) in recipe.ingredients" :key="index">
           <span class="flex flex-row items-center">
             <input type="text"
+              class="inline-block form-control text-sm mb-4"
               v-model.trim="recipe.ingredients[index]"
-              v-focus class="inline-block form-control text-sm mb-4"
+              v-focus
               @keydown.enter="addIngredient(index)"
               :placeholder="`Ingredient ${index+1}`"
+              :ref="`input${index}`"
             >
             <button class="inline-block text-lg opacity-75 hover:opacity-100 p-1 ml-2 mb-4"
               @click="removeIngredient(index)"
@@ -101,12 +103,12 @@ export default {
         body: {
           "type":"doc",
           "content":[
-            {"type":"heading","attrs":{"level":2},"content":[{"type":"text","text":"About this Recipe"}]},
+            {"type":"heading","attrs":{"level":1},"content":[{"type":"text","text":"About this Recipe"}]},
             {"type":"paragraph","content":[{"type":"text","text":"About text"}]},
             {"type":"heading","attrs":{"level":1},"content":[{"type":"text","text":"Instructions"}]},
             {"type":"paragraph","content":[{"type":"text","text":"What to do..."}]},
             {"type":"horizontal_rule"},
-            {"type":"heading","attrs":{"level":2},"content":[{"type":"text","text":"Notes"}]}
+            {"type":"heading","attrs":{"level":1},"content":[{"type":"text","text":"Notes"}]}
           ]
         }
       }
@@ -156,6 +158,12 @@ export default {
       let ing = this.recipe.ingredients;
       if(index > -1) {
         ing.splice(index + 1, 0, '');
+        this.$nextTick(function() {
+          // focus the spliced element instead of the last one as per directive
+          // somehow vue returns a 1 element array here
+          // see -> https://stackoverflow.com/questions/54306581/this-refsp-index-focus-is-not-a-function
+          this.$refs[`input${index + 1}`][0].focus();
+        });
       } else {
         ing.push('');
       }
