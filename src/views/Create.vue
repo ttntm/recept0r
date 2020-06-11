@@ -62,7 +62,7 @@
       <recipe-editor :editing="true" :editorContent="recipe.body" @editor:update="editorUpdate" />
       <hr class="my-8">
       <div class="flex flex-row justify-center lg:justify-start">
-        <button class="btn btn-green mr-4" @click="createRecipe(recipe)" :disabled="isDisabled">{{ saveBtnTxt }}</button>
+        <button class="btn btn-green mr-4" @click="saveRecipe(recipe)" :disabled="isDisabled">{{ saveBtnTxt }}</button>
         <button class="btn btn-red" @click="cancelCreate(recipe)">Cancel</button>
       </div>
     </div>
@@ -79,9 +79,6 @@ export default {
   components: {
     RecipeImage,
     RecipeEditor
-  },
-  props: {
-    fPath: Object
   },
   data() {
     return {
@@ -115,7 +112,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('app',[
+    ...mapGetters('recipe',[
       'recipeCategory',
       'recipeDiet'
     ]),
@@ -175,38 +172,12 @@ export default {
       } else {
         ing.splice(ing.length - 1);
       }
-      this.hasIng = ing.length < 1 ? false : true;
     },
     editorUpdate(editorData) {
       this.recipe.body = editorData;
       this.wasEdited = true;
     },
-    addRecipe(recipe) {
-      const newRecipe = recipe;
-      const functions = this.fPath;
-      const vm = this;
-
-      function postRecipe(data) {
-        return fetch(`${functions.create}`, {
-          body: JSON.stringify(data),
-          method: 'POST'
-        }).then(response => {
-          vm.sendToastMessage({ text: `Recipe "${newRecipe.title}" created`, type: 'success' });
-          return response.json();
-        }).catch((error) => {
-          console.log("API error", error);
-        })
-      }
-
-      postRecipe(newRecipe)
-        .then((res) => {
-          let newId = res.data.id;
-          let newRefId = res.ref['@ref'].id;
-          let newRecipePath = `/recipe/${newId}/${newRefId}`
-          this.$router.push(newRecipePath); //go to new recipe page
-        })
-    },
-    createRecipe(recipe) {
+    saveRecipe(recipe) {
       if(this.$store.state.user.currentUser) {
         if (recipe.title === '' || recipe.description === '' || recipe.ingredients.length == 0 || recipe.body === '') {
             this.sendToastMessage({ text: "Please fill all fields.", type: 'error' });
@@ -216,7 +187,7 @@ export default {
             this.sendToastMessage({ text: 'An image was selected but never uploaded. Please click "Upload Image" before saving.', type: 'error' });
           } else { //all necessary data available, send it off
             this.isSaving = true;
-            this.addRecipe(recipe);
+            this.postRecipe(recipe);
           }
         }
       } else {
@@ -225,6 +196,27 @@ export default {
     },
     cancelCreate() {
       this.$router.push({ name: 'home' });
+    },
+    postRecipe(recipe) {
+      const functions = this.$store.getters['app/functions']
+
+      fetch(`${functions.create}`, {
+        body: JSON.stringify(recipe),
+        method: 'POST'
+      })
+      .then(response => {
+        return response.json();
+      })
+      .then((res) => {
+        let newId = res.data.id;
+        let newRefId = res.ref['@ref'].id;
+        let newRecipePath = `/recipe/${newId}/${newRefId}`
+        this.sendToastMessage({ text: `Recipe "${recipe.title}" created`, type: 'success' });
+        this.$router.push(newRecipePath); //go to new recipe page
+      })
+      .catch((error) => {
+        console.log("API error", error);
+      })
     }
   },
   directives: {

@@ -8,23 +8,13 @@ export default {
       siteURL: 'recept0r.com',
       menuOpen: false,
       toastMessage: null,
-      recipeCategory: [
-        'Bread',
-        'Salad',
-        'Dessert',
-        'Drink',
-        'Main',
-        'Snack',
-        'Soup',
-        'Pastry',
-        'Other'
-      ],
-      recipeDiet: [
-        'Keto',
-        'None',
-        'Vegetarian',
-        'Vegan'
-      ]
+      functions: {
+        readAll: process.env.VUE_APP_FUNC_PATH_ALL,
+        readOne: process.env.VUE_APP_FUNC_PATH_ONE,
+        create: process.env.VUE_APP_FUNC_PATH_CREATE,
+        edit: process.env.VUE_APP_FUNC_PATH_EDIT,
+        delete: process.env.VUE_APP_FUNC_PATH_DELETE
+      }
     };
   },
 
@@ -33,8 +23,7 @@ export default {
     siteURL: state => state.siteURL,
     menuOpen: state => state.menuOpen,
     toastMessage: state => state.toastMessage,
-    recipeCategory: state => state.recipeCategory,
-    recipeDiet: state => state.recipeDiet
+    functions: state => state.functions,
   },
 
   mutations: {

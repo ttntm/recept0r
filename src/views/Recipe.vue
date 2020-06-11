@@ -10,7 +10,7 @@
     </div>
     <div v-if="readSuccess" class="w-full lg:w-2/5 lg:pl-8">
       <div>
-        <h3 class="mt-4 lg:mt-0 mb-4">
+        <h2 class="mt-4 lg:mt-0 mb-4">
           <span v-if="!editing">
             {{ recipe.title }}
           </span>
@@ -18,7 +18,7 @@
             <span class="block mb-4">Recipe Title</span>
             <input type="text" v-model="recipe.title" ref="recipeTitle" class="form-control">
           </span>
-        </h3>
+        </h2>
         <div class="my-8">
           <p v-if="!editing" class="m-0">{{ recipe.description }}</p>
           <input v-else type="text" v-model="recipe.description" class="form-control">
@@ -131,19 +131,20 @@ export default {
     RecipeImage,
     RecipeEditor
   },
-  props: {
-    fPath: Object
-  },
   computed: {
     ...mapGetters('user',['loggedIn']),
-    ...mapGetters('app',[
+    ...mapGetters('recipe',[
+      'allRecipes',
       'recipeCategory',
       'recipeDiet'
     ]),
     saveBtnTxt() {
       if(this.isSaving) {
-        return "Saving..."
+        return "Saving...";
       } else { return "Save" }
+    },
+    functions() {
+      return this.$store.getters['app/functions']
     }
   },
   data() {
@@ -157,14 +158,24 @@ export default {
   },
   created() {
     const cRefId = this.$route.params.refId; //get refId
-    this.readRecipe(cRefId); //query DB for the respective record
+    //try vuex store first
+    let current = this.allRecipes.filter(recipe => recipe.refId === cRefId);
+    if(current.length > 0) {
+      this.recipe = current[0];
+      this.readSuccess = true; //set success state
+      console.log("recipe data obtained from store - " + this.recipe.title); //log success
+    } else {
+      //otherwise try db
+      console.log("couldn't find recipe in the store, trying DB...");
+      this.readRecipe(cRefId); //query DB for the respective record
+    }
   },
   watch: {
     recipe: {
       deep: true,
       handler() {
         const r = this.recipe;
-        //create id
+        //create id = slug
         let rTitle = r.title;
         r.id = rTitle.replace(/[^a-z0-9]+/gi, '-').replace(/^-*|-*$/g, '').toLowerCase();
       }
@@ -211,7 +222,6 @@ export default {
       } else {
         ing.splice(ing.length - 1);
       }
-      this.hasIng = ing.length < 1 ? false : true;
     },
     editorUpdate(editorData) {
       this.recipe.body = editorData;
@@ -222,18 +232,21 @@ export default {
       this.editing = false;
     },
     readRecipe(refId) {
-      fetch(`${this.fPath.readOne}/${refId}`, {
+      fetch(`${this.functions.readOne}/${refId}`, {
         method: 'POST',
-      }).then(response => {
+      })
+      .then(response => {
         return response.json();
-      }).then(res => {
+      })
+      .then(res => {
         this.recipe = res.data;
         this.recipe.refId = res.ref['@ref'].id;
         if('refId' in this.recipe) { //check if data was obtained from the DB
           this.readSuccess = true; //set success state
-          console.log("recipe data obtained - " + this.recipe.title); //log success
+          console.log("recipe data obtained from DB - " + this.recipe.title); //log success
         }
-      }).catch((error) => {
+      })
+      .catch((error) => {
         console.log("API error", error);
       })
     },
@@ -254,14 +267,17 @@ export default {
         } else { //all necessary data available, send it off
           let rId = recipe.refId;
           this.isSaving = true;
-          fetch(`${this.fPath.edit}/${rId}`, {
+          fetch(`${this.functions.edit}/${rId}`, {
             body: JSON.stringify(recipe),
             method: 'POST'
-          }).then(response => {
-            console.log("recipe " + recipe.title + " successfully updated.", response);
+          })
+          .then(response => {
+            console.log("Success:", response);
+            this.sendToastMessage({ text: `Recipe ${recipe.title} successfully updated.`, type: 'success' });
             this.editing = false; //reset state when done editing
-          }).catch((error) => {
-            console.log("API error", error);
+          })
+          .catch((error) => {
+            console.log("API error:", error);
           })
         }
       }
@@ -271,13 +287,15 @@ export default {
       let rName = recipe.title;
       const confirmDelete = window.confirm('This action is irreversible. Do you really want to delete this recipe?');
       if(confirmDelete) {
-        fetch(`${this.fPath.delete}/${rId}`, {
+        fetch(`${this.functions.delete}/${rId}`, {
           method: 'POST',
-        }).then(response => {
+        })
+        .then(response => {
+          console.log(`Recipe "${rName}" deleted.`, response);
           this.sendToastMessage({ text: `Recipe "${rName}" deleted.`, type: 'info' });
           this.$router.push({ name: 'home' }); // navigate when done
-          console.log(`Recipe "${rName}" deleted.`, response);
-        }).catch((error) => {
+        })
+        .catch((error) => {
           console.log("API error", error);
         })
       } else { return }

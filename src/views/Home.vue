@@ -45,62 +45,49 @@
 
 <script>
 import { VueClazyLoad } from 'vue-clazy-load';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'all-recipes',
   components: {
     VueClazyLoad
   },
-  props: {
-    fPath: Object
-  },
-  methods: {
-    getRecipes() {
-      const functions = this.fPath;
-      fetch(`${functions.readAll}`)
-        .then((response) => {
-          return response.json();
-        }).then((res) => {
-          this.recipes = res.map((e) => {
-            let temp = Object.assign({}, e.data); //create new object from DB data
-            temp.refId = e.ref['@ref'].id; // add the database ID for edit/delete operations
-            return temp; //return newly created temp object
-          });
-        }).catch((error) => {
-          console.log('API error', error);
-      })
-    },
-    clearSearch() {
-      this.searchTerm = '';
-    },
-  },
-  created() {
-    this.getRecipes();
-  },
   data() {
     return {
-      recipes: [],
       searchTerm: ''
     };
   },
   computed: {
+    ...mapGetters('recipe',['allRecipes']),
     isLoading() {
-      return this.recipes.length > 0 ? false : true;
-    },
-    recipesReversed() {
-      var vm = this;
-      return this.recipes.filter(function (item) {
-        if (item.title.toLowerCase().indexOf(vm.searchTerm.toLowerCase()) === -1) { //if there was no match for the title...
-          return item.description.toLowerCase().indexOf(vm.searchTerm.toLowerCase()) !== -1 //...evaluate the description
-        } else { return true }
-      }).reverse();
+      return this.allRecipes.length > 0 ? false : true;
     },
     noResults() {
       if(this.searchTerm !== '') {
         return this.recipesReversed.length > 0 ? false : true;
       } else { return false }
+    },
+    recipesReversed() {
+      var vm = this;
+      return this.allRecipes.filter(item => {
+        if (item.title.toLowerCase().indexOf(vm.searchTerm.toLowerCase()) === -1) { //if there was no match for the title...
+          return item.description.toLowerCase().indexOf(vm.searchTerm.toLowerCase()) !== -1 //...evaluate the description
+        } else { return true }
+      }).reverse();
     }
-  }
+  },
+  methods: {
+    ...mapActions('recipe', [
+      'getAllRecipes',
+    ]),
+    clearSearch() {
+      this.searchTerm = '';
+    },
+  },
+  created() {
+    this.getAllRecipes();
+  },
+
 };
 </script>
 

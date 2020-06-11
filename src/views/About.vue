@@ -10,10 +10,7 @@
 
 <script>
 export default {
-  name: 'about',
-  props: {
-    fPath: Object
-  }
+  name: 'about'
 }
 </script>
 

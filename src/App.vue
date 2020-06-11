@@ -3,7 +3,7 @@
     <Navbar />
     <NavMobile />
     <div class="container flex-grow flex-shrink-0 px-4 mt-12 mx-auto">
-      <router-view :fPath="fPath" />
+      <router-view />
     </div>
     <AppFooter />
     <ToastMessage />
@@ -27,18 +27,6 @@ export default {
   },
   computed: {
     ...mapGetters('app',['menuOpen']),
-    ...mapGetters('user',['loggedIn'])
-  },
-  data() {
-    return {
-      fPath: {
-        readAll: process.env.VUE_APP_FUNC_PATH_ALL,
-        readOne: process.env.VUE_APP_FUNC_PATH_ONE,
-        create: process.env.VUE_APP_FUNC_PATH_CREATE,
-        edit: process.env.VUE_APP_FUNC_PATH_EDIT,
-        delete: process.env.VUE_APP_FUNC_PATH_DELETE
-      }
-    };
   }
 };
 </script>
@@ -65,12 +53,10 @@ export default {
   }
   .btn-green {
     border: 1px solid;
-    @apply border-green-700;
-    @apply text-green-700;
+    @apply border-green-700 text-green-700;
   }
   .btn-green:not(:disabled):hover, .btn-green:focus {
-    @apply bg-green-700;
-    @apply text-gray-500;
+    @apply bg-green-700 text-gray-500;
   }
   .btn-red {
     @apply border border-red-600 text-red-600;
