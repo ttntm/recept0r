@@ -145,12 +145,22 @@ export default {
     },
     functions() {
       return this.$store.getters['app/functions']
-    }
+    },
+    hasImg() {
+      if('image' in this.recipe && this.recipe.image !== null) {
+        return true
+      } else { return false }
+    },
+    isImgUploaded() {
+      if(this.hasImg) {
+        const checkImgSrc = RegExp(/^https:\/\//);
+        return checkImgSrc.test(this.recipe.image);
+      } else { return false }
+    },
   },
   data() {
     return {
       editing: false,
-      isImgUploaded: null,
       isSaving: false,
       recipe: null,
       readSuccess: false
@@ -176,8 +186,7 @@ export default {
       handler() {
         const r = this.recipe;
         //create id = slug
-        let rTitle = r.title;
-        r.id = rTitle.replace(/[^a-z0-9]+/gi, '-').replace(/^-*|-*$/g, '').toLowerCase();
+        r.id = r.title.replace(/[^a-z0-9]+/gi, '-').replace(/^-*|-*$/g, '').toLowerCase();
       }
     },
     loggedIn: {
@@ -190,6 +199,7 @@ export default {
   },
   methods: {
     ...mapActions('app', ['sendToastMessage']),
+    ...mapActions('recipe', ['updateRecipe']),
     editMode(recipe) {
       Object.assign(cache, recipe);
       cacheStr = JSON.stringify(cache);
@@ -250,35 +260,17 @@ export default {
         console.log("API error", error);
       })
     },
-    checkImageStatus() {
-      if('image' in this.recipe && this.recipe.image !== null) {
-        const checkImgSrc = RegExp(/^https:\/\//);
-        this.isImgUploaded = checkImgSrc.test(this.recipe.image);
-      }
-    },
     editRecipe(recipe) {
-      if (recipe.title === '' || recipe.description === '' || recipe.ingredients.length == 0 || recipe.body === '') {
+      if (recipe.title === '' || recipe.description === '' || recipe.category === '' || recipe.diet === '' || recipe.duration === '' || recipe.portions === '' || recipe.ingredients.length == 0 || recipe.body === '') {
           this.sendToastMessage({ text: "Please fill all fields.", type: 'error' });
           return
       } else {
-        this.checkImageStatus();
-        if(this.isImgUploaded === false) {
+        if(this.hasImg && !this.isImgUploaded) {
           this.sendToastMessage({ text: 'An image was selected but never uploaded. Please click "Upload Image" before saving.', type: 'error' });
         } else { //all necessary data available, send it off
-          let rId = recipe.refId;
+          this.updateRecipe(recipe);
           this.isSaving = true;
-          fetch(`${this.functions.edit}/${rId}`, {
-            body: JSON.stringify(recipe),
-            method: 'POST'
-          })
-          .then(response => {
-            console.log("Success:", response);
-            this.sendToastMessage({ text: `Recipe ${recipe.title} successfully updated.`, type: 'success' });
-            this.editing = false; //reset state when done editing
-          })
-          .catch((error) => {
-            console.log("API error:", error);
-          })
+          this.editing = false; //reset state when done editing
         }
       }
     },

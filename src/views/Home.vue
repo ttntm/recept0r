@@ -14,6 +14,7 @@
           <span v-if="noResults" class="no-results text-center text-cool-gray-500 mt-6">No results for your search query :(</span>
         </transition>
       </div>
+      <RecipeFilter v-if="showFilterSelect" class="mb-12" />
       <!-- RECIPE GRID -->
       <transition-group name="list" tag="div" class="recipe-grid">
         <div v-for="recipe in recipesReversed" :key="recipe.refId" class="recipe-card rounded-lg">
@@ -44,26 +45,34 @@
 </template>
 
 <script>
+import RecipeFilter from '@/components/RecipeFilter.vue';
 import { VueClazyLoad } from 'vue-clazy-load';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'all-recipes',
   components: {
-    VueClazyLoad
+    VueClazyLoad,
+    RecipeFilter
   },
   data() {
     return {
-      searchTerm: ''
+      searchTerm: '',
+      showFilterSelect: false
     };
   },
   computed: {
-    ...mapGetters('recipe',['allRecipes']),
+    ...mapGetters('recipe',[
+      'allRecipes',
+      'filterActive'
+    ]),
     isLoading() {
-      return this.allRecipes.length > 0 ? false : true;
+      if(!this.filterActive) {
+        return this.allRecipes.length > 0 ? false : true;
+      } else { return false }
     },
     noResults() {
-      if(this.searchTerm !== '') {
+      if(this.searchTerm !== '' || this.filterActive) {
         return this.recipesReversed.length > 0 ? false : true;
       } else { return false }
     },
@@ -71,7 +80,7 @@ export default {
       var vm = this;
       return this.allRecipes.filter(item => {
         if (item.title.toLowerCase().indexOf(vm.searchTerm.toLowerCase()) === -1) { //if there was no match for the title...
-          return item.description.toLowerCase().indexOf(vm.searchTerm.toLowerCase()) !== -1 //...evaluate the description
+          return item.description.toLowerCase().indexOf(vm.searchTerm.toLowerCase()) !== -1 ? true : false //...evaluate the description
         } else { return true }
       }).reverse();
     }

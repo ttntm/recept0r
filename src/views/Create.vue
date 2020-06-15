@@ -138,8 +138,7 @@ export default {
         //watch ingredients
         this.hasIng = r.ingredients.length < 1 ? false : true;
         //create id = slug
-        let rTitle = r.title;
-        r.id = rTitle.replace(/[^a-z0-9]+/gi, '-').replace(/^-*|-*$/g, '').toLowerCase();
+        r.id = r.title.replace(/[^a-z0-9]+/gi, '-').replace(/^-*|-*$/g, '').toLowerCase();
         //check if image was uploaded
         const checkImgSrc = RegExp(/^https:\/\//);
         this.isImgUploaded = checkImgSrc.test(r.image);
@@ -179,9 +178,9 @@ export default {
     },
     saveRecipe(recipe) {
       if(this.$store.state.user.currentUser) {
-        if (recipe.title === '' || recipe.description === '' || recipe.ingredients.length == 0 || recipe.body === '') {
-            this.sendToastMessage({ text: "Please fill all fields.", type: 'error' });
-            return
+        if (recipe.title === '' || recipe.description === '' || recipe.category === '' || recipe.diet === '' || recipe.duration === '' || recipe.portions === '' || recipe.ingredients.length == 0 || recipe.body === '') {
+          this.sendToastMessage({ text: "Please fill all fields.", type: 'error' });
+          return
         } else {
           if(recipe.image !== null && !this.isImgUploaded) {
             this.sendToastMessage({ text: 'An image was selected but never uploaded. Please click "Upload Image" before saving.', type: 'error' });
