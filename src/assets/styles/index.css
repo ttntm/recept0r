@@ -2,6 +2,11 @@
 
 @tailwind components;
 
+  * {
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: transparent;
+  }
+
   *:hover {
     transition: all .35s ease;
   }
@@ -14,8 +19,6 @@
   body, html {
     @apply text-blue-600;
   }
-
-/* BS Reboot */
 
   h1, h2, h3, h4, h5, h6 {
     @apply tracking-wide;
@@ -99,7 +102,8 @@
   /* OTHER */
 
   hr {
-    @apply border-gray-500 my-8;
+    @apply border-gray-500;
+    @apply my-8;
   }
 
 @tailwind utilities;
