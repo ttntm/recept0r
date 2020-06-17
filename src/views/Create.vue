@@ -127,6 +127,11 @@ export default {
       } else { return "Save" }
     }
   },
+  mounted() {
+    this.$nextTick(function() {
+      this.$refs['recipeTitle'].focus();
+    });
+  },
   watch: {
     recipe: {
       deep: true,
@@ -224,11 +229,6 @@ export default {
         el.focus()
       }
     }
-  },
-  mounted() {
-    this.$nextTick(function() {
-      this.$refs['recipeTitle'].focus();
-    });
   },
   beforeRouteLeave (to, from, next) {
     if(!this.isEmpty && !this.isSaving) { //if NOT empty OR filled

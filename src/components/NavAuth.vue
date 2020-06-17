@@ -16,6 +16,7 @@
                 class="text-cool-gray-500 text-lg pb-1 border-b border-transparent"
                 :class="{ 'border-blue-500 text-blue-500 font-bold': mode === 'register' }"
                 @click="toggleMode('register')"
+                v-blur
                 ref="toSignup"
               >
                 Sign Up
@@ -26,6 +27,7 @@
                 class="text-cool-gray-500 text-lg pb-1 border-b border-transparent"
                 :class="{ 'border-blue-500 text-blue-500 font-bold': mode === 'login' }"
                 @click="toggleMode('login')"
+                v-blur
                 ref="toLogin"
               >
                 Login
@@ -102,17 +104,13 @@ export default {
           return false;
         } else if(c.password && c.email && valid) {
           return true;
-        } else {
-          return false;
-        }
+        } else { return false; }
       } else {
         if(!c.password || !c.email || !c.name) {
           return false;
         } else if(c.password && c.email && c.name && valid) {
           return true;
-        } else {
-          return false;
-        }
+        } else { return false; }
       }
     }
   },
@@ -162,7 +160,7 @@ export default {
       if(!this.cValidate) {
         this.cValidateMsg = "Please enter valid information.";
       } else {
-        let msg = { text: '', type: ''}
+        let msg = { text: '', type: ''};
         this.cValidateMsg = "Signing up...";
         this.attemptSignup(this.crendentials)
           .then(response => {
@@ -186,7 +184,7 @@ export default {
       if(!this.cValidate) {
         this.cValidateMsg = "Please enter valid information.";
       } else {
-        let msg = { text: '', type: ''}
+        let msg = { text: '', type: ''};
         this.cValidateMsg = "Logging in...";
         this.attemptLogin({ ...this.crendentials })
           .then(() => {
@@ -206,7 +204,7 @@ export default {
       }
     },
     logout() {
-      let msg = { text: '', type: ''}
+      let msg = { text: '', type: ''};
       this.attemptLogout()
         .then(resp => {
           console.log("logged out", resp);
@@ -235,11 +233,11 @@ export default {
     },
   },
   mounted() {
-    var vm = this;
+    const vm = this;
     window.addEventListener('keydown', vm.escHandler);
   },
   beforeDestroy() {
-    var vm = this;
+    const vm = this;
     window.removeEventListener('keydown', vm.escHandler);
   }
 };

@@ -131,6 +131,28 @@ export default {
     RecipeImage,
     RecipeEditor
   },
+  data() {
+    return {
+      editing: false,
+      isSaving: false,
+      recipe: null,
+      readSuccess: false
+    };
+  },
+  created() {
+    const cRefId = this.$route.params.refId; //get refId
+    //try vuex store first
+    let current = this.allRecipes.filter(recipe => recipe.refId === cRefId);
+    if(current.length > 0) {
+      this.recipe = current[0];
+      this.readSuccess = true; //set success state
+      console.log(`recipe data obtained from store - ${this.recipe.title}`); //log success
+    } else {
+      //otherwise try db
+      console.log("couldn't find recipe in the store, trying DB...");
+      this.readRecipe(cRefId); //query DB for the respective record
+    }
+  },
   computed: {
     ...mapGetters('user',['loggedIn']),
     ...mapGetters('recipe',[
@@ -157,28 +179,6 @@ export default {
         return checkImgSrc.test(this.recipe.image);
       } else { return false }
     },
-  },
-  data() {
-    return {
-      editing: false,
-      isSaving: false,
-      recipe: null,
-      readSuccess: false
-    };
-  },
-  created() {
-    const cRefId = this.$route.params.refId; //get refId
-    //try vuex store first
-    let current = this.allRecipes.filter(recipe => recipe.refId === cRefId);
-    if(current.length > 0) {
-      this.recipe = current[0];
-      this.readSuccess = true; //set success state
-      console.log("recipe data obtained from store - " + this.recipe.title); //log success
-    } else {
-      //otherwise try db
-      console.log("couldn't find recipe in the store, trying DB...");
-      this.readRecipe(cRefId); //query DB for the respective record
-    }
   },
   watch: {
     recipe: {
@@ -251,9 +251,10 @@ export default {
       .then(res => {
         this.recipe = res.data;
         this.recipe.refId = res.ref['@ref'].id;
-        if('refId' in this.recipe) { //check if data was obtained from the DB
+        if('refId' in this.recipe) {
+          //check if data was obtained from the DB
           this.readSuccess = true; //set success state
-          console.log("recipe data obtained from DB - " + this.recipe.title); //log success
+          console.log(`recipe data obtained from DB - ${this.recipe.title}`); //log success
         }
       })
       .catch((error) => {
@@ -262,12 +263,13 @@ export default {
     },
     editRecipe(recipe) {
       if (recipe.title === '' || recipe.description === '' || recipe.category === '' || recipe.diet === '' || recipe.duration === '' || recipe.portions === '' || recipe.ingredients.length == 0 || recipe.body === '') {
-          this.sendToastMessage({ text: "Please fill all fields.", type: 'error' });
-          return
+        this.sendToastMessage({ text: "Please fill all fields.", type: 'error' });
+        return
       } else {
         if(this.hasImg && !this.isImgUploaded) {
           this.sendToastMessage({ text: 'An image was selected but never uploaded. Please click "Upload Image" before saving.', type: 'error' });
-        } else { //all necessary data available, send it off
+        } else {
+          //all necessary data available, send it off
           this.updateRecipe(recipe);
           this.isSaving = true;
           this.editing = false; //reset state when done editing

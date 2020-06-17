@@ -4,9 +4,9 @@
       <div
         v-if="toastMessage"
         :class="{
-            'error': toastMessage.type === 'error',
-            'success': toastMessage.type === 'success',
-            'bg-gray-500': toastMessage.type === 'info',
+          'error': toastMessage.type === 'error',
+          'success': toastMessage.type === 'success',
+          'bg-gray-500': toastMessage.type === 'info',
         }"
         class="rounded-lg shadow-md p-6 pr-10"
         style="min-width: 240px"

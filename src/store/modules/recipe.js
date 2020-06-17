@@ -7,7 +7,7 @@ export default {
       allRecipes: [],
       filterActive: false,
       filterCache: [], //used to store a copy of the current 'allRecipes' state before applying a filter; to be restored into 'allRecipes' when clearing filter selection
-      filterMode: null,
+      filterData: {},
       recipeCategory: [
         'Bread',
         'Salad',
@@ -16,14 +16,13 @@ export default {
         'Main',
         'Snack',
         'Soup',
-        'Pastry',
-        'Other'
+        'Pastry'
       ],
       recipeDiet: [
         'Keto',
-        'None',
         'Vegetarian',
-        'Vegan'
+        'Vegan',
+        'Other'
       ]
     }
   },
@@ -32,7 +31,7 @@ export default {
     allRecipes: state => state.allRecipes,
     filterActive: state => state.filterActive,
     filterCache: state => state.filterCache,
-    filterMode: state => state.filterMode,
+    filterData: state => state.filterData,
     recipeCategory: state => state.recipeCategory,
     recipeDiet: state => state.recipeDiet
   },
@@ -47,53 +46,93 @@ export default {
     SET_FILTER_CACHE(state, value) {
       state.filterCache = value;
     },
-    SET_FILTER_MODE(state, value) {
-      state.filterMode = value;
+    SET_FILTER_DATA(state, value) {
+      state.filterData = value;
     },
   },
 
   actions: {
+    /**
+    * @param args - an array provided by 'RecipeFilter.vue' that provides input for 'mode' in [0] and 'selection' in [2]
+    */
     applyFilter({ commit, getters}, args) {
-      let filtered = new Array;
-      let mode = args[0].toLowerCase();
-      let selection = args[1].toLowerCase();
-
       const fState = getters.filterActive;
-      const fMode = getters.filterMode;
+      const fData = getters.filterData;
       const recipes = getters.allRecipes;
       const fromCache = getters.filterCache;
 
-      console.log("applying filter", mode, selection);
+      let filtered = new Array;
+      let mode = args[0].toLowerCase(); //strig value
+      let selection = args[1].map(item => item.toLowerCase()); //array based on 'RecipeFilter.vue' component state; lowercased
 
-      const doFilter = (input) => {
-        return input.filter(item => {
-          if(item[mode]) {
-            return item[mode].toLowerCase().indexOf(selection) !== -1 ? true : false
-          } else { return false }
-        });
+      //format the data for filtering
+      let currentFilterData = Object.assign(fData, { [mode]: selection });
+      //commit the filter settings
+      commit('SET_FILTER_DATA', currentFilterData);
+
+      const findIndex = (arr, el) => {
+        if(arr !== undefined) {
+          if(arr.length === 0) {
+            return 0;
+          } else {
+            return arr.indexOf(el);
+          }
+        } else { return -1 }
       }
 
-      //if there is NO active filter
+      const doFilter = (input) => {
+        let result = new Array;
+        let fDataLength = Object.keys(fData).length;
+
+        result = input.filter((item) => {
+          //prepare the data
+          let cat = findIndex(fData.category, item.category.toLowerCase());
+          let dt = findIndex(fData.diet, item.diet.toLowerCase());
+          //handle the possibilities
+          switch(fDataLength) {
+            case 2:
+              // fDataLength = 2 -- BOTH conditions are set
+              if(cat !== -1 && dt !== -1) {
+                return true
+              }
+              break;
+
+            case 1:
+              // fDataLength = 1 -- ONE condition is set
+              if(cat !== -1 || dt !== -1) {
+                return true
+              }
+              break;
+
+            default:
+              return false;
+          }
+        });
+        //return the filtered array
+        return result;
+      };
+
       if(!fState) {
-        commit('SET_FILTER_STATE', true); //set 'filterActive' flag, so we know for the next selection
-        commit('SET_FILTER_MODE', mode);
-        filtered = doFilter(recipes); //apply to the current state of 'allRecies'
-      } else { //if 'filterActive' !== false, i.e. a filter has already been applied
-        if(fMode === mode) { //changing within current mode, i.e. in need of content that's only available from the cache
-          filtered = doFilter(fromCache);
-        } else { //adding a second condition to the filter
-          filtered = doFilter(recipes); //apply to the current state of 'allRecies'
-        }
+        //if there is NO active filter
+        commit('SET_FILTER_STATE', true);
+        //apply to the current state of 'allRecies'
+        filtered = doFilter(recipes);
+      } else {
+        //apply to previously filtered selection
+        filtered = doFilter(fromCache);
       }
 
       commit('SET_ALL_RECIPES', filtered);
     },
 
     clearFilter({ commit, getters}) {
+      //get state from before applying a filter
       const fromCache = getters.filterCache;
+      //restore that state
       commit('SET_ALL_RECIPES', fromCache);
+      //set filter state and clear filter data
       commit('SET_FILTER_STATE', false);
-      commit('SET_FILTER_MODE', null);
+      commit('SET_FILTER_DATA', {});
     },
 
     getAllRecipes({ commit, rootGetters }) {

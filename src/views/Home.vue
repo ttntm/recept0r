@@ -1,20 +1,27 @@
 <template>
   <div id="all-recipes" class="">
-    <p v-if="isLoading" class="text-blue-600 text-center font-bold">Loading recipes...</p>
+    <p v-if="isLoading" class="text-cool-gray-500 text-center font-bold">Loading recipes...</p>
     <div v-else class="">
       <!-- SEARCH -->
-      <div class="text-center pb-12 mb-12">
-        <div class="search shadow-sm mx-auto" :class="{ 'input-group': searchTerm }">
+      <div class="w-full xl:w-2/3 flex flex-col lg:flex-row justify-center mb-12 mx-auto">
+        <div class="search shadow-sm flex-1" :class="{ 'input-group': searchTerm }">
           <input v-model.trim="searchTerm" type="text" class="w-full search-input" placeholder="Search term">
           <div class="input-group-append">
             <button v-if="searchTerm" @click="clearSearch()" class="btn border-0 font-bold text-lg px-4" type="button" title="Clear search">&times;</button>
           </div>
         </div>
-        <transition name="fade">
-          <span v-if="noResults" class="no-results text-center text-cool-gray-500 mt-6">No results for your search query :(</span>
-        </transition>
+        <button
+          class="w-1/2 lg:w-auto btn btn-gray mt-12 lg:mt-0 lg:ml-6 mx-auto"
+          @click="filterAction()"
+          v-blur
+        >{{ filterBtnText }}</button>
       </div>
-      <RecipeFilter v-if="showFilterSelect" class="mb-12" />
+      <transition name="slide-fade">
+        <RecipeFilter v-if="showFilterSelect" @closeFilter="filterAction()" class="mb-12" />
+      </transition>
+      <transition name="fade">
+        <span v-if="noResults" class="no-results text-center text-cool-gray-500">No results for your search query :(</span>
+      </transition>
       <!-- RECIPE GRID -->
       <transition-group name="list" tag="div" class="recipe-grid">
         <div v-for="recipe in recipesReversed" :key="recipe.refId" class="recipe-card rounded-lg">
@@ -61,11 +68,21 @@ export default {
       showFilterSelect: false
     };
   },
+  created() {
+    this.getAllRecipes();
+  },
   computed: {
     ...mapGetters('recipe',[
       'allRecipes',
       'filterActive'
     ]),
+    filterBtnText() {
+      if(!this.showFilterSelect) {
+        return "+ Show Filter";
+      } else {
+        return "× Hide Filter";
+      }
+    },
     isLoading() {
       if(!this.filterActive) {
         return this.allRecipes.length > 0 ? false : true;
@@ -88,15 +105,18 @@ export default {
   methods: {
     ...mapActions('recipe', [
       'getAllRecipes',
+      'clearFilter'
     ]),
     clearSearch() {
       this.searchTerm = '';
     },
-  },
-  created() {
-    this.getAllRecipes();
-  },
-
+    filterAction() {
+      this.showFilterSelect = !this.showFilterSelect;
+      if(!this.showFilterSelect) {
+        this.clearFilter();
+      }
+    }
+  }
 };
 </script>
 
@@ -222,5 +242,14 @@ export default {
     100% {
       transform: rotate(360deg);
     }
+  }
+  .slide-fade-enter-active,
+  .slide-fade-leave-active {
+    transition: all 0.5s;
+  }
+  .slide-fade-enter,
+  .slide-fade-leave-to {
+    transform: translateY(-200px);
+    opacity: 0;
   }
 </style>
