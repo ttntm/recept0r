@@ -23,6 +23,6 @@ recept0r is built based on these tools:
 - vue-router
 - vuex
 
-100% exact specifications can be found in `package.json` at [GitHub](https://github.com/ttntm/recept0r/blob/master/package.json)
+The exact specifications can be found in `package.json` at [GitHub](https://github.com/ttntm/recept0r/blob/master/package.json)
 
 Large parts of user authentication are based on this project: [vue-netlify-fauna-starter-kit](https://github.com/chiubaca/vue-netlify-fauna-starter-kit)
