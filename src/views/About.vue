@@ -31,7 +31,7 @@
 			<a href="https://github.com/ttntm/recept0r/blob/master/package.json" target="_blank">GitHub</a>
 		</p>
 		<p>
-			Large parts of user authentication are based on this project:
+			Large parts of the user signup and authentication process are based on this project:
 			<a href="https://github.com/chiubaca/vue-netlify-fauna-starter-kit" target="_blank">vue-netlify-fauna-starter-kit</a>
 		</p>
 	</div>

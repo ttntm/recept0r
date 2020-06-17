@@ -25,4 +25,4 @@ recept0r is built based on these tools:
 
 The exact specifications can be found in `package.json` at [GitHub](https://github.com/ttntm/recept0r/blob/master/package.json)
 
-Large parts of user authentication are based on this project: [vue-netlify-fauna-starter-kit](https://github.com/chiubaca/vue-netlify-fauna-starter-kit)
+Large parts of the user signup and authentication process are based on this project: [vue-netlify-fauna-starter-kit](https://github.com/chiubaca/vue-netlify-fauna-starter-kit)
