@@ -2,37 +2,40 @@
   <div id="recipe-filter" class="flex flex-col relative w-full lg:w-3/4 xl:w-2/3 bg-gray-500 rounded-lg shadow-sm py-8 px-12 mx-auto">
     <button
       @click.prevent="$emit('closeFilter')"
-      class="text-3xl font-bold opacity-75 cursor-pointer absolute top-0 right-0 mt-1 mr-4 hover:opacity-100"
+      class="text-3xl font-bold opacity-75 cursor-pointer absolute top-0 right-0 mt-1 mr-4 hover:opacity-100 focus:outline-none"
       title="Close Filter Selection"
+      v-blur
     >×</button>
     <div class="w-full mb-4 lg:mb-8">
       <h5>Category</h5>
       <div class="flex flex-row flex-wrap justify-between md:justify-start items-center">
-        <div
+        <button
           v-for="(cat, index) in recipeCategory"
           :key="index"
-          @click.prevent="categoryFilterClick(cat)"
+          :ref="`${cat}`"
+          @click="categoryFilterClick(cat)"
           :class="{ 'activeFilter': isActiveFilter(cat) }"
           class="filter-group mb-4 md:mr-4"
         >
           <img :src="getFilterImg(cat)" :alt="cat" class="filter-img" />
           <span class="filter-text">{{ cat }}</span>
-        </div>
+        </button>
       </div>
     </div>
-    <div class="w-full mb-4 lg:mb-8">
+    <div class="w-full mb-4">
       <h5>Diet</h5>
       <div class="flex flex-row flex-wrap justify-between md:justify-start items-center">
-        <div
+        <button
           v-for="(diet, index) in recipeDiet"
           :key="index"
-          @click.prevent="dietFilterClick(diet)"
+          :ref="`${diet}`"
+          @click="dietFilterClick(diet)"
           :class="{ 'activeFilter': isActiveFilter(diet) }"
           class="filter-group mb-4 md:mr-4"
         >
           <img :src="getFilterImg(diet)" :alt="diet" class="filter-img" />
           <span class="filter-text">{{ diet }}</span>
-        </div>
+        </button>
       </div>
     </div>
     <div class="w-full flex flex-row justify-center lg:justify-end">
@@ -76,9 +79,7 @@ export default {
       let sd = this.findIndex(this.selDiet, item);
       if (sc !== -1 || sd !== -1) {
         return true;
-      } else {
-        return false;
-      }
+      } else { return false; }
     },
     selectionHandler(arr, item) {
       let idx = this.findIndex(arr, item);
@@ -91,10 +92,19 @@ export default {
     categoryFilterClick(selection) {
       this.selectionHandler(this.selCat, selection);
       this.applyFilter(["category", this.selCat]);
+      this.blurFilterIcon(selection);
     },
     dietFilterClick(selection) {
       this.selectionHandler(this.selDiet, selection);
       this.applyFilter(["diet", this.selDiet]);
+      this.blurFilterIcon(selection);
+    },
+    blurFilterIcon(icon) {
+      if(!this.isActiveFilter(icon)) {
+        this.$nextTick(function() {
+          this.$refs[`${icon}`][0].blur();
+        });
+      }
     },
     clearFilterClick() {
       this.selCat = [];
@@ -110,7 +120,11 @@ export default {
     @apply cursor-pointer outline-none;
   }
   .filter-group:focus {
-    @apply outline-none;
+    @apply outline-none shadow-none;
+  }
+  .filter-img,
+  .filter-text {
+    transition: opacity .35s ease-in-out;
   }
   .filter-img {
     width: 60px;
@@ -120,11 +134,13 @@ export default {
     @apply block text-xs font-bold text-center text-blue-500 opacity-50;
   }
   .filter-group:hover .filter-img,
-  .filter-group:hover .filter-text {
+  .filter-group:hover .filter-text,
+  .filter-group:focus .filter-img,
+  .filter-group:focus .filter-text {
     @apply opacity-100;
   }
-  .activeFilter > img,
-  .activeFilter > span {
+  .activeFilter .filter-img,
+  .activeFilter .filter-text {
     @apply opacity-100;
   }
   .clear-btn {

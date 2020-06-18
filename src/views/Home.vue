@@ -27,7 +27,7 @@
         <div v-for="recipe in recipesReversed" :key="recipe.refId" class="recipe-card rounded-lg">
           <clazy-load v-if="recipe.image" :src="recipe.image" class="clazy-container relative" is="VueClazyLoad">
             <transition name="fade">
-              <router-link :to="{name: 'recipe', params: {id: recipe.id, refId: recipe.refId}}">
+              <router-link :to="{name: 'recipe', params: {id: recipe.id, refId: recipe.refId}}" class="img-link focus:shadow-none">
                 <img class="recipe-card-img" :src="recipe.image" crossorigin="anonymous">
               </router-link>
             </transition>
@@ -40,7 +40,7 @@
             </transition>
           </clazy-load>
           <div class="p-8">
-            <router-link :to="{name: 'recipe', params: {id: recipe.id, refId: recipe.refId}}">
+            <router-link :to="{name: 'recipe', params: {id: recipe.id, refId: recipe.refId}}" tabindex="-1">
               <h3 class="font-bold text-2xl tracking-wide text-blue-500 hover:text-blue-700">{{ recipe.title }}</h3>
             </router-link>
             <p class="text-blue-600 mt-4">{{ recipe.description }}</p>
@@ -186,13 +186,15 @@ export default {
     @apply w-full rounded-tl-lg rounded-tr-lg object-cover;
     height: 299px;
     max-height: 299px;
-    transition: all .5s ease-in-out;
   }
   @media screen and (min-width:1024px) {
     .recipe-card:hover {
       transform: translateY(-0.25rem);
       transition: all .35s ease-in-out;
     }
+  }
+  .img-link:focus > img {
+    @apply shadow-outline;
   }
   .list-enter-active, .list-leave-active {
     transition: all .5s;
