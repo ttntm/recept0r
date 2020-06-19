@@ -79,7 +79,7 @@
     <div v-if="readSuccess" class="w-full lg:w-2/5 lg:pl-8 order-1 lg:order-2">
       <div class="bg-gray-500 rounded-lg p-8 mt-4 lg:mt-0">
         <h4 class="mb-4">Ingredients</h4>
-        <ul class="">
+        <ul class="mb-0">
           <li v-for="(ing, index) in recipe.ingredients" :key="index">
             <span v-if="!editing">
               {{ ing }}
