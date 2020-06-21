@@ -333,7 +333,7 @@ export default {
     @apply block w-full;
   }
   .ing-list > li {
-    @apply mb-2;
+    @apply text-blue-500 mb-2;
     font-weight: 600;
   }
   .ing-list > li:last-child {
