@@ -1,7 +1,11 @@
 <template>
   <div id="recipe" class="w-full xl:w-4/5 flex flex-row flex-wrap mx-auto">
     <div v-if="!readSuccess" class="w-full">
-      <p class="text-cool-gray-500 text-center">Loading...</p>
+      <div v-if="!errorMsg" class="text-center my-12">
+        <img src="@/assets/loading.svg" alt="Loading..." class="mx-auto">
+        <p class="text-cool-gray-500 mt-12">Loading recipe data...</p>
+      </div>
+      <div v-else v-html="errorMsg" class="text-center my-12" />
     </div>
     <div v-if="readSuccess" class="w-full lg:w-3/5">
       <h4 v-if="editing" class="mb-4">Image</h4>
@@ -19,14 +23,14 @@
             <input type="text" v-model="recipe.title" ref="recipeTitle" class="form-control">
           </span>
         </h2>
-        <div class="my-8">
-          <p v-if="!editing" class="m-0">{{ recipe.description }}</p>
+        <div class="mb-8">
+          <p v-if="!editing" class="text-blue-500 m-0">{{ recipe.description }}</p>
           <input v-else type="text" v-model="recipe.description" class="form-control">
         </div>
         <div class="flex flex-row flex-no-wrap border-t border-b border-cool-gray-500 my-4 py-4">
           <div v-if="!editing" class="flex-1 flex flex-row items-center mr-4">
             <img src="@/assets/portions.svg" class="mr-4">
-            <p class="mb-0">{{ recipe.portions }} portions</p>
+            <p class="text-cool-gray-500 mb-0">{{ recipe.portions }} portions</p>
           </div>
           <div v-else class="flex-1 mr-4">
             <label class="text-cool-gray-500 text-xs">Portions</label>
@@ -34,7 +38,7 @@
           </div>
           <div v-if="!editing" class="flex-1 flex flex-row items-center pl-4 border-l border-cool-gray-500">
             <img src="@/assets/duration.svg" class="mr-4">
-            <p class="mb-0">{{ recipe.duration }}</p>
+            <p class="text-cool-gray-500 mb-0">{{ recipe.duration }}</p>
           </div>
           <div v-else class="flex-1">
             <label class="text-cool-gray-500 text-xs">Duration</label>
@@ -42,7 +46,7 @@
           </div>
         </div>
         <div>
-          <p v-if="!editing">
+          <p v-if="!editing"  class="text-blue-500">
             <span class="inline-block text-cool-gray-500" style="width: 6rem">Diet:</span>
             {{ recipe.diet }}
           </p>
@@ -57,7 +61,7 @@
           </div>
         </div>
         <div>
-          <p v-if="!editing">
+          <p v-if="!editing" class="text-blue-500">
             <span class="inline-block text-cool-gray-500" style="width: 6rem">Category:</span>
             {{ recipe.category }}
           </p>
@@ -78,8 +82,8 @@
     </div>
     <div v-if="readSuccess" class="w-full lg:w-2/5 lg:pl-8 order-1 lg:order-2">
       <div class="bg-gray-500 rounded-lg p-8 mt-4 lg:mt-0">
-        <h4 class="mb-4">Ingredients</h4>
-        <ul class="mb-0">
+        <h3 class="mb-4">Ingredients</h3>
+        <ul class="ing-list mb-0">
           <li v-for="(ing, index) in recipe.ingredients" :key="index">
             <span v-if="!editing">
               {{ ing }}
@@ -134,6 +138,7 @@ export default {
   data() {
     return {
       editing: false,
+      errorMsg: '',
       isSaving: false,
       recipe: null,
       readSuccess: false
@@ -184,9 +189,11 @@ export default {
     recipe: {
       deep: true,
       handler() {
-        const r = this.recipe;
-        //create id = slug
-        r.id = r.title.replace(/[^a-z0-9]+/gi, '-').replace(/^-*|-*$/g, '').toLowerCase();
+        if(this.readSuccess) {
+          const r = this.recipe;
+          //create id = slug
+          r.id = r.title.replace(/[^a-z0-9]+/gi, '-').replace(/^-*|-*$/g, '').toLowerCase();
+        }
       }
     },
     loggedIn: {
@@ -259,6 +266,9 @@ export default {
       })
       .catch((error) => {
         console.log("API error", error);
+        this.errorMsg = `<h3>Oops, something went wrong :(</h3>
+          <p>Error: couldn't load recipe data.<br><br>
+          Please try again later or go back to the home page.</p>`;
       })
     },
     editRecipe(recipe) {
@@ -321,5 +331,12 @@ export default {
 <style lang="postcss" scoped>
   .form-control {
     @apply block w-full;
+  }
+  .ing-list > li {
+    @apply mb-2;
+    font-weight: 600;
+  }
+  .ing-list > li:last-child {
+    @apply mb-0;
   }
 </style>

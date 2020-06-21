@@ -3,6 +3,7 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import attemptToAuthoriseTokens from './helpers/authorise-tokens';
+import VueShortkey from 'vue-shortkey';
 
 require('@/assets/styles/index.css');
 
@@ -42,6 +43,8 @@ Vue.directive('blur', {
     el.onclick = (ev) => ev.target.blur();
   }
 });
+
+Vue.use(VueShortkey);
 
 new Vue({
   router,

@@ -1,11 +1,14 @@
 <template>
   <div id="all-recipes" class="">
-    <p v-if="isLoading" class="text-cool-gray-500 text-center font-bold">Loading recipes...</p>
+    <div v-if="isLoading" class="text-center my-12">
+      <img src="@/assets/loading.svg" alt="Loading..." class="mx-auto">
+      <p class="text-cool-gray-500 mt-12">Loading recipes...</p>
+    </div>
     <div v-else class="">
       <!-- SEARCH -->
       <div class="w-full xl:w-2/3 flex flex-col lg:flex-row justify-center mb-12 mx-auto">
         <div class="search shadow-sm flex-1" :class="{ 'input-group': searchTerm }">
-          <input v-model.trim="searchTerm" type="text" class="w-full search-input" placeholder="Search term">
+          <input v-model.trim="searchTerm" v-shortkey.focus="['s']" type="text" class="w-full search-input" placeholder="Search term">
           <div class="input-group-append">
             <button v-if="searchTerm" @click="clearSearch()" class="btn border-0 font-bold text-lg px-4" type="button" title="Clear search">&times;</button>
           </div>
@@ -41,7 +44,7 @@
           </clazy-load>
           <div class="p-8">
             <router-link :to="{name: 'recipe', params: {id: recipe.id, refId: recipe.refId}}" tabindex="-1">
-              <h3 class="font-bold text-2xl tracking-wide text-blue-500 hover:text-blue-700">{{ recipe.title }}</h3>
+              <h3 class="font-bold text-2xl tracking-wide text-blue-500 hover:text-blue-600">{{ recipe.title }}</h3>
             </router-link>
             <p class="text-blue-600 mt-4">{{ recipe.description }}</p>
           </div>
@@ -78,9 +81,9 @@ export default {
     ]),
     filterBtnText() {
       if(!this.showFilterSelect) {
-        return "+ Show Filter";
+        return "Show Filter";
       } else {
-        return "× Hide Filter";
+        return "Hide Filter";
       }
     },
     isLoading() {

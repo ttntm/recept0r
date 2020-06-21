@@ -106,7 +106,7 @@ export default {
           this.editor.options.editable = true;
         } else {
           this.editor.options.editable = false;
-          this.editor.setContent(this.editorContent);  //reset when cached old data come back after "cancel" of edit mode
+          this.editor.setContent(this.editorContent);  //reset when cached old data comes back after "cancel" of edit mode
         }
       }
     }
@@ -156,10 +156,10 @@ export default {
     @apply my-8;
   }
   .editor__content > .ProseMirror h1 {
-    @apply text-xl;
+    @apply text-2xl;
   }
   .editor__content > .ProseMirror h2 {
-    @apply text-lg;
+    @apply text-xl;
   }
   .btn-group {
     @apply text-sm;

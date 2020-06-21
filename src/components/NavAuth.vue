@@ -36,9 +36,9 @@
           </div>
           <!-- SIGNUP PART - TEMP INVITE ONLY -->
           <div v-if="mode === 'register'">
-            <p class="text-center font-bold">
+            <p class="text-center">
               Thanks for your interest in recept0r.<br><br>
-              Public registrations are suspended until further notice, this is currently an invite only service.
+              Public registrations are suspended until further notice. This is currently an invite only service.
             </p>
           </div>
           <!-- SIGNUP PART -->
@@ -248,7 +248,7 @@ export default {
     @apply flex flex-col border-b border-cool-gray-500 mb-8;
   }
   .form-group label {
-    @apply tracking-wide text-sm text-cool-gray-700 mb-1;
+    @apply tracking-wide text-sm text-blue-600 mb-1;
   }
   .auth-form-control {
     @apply bg-gray-500 px-3 py-1;

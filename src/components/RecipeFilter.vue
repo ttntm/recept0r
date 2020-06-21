@@ -39,7 +39,7 @@
       </div>
     </div>
     <div class="w-full flex flex-row justify-center lg:justify-end">
-      <button class="clear-btn px-8 py-2" v-blur @click="clearFilterClick()">× Clear Filter</button>
+      <button class="clear-btn px-8 py-2" v-blur @click="clearFilterClick()">Clear Filter</button>
     </div>
   </div>
 </template>

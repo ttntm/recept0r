@@ -45,10 +45,10 @@ export default {
 
 <style lang="postcss" scoped>
 .error {
-  @apply bg-red-500 text-blue-500;
+  @apply bg-gray-500 text-blue-500;
 }
 .success {
-  @apply bg-green-500 text-blue-500;
+  @apply bg-gray-500 text-blue-500;
 }
 .slide-fade-enter-active,
 .slide-fade-leave-active {
