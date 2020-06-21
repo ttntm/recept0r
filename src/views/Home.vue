@@ -6,7 +6,7 @@
     </div>
     <div v-else class="">
       <!-- SEARCH -->
-      <div class="w-full xl:w-2/3 flex flex-col lg:flex-row justify-center mb-12 mx-auto">
+      <div class="w-full xl:w-2/3 flex flex-row justify-center mb-12 mx-auto">
         <div class="search shadow-sm flex-1" :class="{ 'input-group': searchTerm }">
           <input v-model.trim="searchTerm" v-shortkey.focus="['s']" type="text" class="w-full search-input" placeholder="Search term">
           <div class="input-group-append">
@@ -14,10 +14,13 @@
           </div>
         </div>
         <button
-          class="w-1/2 lg:w-auto btn btn-gray mt-12 lg:mt-0 lg:ml-6 mx-auto"
+          class="w-auto flex-0 btn btn-gray ml-2 lg:ml-6 mx-auto"
           @click="filterAction()"
           v-blur
-        >{{ filterBtnText }}</button>
+        >
+          <span class="icono-filter inline-block lg:hidden"></span>
+          <span class="hidden lg:inline-block">{{ filterBtnText }}</span>
+        </button>
       </div>
       <transition name="slide-fade">
         <RecipeFilter v-if="showFilterSelect" @closeFilter="filterAction()" class="mb-12" />
@@ -36,9 +39,7 @@
             </transition>
             <transition name="fade" slot="placeholder">
               <div class="preloader">
-                <div class="circle">
-                  <div class="circle-inner"></div>
-                </div>
+                <img src="@/assets/loading.svg">
               </div>
             </transition>
           </clazy-load>
@@ -208,7 +209,6 @@ export default {
   .list-move {
     transition: transform .5s;
   }
-  /* preloader source: https://codepen.io/Alex-Miller/pen/qviHa */
   .preloader {
     position: absolute;
     top: 50%;
@@ -216,37 +216,6 @@ export default {
     margin: -25px 0 0 -25px;
     width: 50px;
     height: 50px;
-    transition: all 100ms ease-in;
-  }
-  .preloader .circle,
-  .preloader .circle .circle-inner {
-    width: inherit;
-    height: inherit;
-    border-radius: 50%;
-    background: linear-gradient(rgba(220, 220, 220, 1) -50%,rgba(220, 220, 220, 0) 60%);
-  }
-  .preloader .circle {
-    animation: roll 6s linear infinite;
-  }
-  .preloader .circle .circle-inner {
-    padding: 5px;
-    animation: roll 2s linear infinite reverse;
-  }
-  .preloader .circle .circle-inner::after {
-    content: '';
-    display: block;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: #fff;
-  }
-  @keyframes roll {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
   }
   .slide-fade-enter-active,
   .slide-fade-leave-active {
@@ -256,5 +225,22 @@ export default {
   .slide-fade-leave-to {
     transform: translateY(-200px);
     opacity: 0;
+  }
+  /* icon source -> https://github.com/saeedalipoor/icono */
+  [class*=icono-] {
+    @apply relative text-blue-500;
+    vertical-align: middle;
+    text-align: left;
+    text-indent: -9999px;
+    direction: ltr;
+  }
+  .icono-filter {
+    @apply w-0 h-0;
+    border: 8px solid;
+    border-bottom: none;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    padding: 3px;
+    box-shadow: inset 0 7px;
   }
 </style>

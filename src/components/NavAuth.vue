@@ -69,7 +69,7 @@
             </div>
             <button class="modal-btn px-8 py-2 mt-8 mb-4 mx-auto" type="button" @click="login()">Login</button>
           </form>
-          <p v-if="cValidateMsg !== ''" class="font-bold mt-8 mb-2" :class="{ 'error' : !cValidate }">{{ cValidateMsg }}</p>
+          <p v-if="cValidateMsg !== ''" v-html="cValidateMsg" class="font-bold mt-8 mb-2" :class="{ 'error' : !cValidate }" />
         </div>
       </div>
     </transition>
@@ -185,7 +185,8 @@ export default {
         this.cValidateMsg = "Please enter valid information.";
       } else {
         let msg = { text: '', type: ''};
-        this.cValidateMsg = "Logging in...";
+        let spinner = require('@/assets/loading.svg');
+        this.cValidateMsg = `<img src="${spinner}" class="mx-auto">`;
         this.attemptLogin({ ...this.crendentials })
           .then(() => {
             this.toggleShow();

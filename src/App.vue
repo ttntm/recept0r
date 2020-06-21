@@ -2,7 +2,7 @@
   <div id="app" :class="{ 'overflow-hidden' : menuOpen }" class="flex h-full flex-col">
     <Navbar />
     <NavMobile />
-    <div class="container flex-grow flex-shrink-0 px-4 mt-12 mx-auto">
+    <div class="container flex-grow flex-shrink-0 px-4 md:mt-6 lg:mt-12 mx-auto">
       <router-view />
     </div>
     <AppFooter />
