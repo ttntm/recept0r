@@ -8,11 +8,11 @@ module.exports = {
     appleMobileWebAppStatusBarStyle: 'black',
     manifestPath: 'manifest.json',
     manifestOptions: {
-      name: pwa.name,
-      short_name: pwa.name,
+      name: 'recept0r',
+      short_name: 'recept0r',
       start_url: 'https://recept0r.com',
       display: 'standalone',
-      theme_color: pwa.themeColor,
+      theme_color: '#F2F6FF',
     },
     iconPaths: {
       favicon32: '/favicon-32x32.png',
