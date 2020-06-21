@@ -14,7 +14,7 @@
     </div>
     <div v-if="readSuccess" class="w-full lg:w-2/5 lg:pl-8">
       <div>
-        <h2 class="mt-4 lg:mt-0 mb-4">
+        <h2 class="mt-4 lg:mt-8 mb-4">
           <span v-if="!editing">
             {{ recipe.title }}
           </span>
@@ -28,17 +28,17 @@
           <input v-else type="text" v-model="recipe.description" class="form-control">
         </div>
         <div class="flex flex-row flex-no-wrap border-t border-b border-cool-gray-500 my-4 py-4">
-          <div v-if="!editing" class="flex-1 flex flex-row items-center mr-4">
+          <div v-if="!editing" class="flex-1 flex flex-row items-center justify-center mr-4">
             <img src="@/assets/portions.svg" class="mr-4">
-            <p class="text-cool-gray-500 mb-0">{{ recipe.portions }} portions</p>
+            <p class="text-blue-500 mb-0">{{ recipe.portions }} portions</p>
           </div>
           <div v-else class="flex-1 mr-4">
             <label class="text-cool-gray-500 text-xs">Portions</label>
             <input type="text" v-model="recipe.portions" class="form-control text-sm mr-4" placeholder="Portions; how many people does this recipe serve?">
           </div>
-          <div v-if="!editing" class="flex-1 flex flex-row items-center pl-4 border-l border-cool-gray-500">
+          <div v-if="!editing" class="flex-1 flex flex-row items-center justify-center border-l border-cool-gray-500">
             <img src="@/assets/duration.svg" class="mr-4">
-            <p class="text-cool-gray-500 mb-0">{{ recipe.duration }}</p>
+            <p class="text-blue-500 mb-0">{{ recipe.duration }}</p>
           </div>
           <div v-else class="flex-1">
             <label class="text-cool-gray-500 text-xs">Duration</label>
@@ -46,7 +46,7 @@
           </div>
         </div>
         <div>
-          <p v-if="!editing"  class="text-blue-500">
+          <p v-if="!editing" class="text-blue-500 font-semibold mb-2">
             <span class="inline-block text-cool-gray-500" style="width: 6rem">Diet:</span>
             {{ recipe.diet }}
           </p>
@@ -61,7 +61,7 @@
           </div>
         </div>
         <div>
-          <p v-if="!editing" class="text-blue-500">
+          <p v-if="!editing" class="text-blue-500 font-semibold mb-4">
             <span class="inline-block text-cool-gray-500" style="width: 6rem">Category:</span>
             {{ recipe.category }}
           </p>

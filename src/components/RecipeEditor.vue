@@ -40,6 +40,12 @@
         >H2</button>
         <button
           class="btn btn-gray text-sm rounded-none"
+          :class="{ 'is-active': isActive.heading({ level: 3 }) }"
+          @click="commands.heading({ level: 3 })"
+          title="Gray text"
+        >G</button>
+        <button
+          class="btn btn-gray text-sm rounded-none"
           :class="{ 'is-active': isActive.bullet_list() }"
           @click="commands.bullet_list"
           title="Unordered list"
@@ -54,7 +60,7 @@
           class="btn btn-gray text-sm rounded-none"
           @click="commands.horizontal_rule"
           title="Horizontal rule"
-        >HR
+        >-
         </button>
         <button class="btn btn-gray text-sm rounded-none"
           @click="commands.undo"
@@ -117,7 +123,7 @@ export default {
       content: this.editorContent,
       extensions: [
         new BulletList(),
-        new Heading({ levels: [1, 2] }),
+        new Heading({ levels: [1, 2, 3] }),
         new ListItem(),
         new OrderedList(),
         new Bold(),
@@ -160,6 +166,9 @@ export default {
   }
   .editor__content > .ProseMirror h2 {
     @apply text-xl;
+  }
+  .editor__content > .ProseMirror h3 {
+    @apply text-base text-cool-gray-500 font-normal;
   }
   .btn-group {
     @apply text-sm;
