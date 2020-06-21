@@ -6,7 +6,10 @@
       title="Close Filter Selection"
       v-blur
     >×</button>
-    <div class="w-full mb-4 lg:mb-8">
+    <div class="w-full">
+      <h5 class="text-cool-gray-500 text-center">Filter Selection</h5>
+    </div>
+    <div class="w-full mb-4">
       <h5>Category</h5>
       <div class="flex flex-row flex-wrap justify-between md:justify-start items-center">
         <button
