@@ -15,11 +15,11 @@ module.exports = {
       theme_color: '#F2F6FF',
     },
     iconPaths: {
-      favicon32: '/favicon-32x32.png',
-      favicon16: '/favicon-16x16.png',
-      appleTouchIcon: '/apple-touch-icon.png',
-      maskIcon: '/safari-pinned-tab.svg',
-      msTileImage: '/mstile-144x144.png'
+      favicon32: 'https://recept0r.com/favicon-32x32.png',
+      favicon16: 'https://recept0r.com/favicon-16x16.png',
+      appleTouchIcon: 'https://recept0r.com/apple-touch-icon.png',
+      maskIcon: 'https://recept0r.com/safari-pinned-tab.svg',
+      msTileImage: 'https://recept0r.com/mstile-144x144.png'
     },
 
     // configure the workbox plugin
