@@ -6,13 +6,20 @@ module.exports = {
     msTileColor: '#F2F6FF',
     appleMobileWebAppCapable: 'yes',
     appleMobileWebAppStatusBarStyle: 'black',
-    manifestPath: './site.webmanifest',
+    manifestPath: 'manifest.json',
+    manifestOptions: {
+      name: pwa.name,
+      short_name: pwa.name,
+      start_url: 'https://recept0r.com',
+      display: 'standalone',
+      theme_color: pwa.themeColor,
+    },
     iconPaths: {
-      favicon32: './favicon-32x32.png',
-      favicon16: './favicon-16x16.png',
-      appleTouchIcon: './apple-touch-icon.png',
-      maskIcon: './safari-pinned-tab.svg',
-      msTileImage: './mstile-144x144.png'
+      favicon32: '/favicon-32x32.png',
+      favicon16: '/favicon-16x16.png',
+      appleTouchIcon: '/apple-touch-icon.png',
+      maskIcon: '/safari-pinned-tab.svg',
+      msTileImage: '/mstile-144x144.png'
     },
 
     // configure the workbox plugin
