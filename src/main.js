@@ -4,6 +4,7 @@ import router from './router';
 import store from './store';
 import attemptToAuthoriseTokens from './helpers/authorise-tokens';
 import VueShortkey from 'vue-shortkey';
+import './registerServiceWorker'
 
 require('@/assets/styles/index.css');
 
