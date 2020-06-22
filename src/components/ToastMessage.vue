@@ -44,36 +44,36 @@ export default {
 </script>
 
 <style lang="postcss" scoped>
-.error {
-  @apply bg-gray-500 text-blue-500;
-}
-.success {
-  @apply bg-gray-500 text-blue-500;
-}
-.slide-fade-enter-active,
-.slide-fade-leave-active {
-  transition: all 0.75s;
-}
-.slide-fade-enter,
-.slide-fade-leave-to {
-  transform: translateX(400px);
-  opacity: 0;
-}
-.smiley {
-  animation: roll 1.25s linear infinite;
-}
-@keyframes roll {
-  0% {
-    transform: rotate(0deg);
+  .error {
+    @apply bg-gray-500 text-blue-500;
   }
-  25% {
-    transform: rotate(-20deg);
+  .success {
+    @apply bg-gray-500 text-blue-500;
   }
-  50% {
-    transform: rotate(10deg);
+  .slide-fade-enter-active,
+  .slide-fade-leave-active {
+    transition: all 0.75s;
   }
-  100% {
-    transform: rotate(0deg);
+  .slide-fade-enter,
+  .slide-fade-leave-to {
+    transform: translateX(400px);
+    opacity: 0;
   }
-}
+  .smiley {
+    animation: roll 1.25s linear infinite;
+  }
+  @keyframes roll {
+    0% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(-20deg);
+    }
+    50% {
+      transform: rotate(10deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
 </style>

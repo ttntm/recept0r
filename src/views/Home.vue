@@ -34,7 +34,7 @@
           <clazy-load v-if="recipe.image" :src="recipe.image" class="clazy-container relative" is="VueClazyLoad">
             <transition name="fade">
               <router-link :to="{name: 'recipe', params: {id: recipe.id, refId: recipe.refId}}" class="img-link focus:shadow-none">
-                <img class="recipe-card-img" :src="recipe.image" crossorigin="anonymous">
+                <img class="recipe-card-img" :src="recipe.image" crossorigin="anonymous" :alt="recipe.title">
               </router-link>
             </transition>
             <transition name="fade" slot="placeholder">
@@ -56,7 +56,6 @@
 </template>
 
 <script>
-import RecipeFilter from '@/components/RecipeFilter.vue';
 import { VueClazyLoad } from 'vue-clazy-load';
 import { mapGetters, mapActions } from 'vuex';
 
@@ -64,7 +63,7 @@ export default {
   name: 'all-recipes',
   components: {
     VueClazyLoad,
-    RecipeFilter
+    'RecipeFilter': () => import('@/components/RecipeFilter.vue')
   },
   data() {
     return {

@@ -4,7 +4,7 @@
       <span class="gg-menu"></span>
     </button>
     <router-link :to="{name: 'home'}" v-blur>
-      <img src="@/assets/logo.svg" class="hover:opacity-75 pt-2">
+      <img src="@/assets/logo.svg" class="hover:opacity-75 pt-2" alt="recept0r logo">
     </router-link>
     <div class="hidden md:flex flex-row justify-center items-center flex-grow">
       <router-link
@@ -29,13 +29,12 @@
 </template>
 
 <script>
-import NavAuth from "@/components/NavAuth.vue";
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: "navbar",
   components: {
-    NavAuth
+    'NavAuth': () => import('@/components/NavAuth.vue')
   },
   computed: {
     ...mapGetters('app',['menuOpen']),

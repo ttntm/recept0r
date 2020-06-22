@@ -30,7 +30,7 @@
         <div class="flex flex-row flex-no-wrap border-t border-b border-cool-gray-500 my-4 py-4">
           <div v-if="!editing" class="flex-1 flex flex-row items-center justify-center mr-4">
             <img src="@/assets/portions.svg" class="mr-4">
-            <p class="text-blue-500 mb-0">{{ recipe.portions }} portions</p>
+            <p class="text-blue-500 mb-0">{{ recipe.portions }}</p>
           </div>
           <div v-else class="flex-1 mr-4">
             <label class="text-cool-gray-500 text-xs">Portions</label>

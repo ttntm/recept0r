@@ -12,18 +12,16 @@
 
 <script>
 import Navbar from '@/components/Navbar.vue';
-import NavMobile from '@/components/NavMobile.vue';
 import AppFooter from '@/components/AppFooter.vue';
-import ToastMessage from '@/components/ToastMessage.vue';
 import { mapGetters } from 'vuex';
 
 export default {
   name: 'App',
   components: {
     Navbar,
-    NavMobile,
     AppFooter,
-    ToastMessage
+    'NavMobile': () => import('@/components/NavMobile.vue'),
+    'ToastMessage': () => import('@/components/ToastMessage.vue')
   },
   computed: {
     ...mapGetters('app',['menuOpen']),

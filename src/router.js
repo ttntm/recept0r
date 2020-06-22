@@ -1,11 +1,11 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-//import views
-// import About from '@/views/About.vue';
-// import Home from '@/views/Home.vue';
-// import Create from '@/views/Create.vue';
-// import Recipe from '@/views/Recipe.vue';
+// import views
+const About = () => import("@/views/About.vue" /* webpackChunkName: "About" */);
+const Home = () => import("@/views/Home.vue" /* webpackChunkName: "Home" */);
+const Create = () => import("@/views/Create.vue" /* webpackChunkName: "Create" */);
+const Recipe = () => import("@/views/Recipe.vue" /* webpackChunkName: "Recipe" */);
 //import FourOFour from '@/views/404.vue';
 
 import store from '@/store';
@@ -18,23 +18,17 @@ const router = new Router({
     {
       path: '/',
       name: 'home',
-      // component: Home
-      component: () =>
-        import("@/views/Home.vue" /* webpackChunkName: "Home" */)
+      component: Home
     },
     {
       path: '/about',
       name: 'about',
-      // component: About
-      component: () =>
-        import("@/views/About.vue" /* webpackChunkName: "About" */)
+      component: About
     },
     {
       path: '/create',
       name: 'create',
-      // component: Create,
-      component: () =>
-        import("@/views/Create.vue" /* webpackChunkName: "Create" */),
+      component: Create,
       beforeEnter: (to, from, next) => {
          if(!store.state.user.currentUser) { //get stored user state from vuex store
           router.push({ name: 'home' });
@@ -46,9 +40,7 @@ const router = new Router({
     {
       path: '/recipe/:id/:refId',
       name: 'recipe',
-      // component: Recipe
-      component: () =>
-        import("@/views/Recipe.vue" /* webpackChunkName: "Recipe" */)
+      component: Recipe
     },
     {
       path: '*',
