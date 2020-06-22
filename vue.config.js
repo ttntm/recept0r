@@ -1,5 +1,12 @@
 module.exports = {
-  // ...other vue-cli plugin options...
+  configureWebpack:{
+    optimization: {
+      splitChunks: {
+        minSize: 10000,
+        maxSize: 250000,
+      }
+    }
+  },
   pwa: {
     name: 'recept0r',
     themeColor: '#F2F6FF',
@@ -13,13 +20,26 @@ module.exports = {
       start_url: 'https://recept0r.com',
       display: 'standalone',
       theme_color: '#F2F6FF',
+      icons: [
+        {
+            "src": "/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+      ]
     },
+    // https://dev.to/drbragg/manifest-vs-head-icons-in-the-vue-cli-pwa-plugin-12fg
     iconPaths: {
-      favicon32: 'https://recept0r.com/favicon-32x32.png',
-      favicon16: 'https://recept0r.com/favicon-16x16.png',
-      appleTouchIcon: 'https://recept0r.com/apple-touch-icon.png',
-      maskIcon: 'https://recept0r.com/safari-pinned-tab.svg',
-      msTileImage: 'https://recept0r.com/mstile-144x144.png'
+      favicon32: 'favicon-32x32.png',
+      favicon16: 'favicon-16x16.png',
+      appleTouchIcon: 'apple-touch-icon.png',
+      maskIcon: 'safari-pinned-tab.svg',
+      msTileImage: 'mstile-144x144.png'
     },
 
     // configure the workbox plugin
