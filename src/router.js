@@ -2,10 +2,10 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 //import views
-import About from '@/views/About.vue';
-import Home from '@/views/Home.vue';
-import Create from '@/views/Create.vue';
-import Recipe from '@/views/Recipe.vue';
+// import About from '@/views/About.vue';
+// import Home from '@/views/Home.vue';
+// import Create from '@/views/Create.vue';
+// import Recipe from '@/views/Recipe.vue';
 //import FourOFour from '@/views/404.vue';
 
 import store from '@/store';
@@ -18,17 +18,23 @@ const router = new Router({
     {
       path: '/',
       name: 'home',
-      component: Home
+      // component: Home
+      component: () =>
+        import("@/views/Home.vue" /* webpackChunkName: "Home" */)
     },
     {
       path: '/about',
       name: 'about',
-      component: About
+      // component: About
+      component: () =>
+        import("@/views/About.vue" /* webpackChunkName: "About" */)
     },
     {
       path: '/create',
       name: 'create',
-      component: Create,
+      // component: Create,
+      component: () =>
+        import("@/views/Create.vue" /* webpackChunkName: "Create" */),
       beforeEnter: (to, from, next) => {
          if(!store.state.user.currentUser) { //get stored user state from vuex store
           router.push({ name: 'home' });
@@ -40,7 +46,9 @@ const router = new Router({
     {
       path: '/recipe/:id/:refId',
       name: 'recipe',
-      component: Recipe
+      // component: Recipe
+      component: () =>
+        import("@/views/Recipe.vue" /* webpackChunkName: "Recipe" */)
     },
     {
       path: '*',
