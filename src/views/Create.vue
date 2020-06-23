@@ -93,10 +93,10 @@ export default {
         category: '',
         description: '',
         diet: '',
-        duration: '',
+        duration: "30 min / 1 h",
         image: null,
         ingredients: [],
-        portions: '',
+        portions: "4 portions",
         body: {
           "type":"doc",
           "content":[

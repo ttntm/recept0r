@@ -210,6 +210,7 @@ export default {
     editMode(recipe) {
       Object.assign(cache, recipe);
       cacheStr = JSON.stringify(cache);
+      this.isSaving = false; //in case it's not the first edit
       this.editing = true; //set state when editing
       this.$nextTick(function(){
         this.$refs['recipeTitle'].focus();
