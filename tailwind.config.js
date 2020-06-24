@@ -555,6 +555,7 @@ module.exports = {
     },
   },
   variants: {
+    accessibility: [],
     alignContent: ['responsive'],
     alignItems: ['responsive'],
     alignSelf: ['responsive'],
@@ -630,7 +631,6 @@ module.exports = {
     translate: ['responsive', 'hover', 'focus'],
   },
   corePlugins: {
-    accessibility: false,
     backgroundAttachment: false,
     backgroundOpacity: false,
     backgroundPosition: false,

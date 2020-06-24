@@ -8,7 +8,8 @@
       <!-- SEARCH -->
       <div class="w-full xl:w-2/3 flex flex-row justify-center mb-12 mx-auto">
         <div class="search shadow-sm flex-1" :class="{ 'input-group': searchTerm }">
-          <input v-model.trim="searchTerm" v-shortkey.focus="['s']" type="text" class="w-full search-input" placeholder="Search term">
+          <label for="search-input" class="sr-only">Search</label>
+          <input v-model.trim="searchTerm" v-shortkey.focus="['s']" type="text" class="w-full search-input" name="search-input" placeholder="Search term">
           <div class="input-group-append">
             <button v-if="searchTerm" @click="clearSearch()" class="btn border-0 font-bold text-lg px-4" type="button" title="Clear search">&times;</button>
           </div>
@@ -180,7 +181,7 @@ export default {
   }
   .recipe-card:hover {
     box-shadow: 0 0.45rem 0.9rem rgba(0,0,0,.1);
-    transition: all .35s ease-in-out;
+    transition: box-shadow .35s ease-in-out;
   }
   .clazy-container {
     height: 300px;
@@ -192,8 +193,9 @@ export default {
   }
   @media screen and (min-width:1024px) {
     .recipe-card:hover {
-      transform: translateY(-0.25rem);
-      transition: all .35s ease-in-out;
+      /* transform: translateY(-0.25rem); */
+      transform: scale(1.015);
+      transition: transform .2s ease;
     }
   }
   .img-link:focus > img {
