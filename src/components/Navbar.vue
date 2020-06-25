@@ -3,8 +3,8 @@
     <button @click="menuClickHandler()" class="block md:hidden mr-8" type="button">
       <span class="gg-menu"></span>
     </button>
-    <router-link :to="{name: 'home'}" v-blur>
-      <img src="@/assets/logo.svg" class="hover:opacity-75 pt-2" alt="recept0r logo">
+    <router-link :to="{name: 'home'}" v-blur class="focus:shadow-none">
+      <img src="@/assets/logo.svg" v-blur class="hover:opacity-75 pt-2" alt="recept0r logo">
     </router-link>
     <div class="hidden md:flex flex-row justify-center items-center flex-grow">
       <router-link

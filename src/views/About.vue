@@ -13,7 +13,7 @@
       </div>
       <p class="ml-6 mb-0">
         <strong class="text-sm">Design</strong><br>
-        Sahar Heumesser | <a href="https://sahar.design" target="_blank">website</a>
+        Sahar Heumesser | <a href="https://sahar.design" target="_blank" rel="noopener">website</a>
       </p>
     </div>
     <div class="flex flex-row items-center justify-start my-4">
@@ -22,7 +22,7 @@
       </div>
       <p class="ml-6 mb-0">
         <strong class="text-sm">Code</strong><br>
-        ttntm | <a href="https://ttntm.me" target="_blank">website</a>
+        ttntm | <a href="https://ttntm.me" target="_blank" rel="noopener">website</a>
       </p>
     </div>
 		<h3>Tech Stack</h3>
@@ -38,11 +38,11 @@
 		<p>
 			The exact specifications can be found in
 			<code class="bg-gray-500 p-1 rounded-md text-sm">package.json</code> at
-			<a href="https://github.com/ttntm/recept0r/blob/master/package.json" target="_blank">GitHub</a>
+			<a href="https://github.com/ttntm/recept0r/blob/master/package.json" target="_blank" rel="noopener">GitHub</a>
 		</p>
 		<p>
 			Large parts of the user signup and authentication process are based on this project:
-			<a href="https://github.com/chiubaca/vue-netlify-fauna-starter-kit" target="_blank">vue-netlify-fauna-starter-kit</a>
+			<a href="https://github.com/chiubaca/vue-netlify-fauna-starter-kit" target="_blank" rel="noopener">vue-netlify-fauna-starter-kit</a>
 		</p>
 	</div>
 </template>
