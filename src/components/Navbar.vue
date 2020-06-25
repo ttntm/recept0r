@@ -1,6 +1,6 @@
 <template>
   <nav class="container flex flex-row justify-start md:justify-center items-center pt-4 md:pt-12 pb-8 px-6 md:px-4 mx-auto z-10">
-    <button @click="menuClickHandler()" class="block md:hidden mr-8" type="button">
+    <button @click="menuClickHandler()" class="block md:hidden mr-8" type="button" aria-label="Open Menu">
       <span class="gg-menu"></span>
     </button>
     <router-link :to="{name: 'home'}" v-blur class="focus:shadow-none">

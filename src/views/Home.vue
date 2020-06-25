@@ -11,13 +11,20 @@
           <label for="search-input" class="sr-only">Search</label>
           <input v-model.trim="searchTerm" v-shortkey.focus="['s']" type="text" class="w-full search-input" id="search-input" placeholder="Search term">
           <div class="input-group-append">
-            <button v-if="searchTerm" @click="clearSearch()" class="btn border-0 font-bold text-lg px-4" type="button" title="Clear search">&times;</button>
+            <button
+              v-if="searchTerm"
+              @click="clearSearch()"
+              class="btn border-0 font-bold text-lg px-4"
+              title="Clear search"
+              aria-label="Clear search"
+            >&times;</button>
           </div>
         </div>
         <button
           class="w-auto flex-0 btn btn-gray ml-2 lg:ml-6 mx-auto"
           @click="filterAction()"
           v-blur
+          aria-label="Select Filter"
         >
           <span class="icono-filter inline-block lg:hidden"></span>
           <span class="hidden lg:inline-block">{{ filterBtnText }}</span>
@@ -40,7 +47,7 @@
             </transition>
             <transition name="fade" slot="placeholder">
               <div class="preloader">
-                <img src="@/assets/loading.svg">
+                <img src="@/assets/loading.svg" alt="Loading...">
               </div>
             </transition>
           </clazy-load>

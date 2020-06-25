@@ -6,7 +6,7 @@
         class="min-h-screen absolute top-0 mobile-bg w-full flex flex-col justify-start items-start px-6 py-4 z-10"
       >
         <div class="flex flex-row">
-          <button @click="menuClickHandler()" class="block md:hidden mr-8" type="button">
+          <button @click="menuClickHandler()" class="block md:hidden mr-8" type="button" aria-label="Close Menu">
             <span class="font-bold text-3xl opacity-75">&times;</span>
           </button>
           <router-link :to="{name: 'home'}">

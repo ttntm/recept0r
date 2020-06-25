@@ -71,14 +71,14 @@
 
 <script>
 import RecipeImage from '@/components/RecipeImage.vue';
-import RecipeEditor from '@/components/RecipeEditor.vue';
+// import RecipeEditor from '@/components/RecipeEditor.vue';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: "create-recipe",
   components: {
     RecipeImage,
-    RecipeEditor
+    'RecipeEditor': () => import(/* webpackPreload: true */ '@/components/RecipeEditor.vue')
   },
   data() {
     return {

@@ -6,7 +6,8 @@ import attemptToAuthoriseTokens from './helpers/authorise-tokens';
 import VueShortkey from 'vue-shortkey';
 import './registerServiceWorker'
 
-require('@/assets/styles/index.css');
+// require('@/assets/styles/index.css');
+import(/* webpackPreload: true */ '@/assets/styles/index.css');
 
 Vue.config.productionTip = false;
 
