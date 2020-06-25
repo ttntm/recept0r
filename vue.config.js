@@ -51,6 +51,7 @@ module.exports = {
 			exclude: [/_redirects/],
 		}
   },
+  // IF ANYTHING, THIS MADE SITE PERF WORSE...
   // chainWebpack: config => {
   //   config.plugin('preload').tap(options => {
   //     options[0].as = (entry) => {
