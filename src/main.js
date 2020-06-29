@@ -45,7 +45,7 @@ Vue.directive('blur', {
   }
 });
 
-Vue.use(VueShortkey);
+Vue.use(VueShortkey, { prevent: ['input', 'textarea'] });
 
 new Vue({
   router,

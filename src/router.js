@@ -5,6 +5,7 @@ import Router from 'vue-router';
 const About = () => import("@/views/About.vue" /* webpackChunkName: "About" */);
 const Home = () => import("@/views/Home.vue" /* webpackChunkName: "Home" */);
 const Create = () => import("@/views/Create.vue" /* webpackChunkName: "Create" */);
+const Mine = () => import("@/views/MyRecipes.vue" /* webpackChunkName: "Mine" */);
 const Recipe = () => import("@/views/Recipe.vue" /* webpackChunkName: "Recipe" */);
 //import FourOFour from '@/views/404.vue';
 
@@ -24,6 +25,18 @@ const router = new Router({
       path: '/about',
       name: 'about',
       component: About
+    },
+    {
+      path: '/mine',
+      name: 'mine',
+      component: Mine,
+      beforeEnter: (to, from, next) => {
+         if(!store.state.user.currentUser) { //get stored user state from vuex store
+          router.push({ name: 'home' });
+        } else {
+          return next();
+        }
+      }
     },
     {
       path: '/create',

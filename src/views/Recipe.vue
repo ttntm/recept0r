@@ -109,9 +109,10 @@
     <div v-if="readSuccess" class="w-full order-3">
       <hr class="mt-4 mb-8" />
       <div v-if="!editing" class="flex flex-col md:flex-row items-center md:items-start">
-        <router-link :to="{name: 'home'}" class="btn btn-gray mb-4 md:mb-0 md:mr-4">&lt; Go Back</router-link>
-        <button v-if="loggedIn" class="btn btn-gray mb-4 md:mb-0 md:mr-4" @click="editMode(recipe)">Edit Recipe</button>
-        <button v-if="loggedIn" class="btn btn-red" @click="deleteRecipe(recipe)">Delete Recipe</button>
+        <router-link :to="{name: 'home'}" class="btn btn-gray mb-4 md:mb-0 md:mr-4">&lt; All Recipes</router-link>
+        <router-link v-if="uAuth" :to="{name: 'mine'}" class="btn btn-gray mb-4 md:mb-0 md:mr-4">My Recipes</router-link>
+        <button v-if="uAuth" class="btn btn-gray mb-4 md:mb-0 md:mr-4" @click="editMode(recipe)">Edit Recipe</button>
+        <button v-if="uAuth" class="btn btn-red" @click="deleteRecipe(recipe)">Delete Recipe</button>
       </div>
       <div v-else class="flex flex-row items-center justify-center md:justify-start">
         <button class="btn btn-green mr-4" @click="editRecipe(recipe)">{{ saveBtnTxt }}</button>
@@ -122,8 +123,6 @@
 </template>
 
 <script>
-import RecipeImage from '@/components/RecipeImage.vue';
-// import RecipeEditor from '@/components/RecipeEditor.vue';
 import { mapGetters, mapActions } from 'vuex';
 
 var cache = Object.create(null);
@@ -132,7 +131,7 @@ var cacheStr = '';
 export default {
   name: "recipe",
   components: {
-    RecipeImage,
+    'RecipeImage': () => import(/* webpackPreload: true */ '@/components/RecipeImage.vue'),
     'RecipeEditor': () => import(/* webpackPreload: true */ '@/components/RecipeEditor.vue')
   },
   data() {
@@ -159,17 +158,15 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('user',['loggedIn']),
+    ...mapGetters('user',[
+      'currentUser',
+      'loggedIn'
+    ]),
     ...mapGetters('recipe',[
       'allRecipes',
       'recipeCategory',
       'recipeDiet'
     ]),
-    saveBtnTxt() {
-      if(this.isSaving) {
-        return "Saving...";
-      } else { return "Save" }
-    },
     functions() {
       return this.$store.getters['app/functions']
     },
@@ -184,6 +181,22 @@ export default {
         return checkImgSrc.test(this.recipe.image);
       } else { return false }
     },
+    saveBtnTxt() {
+      if(this.isSaving) {
+        return "Saving...";
+      } else { return "Save" }
+    },
+    uAuth() {
+      if(this.loggedIn) {
+        let usr = this.currentUser.email;
+        let chef = process.env.VUE_APP_CHEF;
+        if(usr === chef) {
+          return true;
+        } else {
+          return usr === this.recipe.owner ? true : false;
+        }
+      } else { return false }
+    }
   },
   watch: {
     recipe: {

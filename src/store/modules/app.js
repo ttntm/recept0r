@@ -11,6 +11,7 @@ export default {
       functions: {
         readAll: process.env.VUE_APP_FUNC_PATH_ALL,
         readOne: process.env.VUE_APP_FUNC_PATH_ONE,
+        readByUser: process.env.VUE_APP_FUNC_PATH_BYUSER,
         create: process.env.VUE_APP_FUNC_PATH_CREATE,
         edit: process.env.VUE_APP_FUNC_PATH_EDIT,
         delete: process.env.VUE_APP_FUNC_PATH_DELETE

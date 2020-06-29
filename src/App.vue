@@ -1,8 +1,8 @@
 <template>
   <div id="app" :class="{ 'overflow-hidden' : menuOpen }" class="flex h-full flex-col">
-    <Navbar />
+    <Navbar :class="{ 'menu-blur' : menuOpen }" />
     <NavMobile />
-    <div class="container flex-grow flex-shrink-0 px-4 md:mt-6 lg:mt-12 mx-auto">
+    <div :class="{ 'menu-blur' : menuOpen }" class="container flex-grow flex-shrink-0 px-4 md:mt-6 lg:mt-12 mx-auto">
       <router-view />
     </div>
     <AppFooter />
@@ -30,6 +30,9 @@ export default {
 </script>
 
 <style lang="postcss">
+  .menu-blur {
+    filter: blur(1rem);
+  }
   .btn:focus, .form-control:focus {
     outline: 0;
     @apply shadow-outline;

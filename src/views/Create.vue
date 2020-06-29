@@ -71,7 +71,6 @@
 
 <script>
 import RecipeImage from '@/components/RecipeImage.vue';
-// import RecipeEditor from '@/components/RecipeEditor.vue';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
@@ -96,6 +95,7 @@ export default {
         duration: "30 min / 1 h",
         image: null,
         ingredients: [],
+        owner: '',
         portions: "4 portions",
         body: {
           "type":"doc",
@@ -116,6 +116,10 @@ export default {
       'recipeCategory',
       'recipeDiet'
     ]),
+    ...mapGetters('user',[
+      'currentUser',
+      'loggedIn'
+    ]),
     isDisabled() {
       if(this.isEmpty || this.isSaving) {
         return true
@@ -131,12 +135,15 @@ export default {
     this.$nextTick(function() {
       this.$refs['recipeTitle'].focus();
     });
+    //assign owner
+    this.recipe.owner = this.currentUser.email;
   },
   watch: {
     recipe: {
       deep: true,
       handler() {
         const r = this.recipe;
+        //check user input
         if (r.title === '' && r.description === '' && !this.hasIng && r.image === null && !this.wasEdited) {
             this.isEmpty = true;
         } else { this.isEmpty = false; }
@@ -147,6 +154,14 @@ export default {
         //check if image was uploaded
         const checkImgSrc = RegExp(/^https:\/\//);
         this.isImgUploaded = checkImgSrc.test(r.image);
+      }
+    },
+    loggedIn: {
+      handler() {
+        if(!this.loggedIn) {
+          console.log("logged out, navigating...", this.loggedIn);
+          this.cancelCreate();
+        }
       }
     }
   },
@@ -231,7 +246,7 @@ export default {
     }
   },
   beforeRouteLeave (to, from, next) {
-    if(!this.isEmpty && !this.isSaving) { //if NOT empty OR filled
+    if(this.loggedIn && !this.isEmpty && !this.isSaving) { //if NOT empty OR filled
       const answer = window.confirm('Do you really want to leave? There might be unsaved changes!');
       if (answer) {
         next();
