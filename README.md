@@ -16,6 +16,7 @@ At the moment, recept0r is a semi-public personal service. That means, that even
 
 recept0r is built based on these tools:
 
+- faunadb
 - gotrue-js (Netlify identity)
 - tailwindcss
 - tiptap Editor

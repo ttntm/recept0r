@@ -7,21 +7,21 @@
     <div v-else class="">
       <!-- SEARCH -->
       <div class="w-full xl:w-2/3 flex flex-row justify-center mb-12 mx-auto">
-        <div class="search shadow-sm flex-1" :class="{ 'input-group': searchTerm }">
+        <div class="search flex-1" :class="{ 'input-group': searchTerm }">
           <label for="search-input" class="sr-only">Search</label>
           <input v-model.trim="searchTerm" v-shortkey.focus="['s']" v-shortkey.avoid type="text" class="w-full search-input" id="search-input" placeholder="Search term">
           <div class="input-group-append">
             <button
               v-if="searchTerm"
               @click="clearSearch()"
-              class="btn border-0 font-bold text-lg px-4 py-0"
+              class="btn font-bold text-lg px-4 py-0"
               title="Clear search"
               aria-label="Clear search"
             >&times;</button>
           </div>
         </div>
         <button
-          class="w-auto flex-0 btn btn-gray ml-2 lg:ml-6 mx-auto"
+          class="w-auto flex-0 btn btn-gray border-0 ml-2 lg:ml-6 mx-auto"
           @click="filterAction()"
           v-blur
           aria-label="Select Filter"
@@ -136,7 +136,7 @@ export default {
     @apply w-1/2 shadow-sm bg-gray-500 rounded-lg;
   }
   .search-input {
-    @apply rounded-lg bg-gray-500 p-3;
+    @apply rounded-lg bg-gray-500 px-3 py-2;
     z-index: 3;
   }
   .search-input:focus {

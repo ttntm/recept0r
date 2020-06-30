@@ -12,6 +12,7 @@
     "faunadb": "^2.14.1",
     "gotrue-js": "^0.9.25",
     "register-service-worker": "^1.7.1",
+    "secure-ls": "^1.2.6",
     "sw-precache": "^5.2.1",
     "tailwindcss": "^1.4.6",
     "tiptap": "^1.27.1",
@@ -20,7 +21,9 @@
     "vue-clazy-load": "^0.4.2",
     "vue-router": "^3.2.0",
     "vue-shortkey": "^3.1.7",
-    "vuex": "^3.4.0"
+    "vuex": "^3.4.0",
+    "vuex-multi-tab-state": "^1.0.13",
+    "vuex-persistedstate": "^3.0.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.3.0",

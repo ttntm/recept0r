@@ -47,7 +47,7 @@ export default {
     cursor: not-allowed;
   }
   .btn-gray {
-    @apply border border-gray-500 bg-gray-500 text-blue-500;
+    @apply bg-gray-500 text-blue-500;
   }
   .btn-gray:hover, .btn-gray:focus {
     @apply bg-cool-gray-400;

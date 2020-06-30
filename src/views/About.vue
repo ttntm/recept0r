@@ -28,7 +28,8 @@
 		<h3>Tech Stack</h3>
 		<p>recept0r is built based on these tools:</p>
 		<ul>
-			<li>gotrue-js (Netlify identity)</li>
+			<li>faunadb</li>
+      <li>gotrue-js (Netlify identity)</li>
 			<li>tailwindcss</li>
 			<li>tiptap Editor</li>
 			<li>vue</li>
