@@ -44,13 +44,12 @@
 </template>
 
 <script>
-import NavAuth from "@/components/NavAuth.vue";
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: "nav-mobile",
   components: {
-    NavAuth
+    'NavAuth': () => import('@/components/NavAuth.vue')
   },
   computed: {
     ...mapGetters('app',['menuOpen']),

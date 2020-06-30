@@ -1,10 +1,19 @@
 module.exports = {
-  configureWebpack:{
+  productionSourceMap: false,
+  configureWebpack: {
     optimization: {
       splitChunks: {
         minSize: 10000,
         maxSize: 250000,
       }
+    }
+  },
+  pluginOptions: {
+    webpackBundleAnalyzer: {
+      // from: https://github.com/mrbbot/vue-cli-plugin-webpack-bundle-analyzer
+      analyzerMode: 'disabled', // remove when necessary
+      generateStatsFile: false,
+      openAnalyzer: false // set true when necessary
     }
   },
   pwa: {
@@ -48,7 +57,7 @@ module.exports = {
 			// swSrc is required in InjectManifest mode.
 			swSrc: 'sw.js',
 			// ...other Workbox options...
-			exclude: [/_redirects/],
+			exclude: [/\.map$/, /_redirects/],
 		}
   },
   // IF ANYTHING, THIS MADE SITE PERF WORSE...

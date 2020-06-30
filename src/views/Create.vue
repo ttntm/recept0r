@@ -70,13 +70,12 @@
 </template>
 
 <script>
-import RecipeImage from '@/components/RecipeImage.vue';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: "create-recipe",
   components: {
-    RecipeImage,
+    'RecipeImage': () => import(/* webpackPreload: true */ '@/components/RecipeImage.vue'),
     'RecipeEditor': () => import(/* webpackPreload: true */ '@/components/RecipeEditor.vue')
   },
   data() {

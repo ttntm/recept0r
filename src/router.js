@@ -3,8 +3,8 @@ import Router from 'vue-router';
 
 // import views
 const About = () => import("@/views/About.vue" /* webpackChunkName: "About" */);
-const Home = () => import("@/views/Home.vue" /* webpackChunkName: "Home" */);
 const Create = () => import("@/views/Create.vue" /* webpackChunkName: "Create" */);
+const Home = () => import("@/views/Home.vue" /* webpackChunkName: "Home" */);
 const Mine = () => import("@/views/MyRecipes.vue" /* webpackChunkName: "Mine" */);
 const Recipe = () => import("@/views/Recipe.vue" /* webpackChunkName: "Recipe" */);
 //import FourOFour from '@/views/404.vue';
