@@ -1,4 +1,4 @@
-workbox.core.setCacheNameDetails({prefix: "lite-bdfi-app"});
+workbox.core.setCacheNameDetails({prefix: "r0Cache"});
 
 self.addEventListener('message', (event) => {
 

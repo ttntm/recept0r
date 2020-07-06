@@ -72,8 +72,11 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   if(store.state.app.menuOpen) {
     store.dispatch('app/toggleMenu', false);
-    return next();
-  } else { return next(); }
+  }
+  if(store.state.recipe.filterActive) {
+    store.dispatch('recipe/clearFilter');
+  }
+  return next();
 });
 
 export default router;
