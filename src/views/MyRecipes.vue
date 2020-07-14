@@ -1,6 +1,6 @@
 <template>
   <div id="my-recipes" class="w-full lg:w-4/5 flex flex-col mx-auto">
-    <h3 class="text-center mb-12">{{ username }}'s Recipes</h3>
+    <h3 class="text-center mb-8">{{ username }}'s Recipes</h3>
     <div v-if="!myRecipes" class="text-center">
       <img src="@/assets/loading.svg" alt="Loading..." class="mx-auto">
       <p class="text-cool-gray-500 mt-12">Loading recipe data...</p>
@@ -12,6 +12,15 @@
         :to="{name: 'create'}"
         class="btn btn-gray"
       >&plus;Create</router-link>
+    </div>
+    <div v-else class="mb-12">
+      <h4 class="text-center mb-8">Sort Recipes</h4>
+      <div class="flex flex-row flex-wrap justify-evenly mdd:justify-between">
+        <button-sort @click.native="sortMyRecipes(['date','desc'])" :sortState="sortState" sortData="date" sortType="desc">By newest</button-sort>
+        <button-sort @click.native="sortMyRecipes(['date','asc'])" :sortState="sortState" sortData="date" sortType="asc">By oldest</button-sort>
+        <button-sort @click.native="sortMyRecipes(['abc','asc'])" :sortState="sortState" sortData="abc" sortType="asc">ABC...</button-sort>
+        <button-sort @click.native="sortMyRecipes(['abc','desc'])" :sortState="sortState" sortData="abc" sortType="desc">ZYX...</button-sort>
+      </div>
     </div>
     <div v-for="(recipe, index) in myRecipes" :key="index" class="list-card flex flex-col md:flex-row mb-8">
       <clazy-load v-if="recipe.image" :src="recipe.image" class="w-full md:w-1/3 relative" is="VueClazyLoad" style="height:200px;">
@@ -38,17 +47,24 @@
 </template>
 
 <script>
+import ButtonSort from '@/components/ButtonSort.vue';
 import { VueClazyLoad } from 'vue-clazy-load';
 import { mapGetters } from 'vuex';
+
+//store myRecipes[...] before any sorting is applied
+//created() returns recipes sorted "date asc (old -> new)" [date = number, thus increases] from vuex/FaunaDB
+const cache = [];
 
 export default {
   name: 'my-recipes',
   components: {
+    ButtonSort,
     VueClazyLoad
   },
   data() {
     return {
-      myRecipes: null
+      myRecipes: null,
+      sortState: []
     }
   },
   created() {
@@ -56,12 +72,17 @@ export default {
     if(this.allRecipes.length > 0) {
       //check vuex store first, in case user came from /home and already has cached the recipes
       console.log("Trying to obtain recipe data from store...");
-      this.myRecipes = this.allRecipes.filter(rec => rec.owner === usr).reverse();
+      this.myRecipes = this.allRecipes.filter(rec => rec.owner === usr);
       console.log("Data obtained from store :)");
     } else {
       //user came from somewhere else, therefore we need to query the DB (less data IO than simply getting all recipes)
       console.log("...no matches in the store, obtaining from DB now...");
       this.getMyRecipes(usr);
+    }
+    if(this.myRecipes.length > 0) {
+      //if we have got the user's recipes
+      cache.push(...this.myRecipes); //fill the cache with fresh data
+      this.sortMyRecipes(['date','desc']);
     }
   },
   computed: {
@@ -108,7 +129,50 @@ export default {
       .catch((error) => {
         console.log("API error", error);
       })
-    }
+    },
+    sortMyRecipes(mode) {
+      this.sortState = mode;
+      let sData = mode[0];
+      let sType = mode[1];
+
+      //generic sorting function for object keys
+      const objSort = (field, reverse, primer) => {
+        const key = primer ?
+          function(x) {
+            return primer(x[field])
+          } :
+          function(x) {
+            return x[field]
+          };
+        reverse = !reverse ? 1 : -1;
+
+        return function(a, b) {
+          return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
+        }
+      }
+
+      switch(sData) {
+        case 'date':
+          //need to use the cached vuex/fauna response here; recipe objects don't have a 'date' property, date relies on DB timeline/chronology atm
+          if(sType === 'asc') {
+            this.myRecipes = new Array(...cache);
+          }
+          if(sType === 'desc') {
+            this.myRecipes = new Array(...cache);
+            this.myRecipes.reverse();
+          }
+          break;
+
+        case 'abc':
+          if(sType === 'asc') {
+            this.myRecipes = this.myRecipes.sort(objSort('title', false, (a) =>  a.toUpperCase()));
+          }
+          if(sType === 'desc') {
+            this.myRecipes = this.myRecipes.sort(objSort('title', true, (a) =>  a.toUpperCase()));
+          }
+          break;
+      }
+    },
   }
 }
 </script>
