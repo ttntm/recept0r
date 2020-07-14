@@ -50,7 +50,7 @@ export default {
     @apply bg-gray-500 text-blue-500;
   }
   .btn-gray:hover, .btn-gray:focus {
-    @apply bg-cool-gray-400;
+    @apply bg-cool-gray-500;
   }
   .btn-green {
     border: 1px solid;

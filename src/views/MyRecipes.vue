@@ -53,7 +53,7 @@ import { mapGetters } from 'vuex';
 
 //store myRecipes[...] before any sorting is applied
 //created() returns recipes sorted "date asc (old -> new)" [date = number, thus increases] from vuex/FaunaDB
-const cache = [];
+var cache = new Array;
 
 export default {
   name: 'my-recipes',
@@ -81,7 +81,7 @@ export default {
     }
     if(this.myRecipes.length > 0) {
       //if we have got the user's recipes
-      cache.push(...this.myRecipes); //fill the cache with fresh data
+      cache = new Array(...this.myRecipes); //fill the cache with fresh data
       this.sortMyRecipes(['date','desc']);
     }
   },
