@@ -16,8 +16,8 @@
     <div v-else class="mb-12">
       <h4 class="text-center mb-8">Sort Recipes</h4>
       <div class="flex flex-row flex-wrap justify-evenly mdd:justify-between">
-        <button-sort @click.native="sortMyRecipes(['date','desc'])" :sortState="sortState" sortData="date" sortType="desc">By newest</button-sort>
-        <button-sort @click.native="sortMyRecipes(['date','asc'])" :sortState="sortState" sortData="date" sortType="asc">By oldest</button-sort>
+        <button-sort @click.native="sortMyRecipes(['date','desc'])" :sortState="sortState" sortData="date" sortType="desc">Newest</button-sort>
+        <button-sort @click.native="sortMyRecipes(['date','asc'])" :sortState="sortState" sortData="date" sortType="asc">Oldest</button-sort>
         <button-sort @click.native="sortMyRecipes(['abc','asc'])" :sortState="sortState" sortData="abc" sortType="asc">ABC...</button-sort>
         <button-sort @click.native="sortMyRecipes(['abc','desc'])" :sortState="sortState" sortData="abc" sortType="desc">ZYX...</button-sort>
       </div>
@@ -25,7 +25,9 @@
     <div v-for="(recipe, index) in myRecipes" :key="index" class="list-card flex flex-col md:flex-row mb-8">
       <clazy-load v-if="recipe.image" :src="recipe.image" class="w-full md:w-1/3 relative" is="VueClazyLoad" style="height:200px;">
         <transition name="fade">
-          <img :src="recipe.image" crossorigin="anonymous" :alt="recipe.title" class="w-full rounded-t-lg md:rounded-t-none md:rounded-l-lg img-cover">
+          <router-link :to="{name: 'recipe', params: {id: recipe.id, refId: recipe.refId}}" class="img-link focus:shadow-none">
+            <img :src="recipe.image" crossorigin="anonymous" :alt="recipe.title" class="w-full rounded-t-lg md:rounded-t-none md:rounded-l-lg img-cover">
+          </router-link>
         </transition>
         <transition name="fade" slot="placeholder">
           <div class="preloader">
@@ -197,6 +199,9 @@ export default {
   }
   .btn-outline:focus {
     @apply outline-none shadow-outline;
+  }
+  .img-link:focus > img {
+    @apply shadow-outline;
   }
   .preloader {
     position: absolute;
