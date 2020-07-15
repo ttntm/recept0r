@@ -7,8 +7,13 @@
     <div v-else class="">
       <!-- SEARCH -->
       <div class="w-full xl:w-2/3 flex flex-row justify-center mb-12 mx-auto">
-        <div class="search flex-1" :class="{ 'input-group': searchTerm }">
+        <div class="search flex flex-row items-center flex-1" :class="{ 'input-group': searchTerm }">
           <label for="search-input" class="sr-only">Search</label>
+          <svg xmlns="http://www.w3.org/2000/svg" class="flex ml-4" width="25" height="25" viewBox="0 0 24 24" stroke-width="1.5" stroke="#234CAD" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z"/>
+            <circle cx="10" cy="10" r="7" />
+            <line x1="21" y1="21" x2="15" y2="15" />
+          </svg>
           <input v-model.trim="searchTerm" v-shortkey.focus="['s']" v-shortkey.avoid type="text" class="w-full search-input" id="search-input" placeholder="Search term">
           <div class="input-group-append">
             <button
@@ -26,8 +31,13 @@
           v-blur
           aria-label="Select Filter"
         >
-          <span class="icono-filter inline-block lg:hidden"></span>
-          <span class="hidden lg:inline-block">{{ filterBtnText }}</span>
+          <span class="block lg:hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" class="" width="25" height="25" viewBox="0 0 24 24" stroke-width="1.5" stroke="#234CAD" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z"/>
+              <path d="M5.5 5h13a1 1 0 0 1 0.5 1.5L14 12L14 19L10 16L10 12L5 6.5a1 1 0 0 1 0.5 -1.5" />
+            </svg>
+          </span>
+          <span class="hidden lg:block">{{ filterBtnText }}</span>
         </button>
       </div>
       <transition name="slide-fade">
@@ -135,19 +145,19 @@ export default {
   .search {
     @apply w-1/2 shadow-sm bg-gray-500 rounded-lg;
   }
+  .search:focus-within {
+    @apply shadow-outline;
+  }
   .search-input {
     @apply rounded-lg bg-gray-500 px-3 py-2;
     z-index: 3;
   }
   .search-input:focus {
     outline: 0;
-    @apply shadow-outline;
+    @apply shadow-none;
   }
   .input-group {
-    @apply relative flex items-stretch;
-  }
-  .input-group .search-input:focus {
-    @apply rounded-tr-none rounded-br-none;
+    @apply relative flex;
   }
   .input-group-append {
     @apply flex;
@@ -233,22 +243,5 @@ export default {
   .slide-fade-leave-to {
     transform: translateY(-200px);
     opacity: 0;
-  }
-  /* icon source -> https://github.com/saeedalipoor/icono */
-  [class*=icono-] {
-    @apply relative text-blue-500;
-    vertical-align: middle;
-    text-align: left;
-    text-indent: -9999px;
-    direction: ltr;
-  }
-  .icono-filter {
-    @apply w-0 h-0;
-    border: 8px solid;
-    border-bottom: none;
-    border-left-color: transparent;
-    border-right-color: transparent;
-    padding: 3px;
-    box-shadow: inset 0 7px;
   }
 </style>
