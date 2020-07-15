@@ -13,19 +13,19 @@
         class="btn btn-gray"
       >&plus;Create</router-link>
     </div>
-    <div v-else class="mb-12">
-      <h4 class="text-center mb-8">Sort Recipes</h4>
-      <div class="flex flex-row flex-wrap justify-evenly mdd:justify-between">
-        <button-sort @click.native="sortMyRecipes(['date','desc'])" :sortState="sortState" sortData="date" sortType="desc">Newest</button-sort>
-        <button-sort @click.native="sortMyRecipes(['date','asc'])" :sortState="sortState" sortData="date" sortType="asc">Oldest</button-sort>
-        <button-sort @click.native="sortMyRecipes(['abc','asc'])" :sortState="sortState" sortData="abc" sortType="asc">ABC...</button-sort>
-        <button-sort @click.native="sortMyRecipes(['abc','desc'])" :sortState="sortState" sortData="abc" sortType="desc">ZYX...</button-sort>
+    <div v-else class="mb-10">
+      <div class="flex flex-row flex-wrap justify-center md:justify-evenly items-center">
+        <h4 class="hidden md:block text-cool-gray-500 m-0">Display:</h4>
+        <button-sort class="mr-4 mb-4 md:m-0" @click.native="sortMyRecipes(['date','desc'])" :sortState="sortState" sortData="date" sortType="desc" tip="Sort by date (newest first)">Newest</button-sort>
+        <button-sort class="mb-4 md:mb-0" @click.native="sortMyRecipes(['date','asc'])" :sortState="sortState" sortData="date" sortType="asc" tip="Sort by date (oldest first)">Oldest</button-sort>
+        <button-sort class="mr-4 md:m-0" @click.native="sortMyRecipes(['abc','asc'])" :sortState="sortState" sortData="abc" sortType="asc" tip="Sort alphabetically">ABC...</button-sort>
+        <button-sort class="" @click.native="sortMyRecipes(['abc','desc'])" :sortState="sortState" sortData="abc" sortType="desc" tip="Sort alphabetically (reverse)">ZYX...</button-sort>
       </div>
     </div>
     <div v-for="(recipe, index) in myRecipes" :key="index" class="list-card flex flex-col md:flex-row mb-8">
       <clazy-load v-if="recipe.image" :src="recipe.image" class="w-full md:w-1/3 relative" is="VueClazyLoad" style="height:200px;">
         <transition name="fade">
-          <router-link :to="{name: 'recipe', params: {id: recipe.id, refId: recipe.refId}}" class="img-link focus:shadow-none">
+          <router-link :to="{name: 'recipe', params: {id: recipe.id, refId: recipe.refId}}" class="img-link focus:shadow-none" title="View/Edit">
             <img :src="recipe.image" crossorigin="anonymous" :alt="recipe.title" class="w-full rounded-t-lg md:rounded-t-none md:rounded-l-lg img-cover">
           </router-link>
         </transition>
@@ -53,7 +53,7 @@ import ButtonSort from '@/components/ButtonSort.vue';
 import { VueClazyLoad } from 'vue-clazy-load';
 import { mapGetters } from 'vuex';
 
-//store myRecipes[...] before any sorting is applied
+//stores myRecipes[...] before any sorting is applied
 //created() returns recipes sorted "date asc (old -> new)" [date = number, thus increases] from vuex/FaunaDB
 var cache = new Array;
 
@@ -202,6 +202,9 @@ export default {
   }
   .img-link:focus > img {
     @apply shadow-outline;
+  }
+  .img-link:hover > img {
+    @apply opacity-75;
   }
   .preloader {
     position: absolute;

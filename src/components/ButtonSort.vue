@@ -1,9 +1,10 @@
 <template>
   <button
-    class="btn btn btn-gray btn-sort mb-4 md:mb-0"
+    class="btn btn btn-gray btn-sort"
     :class="{
       'btn-sort-active' : isActive()
     }"
+    :title="tip"
     :disabled="isActive()"
   >
     <svg v-if="sortType === 'desc'" xmlns="http://www.w3.org/2000/svg" class="inline-block" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -34,7 +35,8 @@ export default {
   props: {
     sortData: String,
     sortState: Array,
-    sortType: String
+    sortType: String,
+    tip: String
   },
   methods: {
     getIndex(arr, item) {

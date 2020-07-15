@@ -108,10 +108,16 @@
     </div>
     <div v-if="readSuccess" class="w-full order-3">
       <hr class="mt-4 mb-8" />
-      <div v-if="!editing" class="flex flex-col md:flex-row items-center md:items-start">
-        <router-link :to="{name: 'home'}" class="btn btn-gray mb-4 md:mb-0 md:mr-4">&lt; All Recipes</router-link>
-        <router-link v-if="uAuth" :to="{name: 'mine'}" class="btn btn-gray mb-4 md:mb-0 md:mr-4">My Recipes</router-link>
-        <button v-if="uAuth" class="btn btn-gray mb-4 md:mb-0 md:mr-4" @click="editMode(recipe)">Edit Recipe</button>
+      <div v-if="!editing" class="flex flex-row flex-wrap md:flex-no-wrap justify-center md:justify-start">
+        <router-link :to="{name: 'home'}" class="btn btn-gray flex flex-row items-center mb-8 md:mb-0 mr-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="inline-block" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z"/>
+            <polyline points="15 6 9 12 15 18" />
+          </svg>
+          <span class="inline-block">All Recipes</span>
+        </router-link>
+        <router-link v-if="uAuth" :to="{name: 'mine'}" class="btn btn-gray mb-8 md:mb-0 md:mr-4">My Recipes</router-link>
+        <button v-if="uAuth" class="btn btn-gray mr-4" @click="editMode(recipe)">Edit Recipe</button>
         <button v-if="uAuth" class="btn btn-red" @click="deleteRecipe(recipe)">Delete Recipe</button>
       </div>
       <div v-else class="flex flex-row items-center justify-center md:justify-start">
