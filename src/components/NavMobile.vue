@@ -10,7 +10,7 @@
             <span class="font-bold text-3xl opacity-75">&times;</span>
           </button>
           <router-link :to="{name: 'home'}">
-            <img src="@/assets/logo.svg" class="hover:opacity-75 pt-3">
+            <img src="@/assets/logo.svg" class="hover:opacity-75 pt-b" width="160">
           </router-link>
         </div>
         <div class="w-full flex flex-col justify-start items-center mt-12">
