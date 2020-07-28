@@ -31,7 +31,7 @@ module.exports = {
         // 200: '#EEF1F9',
         // 300: '#E3E9F5',
         400: '#CED8ED',
-        500: '#B9C7E5', //PRIMARY cool gray
+        500: '#b8c6e4', //PRIMARY cool gray
         600: '#A7B3CE',
         700: '#6F7789',
         // 800: '#535A67',
@@ -39,14 +39,14 @@ module.exports = {
       },
 
       blue: {
-        500: '#234CAD', //TITLE blue shade
-        600: '#012477', //PRIMARY blue shade
+        500: '#30529b', //TITLE blue shade
+        600: '#102d69', //PRIMARY blue shade
         700: '#152E68',
         800: '#10224E',
         900: '#0B1734',
       },
       gray: {
-        500: '#F2F6FF', //PRIMARY gray shade
+        500: '#ebeff9', //PRIMARY gray shade
         600: '#DADDE6',
         700: '#919499',
         800: '#6D6F73',
