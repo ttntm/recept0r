@@ -4,7 +4,7 @@
       <span class="gg-menu"></span>
     </button>
     <router-link :to="{name: 'home'}" v-blur class="focus:shadow-none">
-      <img src="@/assets/logo.svg" v-blur class="hover:opacity-75 pt-2" alt="recept0r logo">
+      <img src="@/assets/logo.svg" v-blur class="hover:opacity-75 pb-3" alt="recept0r logo" width="160">
     </router-link>
     <div class="hidden lg:flex flex-row justify-center items-center flex-grow">
       <router-link
