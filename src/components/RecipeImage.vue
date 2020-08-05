@@ -45,6 +45,12 @@
 				uPreset: process.env.VUE_APP_CDNRY_UPRESET
 			};
 		},
+    computed: {
+      isUploaded() {
+        const checkImgSrc = RegExp(/^https:\/\//);
+        return checkImgSrc.test(this.recipe.image);
+      },
+    },
 		methods: {
 			addImage(e) {
 				const selectedImage = e.target.files[0]; //get the first file
@@ -90,7 +96,7 @@
 							vm.imageStatus.body = "Error uploading image";
 						});
 				}
-				if (this.recipe.image) {
+				if (this.recipe.image && !this.isUploaded) {
 					let spinner = require("@/assets/loading.svg");
 					this.imageStatus.type = "info";
 					this.imageStatus.body = `<img src="${spinner}" class="w-6 inline-block"><span class="inline-block ml-2">Uploading...</span>`;
@@ -108,8 +114,13 @@
 						}
 					});
 				} else {
-					this.imageStatus.type = "error";
-					this.imageStatus.body = "Please select an image first";
+          if (this.isUploaded) {
+            this.imageStatus.type = "error";
+            this.imageStatus.body = "This image was uploaded already. Please remove it first if you want to change it.";
+          } else {
+            this.imageStatus.type = "error";
+            this.imageStatus.body = "Please select an image first";
+          }
 				}
 			}
 		}
