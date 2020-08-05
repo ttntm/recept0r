@@ -59,8 +59,7 @@
 					reader.onload = e => {
 						this.$emit("image:update", e.target.result);
 						this.imageStatus.type = "info";
-						this.imageStatus.body =
-							'Image received, please press "Upload Image" now.';
+						this.imageStatus.body = 'Image received, please press "Upload Image" now.';
 					};
 					reader.readAsDataURL(selectedImage);
 				} else {

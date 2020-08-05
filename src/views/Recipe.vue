@@ -236,7 +236,7 @@ export default {
       });
     },
     imageUpdate(url) {
-      this.recipe = Object.assign({}, this.recipe, { image: url});
+      this.recipe = Object.assign({}, this.recipe, {image: url});
     },
     addIngredient(index) {
       let ing = this.recipe.ingredients;
