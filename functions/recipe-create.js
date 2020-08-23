@@ -15,7 +15,7 @@ exports.handler = (event, context, callback) => {
     data: data
   }
   /* construct the fauna query */
-  return client.query(q.Create(q.Ref("classes/recipes"), newRecipe))
+  return client.query(q.Create(q.Ref("collections/recipes"), newRecipe))
   .then((response) => {
     console.log("success", response)
     /* Success! return the response with statusCode 200 */
