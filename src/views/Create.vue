@@ -15,24 +15,8 @@
       <h4 class="mb-4">Metadata</h4>
       <input type="text" v-model="recipe.portions" class="form-control text-sm mb-4" placeholder="Portions; how many people does this recipe serve?">
       <input type="text" v-model="recipe.duration" class="form-control text-sm mb-4" placeholder="Duration; how long does it take to cook this?">
-      <div class="relative mb-4">
-        <select name="diet" id="select-diet" v-model="recipe.diet" class="form-control text-sm appearance-none">
-          <option disabled value="">Please select a diet</option>
-          <option v-for="(diet, index) in recipeDiet" :key="index" :value="diet">{{ diet }}</option>
-        </select>
-        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-cool-gray-500">
-          <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-        </div>
-      </div>
-      <div class="relative mb-4">
-        <select name="diet" id="select-category" v-model="recipe.category" class="form-control text-sm appearance-none">
-          <option disabled value="">Please select a category</option>
-          <option v-for="(cat, index) in recipeCategory" :key="index" :value="cat">{{ cat }}</option>
-        </select>
-        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-cool-gray-500">
-          <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-        </div>
-      </div>
+      <RecipeDiet :diet="recipe.diet" @diet:update="dietUpdate" class="relative mb-4" />
+      <RecipeCategory :category="recipe.category" @category:update="categoryUpdate" class="relative mb-4" />
     </div>
     <div class="w-full md:w-1/2 md:pl-8">
       <h4 class="mb-4">Ingredients</h4>
@@ -75,8 +59,10 @@ import { mapGetters, mapActions } from 'vuex';
 export default {
   name: "create-recipe",
   components: {
-    'RecipeImage': () => import(/* webpackPreload: true */ '@/components/RecipeImage.vue'),
-    'RecipeEditor': () => import(/* webpackPreload: true */ '@/components/RecipeEditor.vue')
+    'RecipeImage': () => import(/* webpackPreload: true */ '@/components/recipe/RecipeImage.vue'),
+    'RecipeDiet': () => import(/* webpackPreload: true */ '@/components/recipe/RecipeDiet.vue'),
+    'RecipeCategory': () => import(/* webpackPreload: true */ '@/components/recipe/RecipeCategory.vue'),
+    'RecipeEditor': () => import(/* webpackPreload: true */ '@/components/recipe/RecipeEditor.vue')
   },
   data() {
     return {
@@ -111,10 +97,6 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('recipe',[
-      'recipeCategory',
-      'recipeDiet'
-    ]),
     ...mapGetters('user',[
       'currentUser',
       'loggedIn'
@@ -168,6 +150,12 @@ export default {
     ...mapActions('app', ['sendToastMessage']),
     imageUpdate(url) {
       this.recipe.image = url;
+    },
+    dietUpdate(selection) {
+      this.recipe.diet = selection;
+    },
+    categoryUpdate(selection) {
+      this.recipe.category = selection;
     },
     addIngredient(index) {
       let ing = this.recipe.ingredients;
