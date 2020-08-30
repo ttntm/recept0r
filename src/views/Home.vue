@@ -41,7 +41,7 @@
         </button>
       </div>
       <transition name="slide-fade">
-        <RecipeFilter v-if="showFilterSelect" @closeFilter="filterAction()" class="mb-12" />
+        <RecipeFilter v-if="showFilterSelect" @close-filter="filterAction()" class="mb-12" />
       </transition>
       <transition name="fade">
         <span v-if="noResults" class="no-results text-center text-cool-gray-500">No results for your search query :(</span>

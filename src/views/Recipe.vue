@@ -67,27 +67,7 @@
     <div v-if="readSuccess" class="w-full lg:w-2/5 lg:pl-8 order-1 lg:order-2">
       <div class="bg-gray-500 rounded-lg p-8 mt-4 lg:mt-0">
         <h3 class="mb-4">Ingredients</h3>
-        <ul class="ing-list mb-0">
-          <li v-for="(ing, index) in recipe.ingredients" :key="index">
-            <span v-if="!editing">
-              {{ ing }}
-            </span>
-            <span v-else class="flex flex-row items-center">
-              <input type="text"
-                class="inline-block form-control text-sm mb-4"
-                v-model.trim="recipe.ingredients[index]"
-                v-focus
-                @keydown.enter="addIngredient(index)"
-                :placeholder="`Ingredient ${index+1}`"
-                :ref="`input${index}`"
-              >
-              <button class="inline-block text-lg opacity-75 hover:opacity-100 p-1 ml-2 mb-4"
-                @click="removeIngredient(index)"
-              >&times;</button>
-            </span>
-          </li>
-        </ul>
-        <button v-if="editing" @click="addIngredient()" class="btn btn-green block text-sm mx-auto">Add Ingredient</button>
+        <RecipeIngredients :editing="editing" :input="recipe.ingredients" @ing:update="ingUpdate" />
       </div>
     </div>
     <div v-if="readSuccess" class="w-full order-3">
@@ -124,6 +104,7 @@ export default {
     'RecipeImage': () => import(/* webpackPreload: true */ '@/components/recipe/RecipeImage.vue'),
     'RecipeDiet': () => import(/* webpackPreload: true */ '@/components/recipe/RecipeDiet.vue'),
     'RecipeCategory': () => import(/* webpackPreload: true */ '@/components/recipe/RecipeCategory.vue'),
+    'RecipeIngredients': () => import(/* webpackPreload: true */ '@/components/recipe/RecipeIngredients.vue'),
     'RecipeEditor': () => import(/* webpackPreload: true */ '@/components/recipe/RecipeEditor.vue')
   },
   data() {
@@ -228,27 +209,8 @@ export default {
     categoryUpdate(selection) {
       this.recipe.category = selection;
     },
-    addIngredient(index) {
-      let ing = this.recipe.ingredients;
-      if(index > -1) {
-        ing.splice(index + 1, 0, '');
-        this.$nextTick(function() {
-          // focus the spliced element instead of the last one as per directive
-          // somehow vue returns a 1 element array here
-          // see -> https://stackoverflow.com/questions/54306581/this-refsp-index-focus-is-not-a-function
-          this.$refs[`input${index + 1}`][0].focus();
-        });
-      } else {
-        ing.push('');
-      }
-    },
-    removeIngredient(index) {
-      let ing = this.recipe.ingredients;
-      if(index > -1) {
-        ing.splice(index, 1);
-      } else {
-        ing.splice(ing.length - 1);
-      }
+    ingUpdate(data) {
+      this.recipe.ingredients = data;
     },
     editorUpdate(editorData) {
       this.recipe.body = editorData;
@@ -341,12 +303,5 @@ export default {
 <style lang="postcss" scoped>
   .form-control {
     @apply block w-full;
-  }
-  .ing-list > li {
-    @apply text-blue-500 mb-2;
-    font-weight: 600;
-  }
-  .ing-list > li:last-child {
-    @apply mb-0;
   }
 </style>

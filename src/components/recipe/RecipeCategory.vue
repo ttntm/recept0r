@@ -1,6 +1,6 @@
 <template>
   <div class="relative mb-4">
-    <select name="diet" id="select-category" v-model="current" class="form-control text-sm appearance-none" @change="update(current)">
+    <select name="diet" id="select-category" v-model="current" class="form-control text-sm appearance-none" @change="$emit('category:update', current)">
       <option disabled value="">Please select a category</option>
       <option v-for="(cat, index) in recipeCategory" :key="index" :value="cat">{{ cat }}</option>
     </select>
@@ -30,11 +30,6 @@ export default {
     ...mapGetters('recipe',[
       'recipeCategory'
     ]),
-  },
-  methods: {
-    update(cat) {
-      this.$emit('category:update', cat)
-    }
   }
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div id="recipe-filter" class="flex flex-col relative w-full lg:w-3/4 xl:w-2/3 bg-gray-500 rounded-lg shadow-sm py-8 px-12 mx-auto">
     <button
-      @click.prevent="$emit('closeFilter')"
+      @click.prevent="$emit('close-filter')"
       class="text-3xl font-bold opacity-75 cursor-pointer absolute top-0 right-0 mt-1 mr-4 hover:opacity-100 focus:outline-none"
       title="Close Filter Selection"
       v-blur

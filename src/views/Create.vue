@@ -18,28 +18,9 @@
       <RecipeDiet :diet="recipe.diet" @diet:update="dietUpdate" class="relative mb-4" />
       <RecipeCategory :category="recipe.category" @category:update="categoryUpdate" class="relative mb-4" />
     </div>
-    <div class="w-full md:w-1/2 md:pl-8">
+    <div class="w-full md:w-1/2 md:pl-8 mb-4">
       <h4 class="mb-4">Ingredients</h4>
-      <ul class="mb-4">
-        <li v-for="(ing, index) in recipe.ingredients" :key="index">
-          <span class="flex flex-row items-center">
-            <input type="text"
-              class="inline-block form-control text-sm mb-4"
-              v-model.trim="recipe.ingredients[index]"
-              v-focus
-              @keydown.enter="addIngredient(index)"
-              :placeholder="`Ingredient ${index+1}`"
-              :ref="`input${index}`"
-            >
-            <button class="inline-block text-lg opacity-75 hover:opacity-100 p-1 ml-2 mb-4"
-              @click="removeIngredient(index)"
-            >&times;</button>
-          </span>
-        </li>
-      </ul>
-      <div class="flex flex-row items-start mb-4">
-        <button @click="addIngredient()" class="btn btn-green text-sm mr-4">Add Ingredient</button>
-      </div>
+      <RecipeIngredients :editing="true" :input="recipe.ingredients" @ing:update="ingUpdate" />
     </div>
     <div class="w-full">
       <h4 class="mb-4">Instructions</h4>
@@ -62,12 +43,13 @@ export default {
     'RecipeImage': () => import(/* webpackPreload: true */ '@/components/recipe/RecipeImage.vue'),
     'RecipeDiet': () => import(/* webpackPreload: true */ '@/components/recipe/RecipeDiet.vue'),
     'RecipeCategory': () => import(/* webpackPreload: true */ '@/components/recipe/RecipeCategory.vue'),
+    'RecipeIngredients': () => import(/* webpackPreload: true */ '@/components/recipe/RecipeIngredients.vue'),
     'RecipeEditor': () => import(/* webpackPreload: true */ '@/components/recipe/RecipeEditor.vue')
   },
   data() {
     return {
       isEmpty: true,
-      hasIng: false,
+      hasIng: false,  // will immediately be 'true' on component init, but isEmpty is also still 'true' at that time, so navigation away from an empty recipe is still possible without the warning
       wasEdited: false,
       isSaving: false,
       isImgUploaded: false,
@@ -124,12 +106,12 @@ export default {
       deep: true,
       handler() {
         const r = this.recipe;
+        //watch ingredients
+        this.hasIng = r.ingredients.length < 1 ? false : true;
         //check user input
         if (r.title === '' && r.description === '' && !this.hasIng && r.image === null && !this.wasEdited) {
             this.isEmpty = true;
         } else { this.isEmpty = false; }
-        //watch ingredients
-        this.hasIng = r.ingredients.length < 1 ? false : true;
         //create id = slug
         r.id = r.title.replace(/[^a-z0-9]+/gi, '-').replace(/^-*|-*$/g, '').toLowerCase();
         //check if image was uploaded
@@ -157,27 +139,8 @@ export default {
     categoryUpdate(selection) {
       this.recipe.category = selection;
     },
-    addIngredient(index) {
-      let ing = this.recipe.ingredients;
-      if(index > -1) {
-        ing.splice(index + 1, 0, '');
-        this.$nextTick(function() {
-          // focus the spliced element instead of the last one as per directive
-          // somehow vue returns a 1 element array here
-          // see -> https://stackoverflow.com/questions/54306581/this-refsp-index-focus-is-not-a-function
-          this.$refs[`input${index + 1}`][0].focus();
-        });
-      } else {
-        ing.push('');
-      }
-    },
-    removeIngredient(index) {
-      let ing = this.recipe.ingredients;
-      if(index > -1) {
-        ing.splice(index, 1);
-      } else {
-        ing.splice(ing.length - 1);
-      }
+    ingUpdate(data) {
+      this.recipe.ingredients = data;
     },
     editorUpdate(editorData) {
       this.recipe.body = editorData;
