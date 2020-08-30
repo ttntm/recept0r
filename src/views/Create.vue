@@ -3,7 +3,7 @@
     <div class="w-full md:w-1/2">
       <h3>Image</h3>
       <img v-if="recipe.image" class="rounded-lg mt-4 mb-4" :src="recipe.image" :alt="recipe.title">
-      <recipe-image :recipe="recipe" @image:update="imageUpdate" class="mb-4" />
+      <RecipeImage :recipe="recipe" @image:update="imageUpdate" class="mb-4" />
     </div>
     <div class="w-full md:w-1/2 md:pl-8">
       <h3 class="">Recipe Title</h3>
@@ -24,7 +24,7 @@
     </div>
     <div class="w-full">
       <h4 class="mb-4">Instructions</h4>
-      <recipe-editor :editing="true" :editorContent="recipe.body" @editor:update="editorUpdate" />
+      <RecipeEditor :editing="true" :editorContent="recipe.body" @editor:update="editorUpdate" />
       <hr class="my-8">
       <div class="flex flex-row justify-center lg:justify-start">
         <button class="btn btn-green mr-4" @click="saveRecipe(recipe)" :disabled="isDisabled">{{ saveBtnTxt }}</button>
