@@ -18,7 +18,7 @@ module.exports = {
   },
   pwa: {
     name: 'recept0r',
-    themeColor: '#F2F6FF',
+    themeColor: '#FFFFFF',
     msTileColor: '#F2F6FF',
     appleMobileWebAppCapable: 'yes',
     appleMobileWebAppStatusBarStyle: 'black',
@@ -28,7 +28,7 @@ module.exports = {
       short_name: 'recept0r',
       start_url: 'https://recept0r.com',
       display: 'standalone',
-      theme_color: '#F2F6FF',
+      theme_color: '#FFFFFF',
       icons: [
         {
             "src": "/android-chrome-192x192.png",

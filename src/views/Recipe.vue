@@ -13,52 +13,50 @@
       <RecipeImage v-if="editing" :recipe="recipe" @image:update="imageUpdate" />
     </div>
     <div v-if="readSuccess" class="w-full lg:w-2/5 lg:pl-8">
+      <h2 class="mt-4 lg:mt-8 mb-4">
+        <span v-if="!editing">
+          {{ recipe.title }}
+        </span>
+        <span v-else>
+          <span class="block mb-4">Recipe Title</span>
+          <input type="text" v-model="recipe.title" ref="recipeTitle" class="form-control">
+        </span>
+      </h2>
+      <div class="mb-8">
+        <p v-if="!editing" class="text-blue-500 m-0">{{ recipe.description }}</p>
+        <input v-else type="text" v-model="recipe.description" class="form-control">
+      </div>
+      <div class="flex flex-row flex-no-wrap border-t border-b border-cool-gray-500 mb-8 py-4">
+        <div v-if="!editing" class="flex-1 flex flex-row items-center justify-center mr-4">
+          <img src="@/assets/portions.svg" class="mr-4">
+          <p class="text-blue-500 mb-0">{{ recipe.portions }}</p>
+        </div>
+        <div v-else class="flex-1 mr-4">
+          <label class="text-cool-gray-500 text-xs">Portions</label>
+          <input type="text" v-model="recipe.portions" class="form-control text-sm mr-4" placeholder="Portions; how many people does this recipe serve?">
+        </div>
+        <div v-if="!editing" class="flex-1 flex flex-row items-center justify-center border-l border-cool-gray-500">
+          <img src="@/assets/duration.svg" class="mr-4">
+          <p class="text-blue-500 mb-0">{{ recipe.duration }}</p>
+        </div>
+        <div v-else class="flex-1">
+          <label class="text-cool-gray-500 text-xs">Duration</label>
+          <input type="text" v-model="recipe.duration" class="form-control text-sm" placeholder="Duration; how long does it take to cook this?">
+        </div>
+      </div>
       <div>
-        <h2 class="mt-4 lg:mt-8 mb-4">
-          <span v-if="!editing">
-            {{ recipe.title }}
-          </span>
-          <span v-else>
-            <span class="block mb-4">Recipe Title</span>
-            <input type="text" v-model="recipe.title" ref="recipeTitle" class="form-control">
-          </span>
-        </h2>
-        <div class="mb-8">
-          <p v-if="!editing" class="text-blue-500 m-0">{{ recipe.description }}</p>
-          <input v-else type="text" v-model="recipe.description" class="form-control">
-        </div>
-        <div class="flex flex-row flex-no-wrap border-t border-b border-cool-gray-500 my-4 py-4">
-          <div v-if="!editing" class="flex-1 flex flex-row items-center justify-center mr-4">
-            <img src="@/assets/portions.svg" class="mr-4">
-            <p class="text-blue-500 mb-0">{{ recipe.portions }}</p>
-          </div>
-          <div v-else class="flex-1 mr-4">
-            <label class="text-cool-gray-500 text-xs">Portions</label>
-            <input type="text" v-model="recipe.portions" class="form-control text-sm mr-4" placeholder="Portions; how many people does this recipe serve?">
-          </div>
-          <div v-if="!editing" class="flex-1 flex flex-row items-center justify-center border-l border-cool-gray-500">
-            <img src="@/assets/duration.svg" class="mr-4">
-            <p class="text-blue-500 mb-0">{{ recipe.duration }}</p>
-          </div>
-          <div v-else class="flex-1">
-            <label class="text-cool-gray-500 text-xs">Duration</label>
-            <input type="text" v-model="recipe.duration" class="form-control text-sm" placeholder="Duration; how long does it take to cook this?">
-          </div>
-        </div>
-        <div>
-          <p v-if="!editing" class="text-blue-500 font-semibold mb-2">
-            <span class="inline-block text-cool-gray-500" style="width: 6rem">Diet:</span>
-            {{ recipe.diet }}
-          </p>
-          <RecipeDiet v-else :diet="recipe.diet" @diet:update="dietUpdate" class="relative mb-4" />
-        </div>
-        <div>
-          <p v-if="!editing" class="text-blue-500 font-semibold mb-4">
-            <span class="inline-block text-cool-gray-500" style="width: 6rem">Category:</span>
-            {{ recipe.category }}
-          </p>
-          <RecipeCategory v-else :category="recipe.category" @category:update="categoryUpdate" class="relative mb-4" />
-        </div>
+        <p v-if="!editing" class="text-blue-500 font-semibold mb-2">
+          <span class="inline-block text-cool-gray-500" style="width: 6rem">Diet:</span>
+          {{ recipe.diet }}
+        </p>
+        <RecipeDiet v-else :diet="recipe.diet" @diet:update="dietUpdate" class="relative mb-4" />
+      </div>
+      <div>
+        <p v-if="!editing" class="text-blue-500 font-semibold mb-4">
+          <span class="inline-block text-cool-gray-500" style="width: 6rem">Category:</span>
+          {{ recipe.category }}
+        </p>
+        <RecipeCategory v-else :category="recipe.category" @category:update="categoryUpdate" class="relative mb-4" />
       </div>
     </div>
     <div v-if="readSuccess" class="w-full lg:w-3/5 order-2 lg:order-1">
