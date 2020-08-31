@@ -44,6 +44,9 @@
         <RecipeFilter v-if="showFilterSelect" @close-filter="filterAction()" class="mb-12" />
       </transition>
       <transition name="fade">
+        <p v-if="filterMsg" class="font-bold text-center mb-10">{{ filterMsg }} <a href="#" @click.prevent="filterMsgClick()" class="font-normal text-cool-gray-500 underline hover:no-underline">Clear Filter</a></p>
+      </transition>
+      <transition name="fade">
         <span v-if="noResults" class="no-results text-center text-cool-gray-500">No results for your search query :(</span>
       </transition>
       <!-- RECIPE GRID -->
@@ -85,6 +88,7 @@ export default {
   },
   data() {
     return {
+      filterMsg: '',
       searchTerm: '',
       showFilterSelect: false
     };
@@ -133,9 +137,16 @@ export default {
     },
     filterAction() {
       this.showFilterSelect = !this.showFilterSelect;
-      if(!this.showFilterSelect) {
-        this.clearFilter();
+      // was used to clear the filter selection when the filer menu got closed
+      // if(!this.showFilterSelect) { this.clearFilter(); }
+      // instead, we're going to leave the filter selection active (until navigation occurs) and display a message
+      if(!this.showFilterSelect && this.filterActive) {
+        this.filterMsg = `Showing filtered recipes.`;
       }
+    },
+    filterMsgClick() {
+      this.filterMsg = '';
+      this.clearFilter();
     }
   }
 };

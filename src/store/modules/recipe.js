@@ -53,7 +53,7 @@ export default {
 
   actions: {
     /**
-    * @param args - an array provided by 'RecipeFilter.vue' that provides input for 'mode' in [0] and 'selection' in [2]
+    * @param args - an array provided by 'RecipeFilter.vue' that provides input for 'mode' in [0] and 'selection' in [1]
     */
     applyFilter({ commit, getters}, args) {
       const fState = getters.filterActive;
@@ -62,8 +62,8 @@ export default {
       const fromCache = getters.filterCache;
 
       let filtered = new Array;
-      let mode = args[0].toLowerCase(); //strig value
-      let selection = args[1].map(item => item.toLowerCase()); //array based on 'RecipeFilter.vue' component state; lowercased
+      let mode = args[0].toLowerCase(); // strig value
+      let selection = args[1].map(item => item.toLowerCase()); //array based on 'RecipeFilter.vue' component state; lowercased just to make sure
 
       //format the data for filtering
       let currentFilterData = Object.assign(fData, { [mode]: selection });
