@@ -14,8 +14,8 @@
             "type": "image/png"
         }
     ],
-    "theme_color": "#f2f6ff",
-    "background_color": "#f2f6ff",
+    "theme_color": "#ffffff",
+    "background_color": "#ffffff",
     "start_url": "https://recept0r.com",
     "display": "standalone"
 }
