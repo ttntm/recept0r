@@ -1,6 +1,6 @@
 <template>
   <button
-    class="btn btn btn-gray btn-sort"
+    class="btn btn-gray btn-sort"
     :class="{
       'btn-sort-active' : isActive()
     }"

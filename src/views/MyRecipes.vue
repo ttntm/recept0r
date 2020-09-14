@@ -16,10 +16,10 @@
     <div v-else class="mb-10">
       <div class="flex flex-row flex-wrap justify-center md:justify-evenly items-center">
         <h4 class="hidden md:block text-cool-gray-500 m-0">Display:</h4>
-        <button-sort class="mr-4 mb-4 md:m-0" @click.native="sortMyRecipes(['date','desc'])" :sortState="sortState" sortData="date" sortType="desc" tip="Sort by date (newest first)">Newest</button-sort>
-        <button-sort class="mb-4 md:mb-0" @click.native="sortMyRecipes(['date','asc'])" :sortState="sortState" sortData="date" sortType="asc" tip="Sort by date (oldest first)">Oldest</button-sort>
-        <button-sort class="mr-4 md:m-0" @click.native="sortMyRecipes(['abc','asc'])" :sortState="sortState" sortData="abc" sortType="asc" tip="Sort alphabetically">ABC...</button-sort>
-        <button-sort class="" @click.native="sortMyRecipes(['abc','desc'])" :sortState="sortState" sortData="abc" sortType="desc" tip="Sort alphabetically (reverse)">ZYX...</button-sort>
+        <button-sort class="mx-2 mb-4 md:m-0" @click.native="sortMyRecipes(['date','desc'])" :sortState="sortState" sortData="date" sortType="desc" tip="Sort by date (newest first)">Newest</button-sort>
+        <button-sort class="mx-2 mb-4 md:m-0" @click.native="sortMyRecipes(['date','asc'])" :sortState="sortState" sortData="date" sortType="asc" tip="Sort by date (oldest first)">Oldest</button-sort>
+        <button-sort class="mx-2 md:m-0" @click.native="sortMyRecipes(['abc','asc'])" :sortState="sortState" sortData="abc" sortType="asc" tip="Sort alphabetically">ABC...</button-sort>
+        <button-sort class="mx-2 md:m-0" @click.native="sortMyRecipes(['abc','desc'])" :sortState="sortState" sortData="abc" sortType="desc" tip="Sort alphabetically (reverse)">ZYX...</button-sort>
       </div>
     </div>
     <div v-for="(recipe, index) in myRecipes" :key="index" class="list-card flex flex-col md:flex-row mb-8">
