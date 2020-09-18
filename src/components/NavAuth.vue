@@ -38,7 +38,8 @@
           <div v-if="mode === 'register'">
             <p class="text-center">
               Thanks for your interest in recept0r.<br><br>
-              Public registrations are suspended until further notice. This is currently an invite only service.
+              Public registrations are suspended until further notice. This is currently an invite only service.<br><br>
+              If you'd like to see this app in action, head over to <a href="https://demo.recept0r.com" target="_blank" class="font-bold underline hover:no-underline">demo.recept0r.com</a>
             </p>
           </div>
           <!-- SIGNUP PART -->
