@@ -46,15 +46,15 @@
           <form v-if="mode === 'register-allowed'" class="" @submit.prevent>
             <div class="form-group">
               <label for="name">Name</label>
-              <input class="auth-form-control" id="name" v-model="crendentials.name" ref="firstInput" type="text" placeholder="Arnold Schwarzenegger"/>
+              <input class="auth-form-control" id="name" v-model="credentials.name" ref="firstInput" type="text" placeholder="Arnold Schwarzenegger"/>
             </div>
             <div class="form-group">
               <label for="email">Email</label>
-              <input class="auth-form-control" id="email" type="email" v-model="crendentials.email" placeholder="arnie@terminator.com"/>
+              <input class="auth-form-control" id="email" type="email" v-model="credentials.email" placeholder="arnie@terminator.com"/>
             </div>
             <div class="form-group">
               <label for="password">Password</label>
-              <input class="auth-form-control" id="password" type="password" v-model="crendentials.password" placeholder="******"/>
+              <input class="auth-form-control" id="password" type="password" v-model="credentials.password" placeholder="******"/>
             </div>
             <button class="modal-btn px-8 py-2 mt-8 mb-4 mx-auto" type="button" @click="signup()">Sign Up</button>
           </form>
@@ -62,11 +62,11 @@
           <form v-if="mode === 'login'" class="" @submit.prevent>
             <div class="form-group">
               <label for="email">Email</label>
-              <input class="auth-form-control" id="email" type="email" v-model="crendentials.email" ref="firstInput" placeholder="hey@email.com"/>
+              <input class="auth-form-control" id="email" type="email" v-model="credentials.email" ref="firstInput" placeholder="hey@email.com"/>
             </div>
             <div class="form-group">
               <label for="password">Password</label>
-              <input class="auth-form-control" id="password" type="password" v-model="crendentials.password" @keyup.enter="login()" placeholder="******"/>
+              <input class="auth-form-control" id="password" type="password" v-model="credentials.password" @keyup.enter="login()" placeholder="******"/>
             </div>
             <button class="modal-btn px-8 py-2 mt-8 mb-4 mx-auto" type="button" @click="login()">Login</button>
           </form>
@@ -84,7 +84,7 @@ export default {
   name: 'nav-auth',
   data() {
     return {
-      crendentials: {
+      credentials: {
         name: "",
         password: "",
         email: ""
@@ -97,7 +97,7 @@ export default {
   computed: {
     ...mapGetters('user',['loggedIn']),
     cValidate() {
-      let c = this.crendentials;
+      let c = this.credentials;
       let rx = RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
       let valid = rx.test(c.email);
       if(this.mode === 'login') {
@@ -119,7 +119,7 @@ export default {
     isShowing: {
       handler() {
         if(!this.isShowing) {
-          this.crendentials = { name: "", password: "", email: "" }; //clear credentials object when modal closes
+          this.credentials = { name: "", password: "", email: "" }; //clear credentials object when modal closes
           this.cValidateMsg = null; //clear message when modal closes
         }
       }
@@ -163,7 +163,7 @@ export default {
       } else {
         let msg = { text: '', type: ''};
         this.cValidateMsg = "Signing up...";
-        this.attemptSignup(this.crendentials)
+        this.attemptSignup(this.credentials)
           .then(response => {
             console.log(response);
             msg.text = "A confirmation email has been sent to you, please check your inbox!";
@@ -188,7 +188,7 @@ export default {
         let msg = { text: '', type: ''};
         let spinner = require('@/assets/loading.svg');
         this.cValidateMsg = `<img src="${spinner}" class="mx-auto">`;
-        this.attemptLogin({ ...this.crendentials })
+        this.attemptLogin({ ...this.credentials })
           .then(() => {
             this.toggleShow();
             this.toggleMenu(false);
